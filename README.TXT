@@ -1,12 +1,7 @@
-------------------------------------------------------------------------
-This is the project README file. Here, you should describe your project.
-Tell the reader (someone who does not know anything about this project)
-all he/she needs to know. The comments should usually include at least:
-------------------------------------------------------------------------
+PROJECT TITLE: The Legend of Informatik LK
 
-PROJECT TITLE:
-PURPOSE OF PROJECT:
-VERSION or DATE:
-HOW TO START THIS PROJECT:
-AUTHORS:
-USER INSTRUCTIONS:
+PURPOSE OF PROJECT: Das Ziel dieses Projektes ist die Entwicklung eines Top-Down Spieles, mit Informatik als Thema. Der Spieler wird auf ein zufällig generiertes Feld mit Gegnern und Items gespawnt. Die Gegner sind nach typischen Herausforderungen in der Programmierung gestaltet. Zum Beispiel gibt es Spinnen (Bugs), Schnecken (Ineffizienz), Krebse die nur seitlich laufen können (Nebeneffekt) etc. Der Spieler kann Nahkampfwaffen wie einen Cursor und eine Tastatur aufheben und die „Herausforderungen“ zerstören. Außerdem gibt es Fernkampfwaffen, wie ein Buch und eine Maus, die der Spieler auf die Gegner werfen kann. Zuletzt gibt es Power-Ups wie Schuhe, die die Laufgeschwindigkeit erhöhen oder ein Herz, dass das maximale Leben erhöht. Man kann das gleiche Item mehrmals aufheben, wodurch sich die Effekte stapeln. (25% Geschwindigkeitserhöhung + 25% Geschwindigkeitserhöhung = 50% Geschwindigkeitserhöhung).
+
+VERSION or DATE: 01.05.2019
+
+AUTHORS: Cashen Adkins, Jakob Kleine, Cepehr Lorenzo Bromand, Ares Zühlke, Janni Marlene Röbbecke
