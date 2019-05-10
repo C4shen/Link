@@ -11,7 +11,7 @@ public class Game implements Runnable {
     public static final int SCREEN_WIDTH = 640;
     //Das Spiel hat erstmal eine Höhe von 10 Tiles und einem Platz für u.a. Leben und Punktzahl (10*64 + 100 = 740)
     public static final int SCREEN_HEIGHT = 740;
-
+    
     public static void main(String[] arg) 
     {
         Game game = new Game();
