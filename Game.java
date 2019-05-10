@@ -23,7 +23,6 @@ public class Game implements Runnable {
      * Attribut, das angiebt, ob das Spiel momentan läuft.
      */
     public boolean running = true;
-
     public static void main(String[] arg) 
     {
         //Es wird ein neues Objekt der Klasse Game erstellt.
