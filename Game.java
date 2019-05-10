@@ -1,6 +1,6 @@
 /**
- * @author Cashen Adkins, quizdroid.wordpress.com
- * @version 0.01 09.05.2019
+ * @author Cashen Adkins, Janni Röbbecke, quizdroid.wordpress.com
+ * @version 0.01 10.05.2019
  */
 public class Game implements Runnable {
     /**
