@@ -9,9 +9,9 @@ public class Utils
     /**
      * Wandelt eine Zeichenkette in eine Zahl um
      * @author Jakob Kleine, Cashen Adkins
-     * @since 1.0
      * @param s der String, der in eine Zahl umgewandelt werden soll
      * @return ein int, der in dem String stand; -1, wenn der String keine Zahl enthielt
+     * @since 0.01 (10.05.2019)
      */
     public static int parseInt(String s) {
         try {
@@ -22,7 +22,15 @@ public class Utils
         }
     }
     
+    /**
+     * Gibt den absoluten Pfad (tatsächlicher Pfad im System) eines 
+     * relativen Pfads (Pfad von dem Ordner des BlueJ-Projekts aus) zurück
+     * @author Jakob Kleine, Cashen Adkins
+     * @param relativePath der relative Pfad, dessen absouter Pfad gesucht wird
+     * @return eine URL, die den absuluten Pfad des relativen Pfads enthält
+     * @since 0.01 (12.05.2019)
+     */
     public static URL absolutePathOf(String relativePath) {
-        return Utils.class.getResource("res/"+relativePath);
+        return Utils.class.getResource(relativePath);
     }
 }

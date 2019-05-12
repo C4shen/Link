@@ -22,6 +22,7 @@ public class Screen
      * @param title der Titel des Spiels
      * @param width die Breite des Screens
      * @param height die Höhe des Screens
+     * @since 0.01 (10.05.2019)
      */
     public Screen(String title, int width, int height)
     {
@@ -51,6 +52,7 @@ public class Screen
      * Gibt die Leinwand des Screens zurück
      * @author Cashen Adkins, Jakob Kleine
      * @return die Leinwand (Canvas) des Screens, auf der die Objekte "gemalt" werden
+     * @since 0.01 (10.05.2019)
      */
     public Canvas getCanvas(){
         return canvas;
@@ -61,6 +63,7 @@ public class Screen
      * Gibt den Frame des Screens zurück
      * @author Cashen Adkins, Jakob Kleine
      * @return der JFrame, der die Leinwand (Canvas) enthält
+     * @since 0.01 (10.05.2019)
      */
     public JFrame getFrame(){
         return frame;

@@ -29,10 +29,14 @@ public class Game implements Runnable {
      */
     public boolean running = true;
     
-    Player player; 
-    public Screen screen;
-    Graphics g;
-    KeyManager keyManager;
+    private Player player; //Die Spielfigur des Spielers
+    private Screen screen; //Der Screen, auf dem das Spiel visualisiert wird
+    private Graphics g; //Die Graphics, mit denen die Figuren gemalt werden
+    private KeyManager keyManager; //Der KeyManager, der die Eingaben über die Tastatur verwaltet
+    
+    /**
+     * Startet ein neues Spiel
+     */
     public static void main(String[] arg) 
     {
         //Es wird ein neues Objekt der Klasse Game erstellt.
@@ -41,12 +45,16 @@ public class Game implements Runnable {
         new Thread(game).start();
     }
   
+    /**
+     * Enthält die Game-Loop, in der das Spiel dauerhaft durchlaufen wird, bis es beendet werden soll
+     */
+    @Override
     public void run() 
     {
         //Es werden zwei Attribute zur Überprüfung der vegrangegen Berechnungszeit erstellt.
         long timestamp;
         long oldTimestamp;
-        SpriteSheet playerSprite = new SpriteSheet("Unbenannt.png", 1, 1, 100, 100);
+        SpriteSheet playerSprite = new SpriteSheet("res/Unbenannt.png", 1, 1, 100, 100);
         player = new Player(320, 320, playerSprite.getSpriteElement(0,0));
         //Es wird ein neues Fenster ertsellt mit dem Namen des Spiels als Titel und der Höhe und Breite der vorher angegebenen Attribute.
         screen = new Screen("LINK", SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -89,31 +97,44 @@ public class Game implements Runnable {
             }
         }
     }
+    
+    /**
+     * Aktualisiert die Spielmechanik
+     */
     void update() 
     {
         keyManager.update();
         player.setMove(getInput());
         player.update();
     }
+    
+    /**
+     * ?
+     */
     private Point getInput(){
         int xMove = 0;
         int yMove = 0;
         if(keyManager.up)
             yMove = -1;
         if(keyManager.down)
-            yMove = 1;
+            yMove += 1; //+=, sodass keine Bewegung erfolgt, wenn beide Pfeile in gegensätzlicher Richtung gedrückt werden
         if(keyManager.left)
             xMove = -1;
         if(keyManager.right)
-            xMove = 1;
+            xMove += 1; //+=, sodass keine Bewegung erfolgt, wenn beide Pfeile in gegensätzlicher Richtung gedrückt werden
         return new Point(xMove, yMove);
     }
-    void render() 
+    
+    /**
+     * Aktualisiert die Anzeige des Spiels
+     */
+    private void render() 
     {
         Canvas c = screen.getCanvas();
         //c.setBackground(Color.blue);
         BufferStrategy bs = c.getBufferStrategy();
-        if(bs == null){screen.getCanvas().createBufferStrategy(3);}
+        if(bs == null)
+            screen.getCanvas().createBufferStrategy(3);
         else{
             g = bs.getDrawGraphics();
             //Clear Screen

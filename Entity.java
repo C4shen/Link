@@ -2,8 +2,8 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 /**
- * Jann, Ares, quizdroid
- * (10.05.19)
+ * @param Janni, Ares, www.quizdroid.wordpress.com
+ * @version 0.01 (10.05.19)
  */
 public abstract class Entity {
     /**
@@ -49,11 +49,12 @@ public abstract class Entity {
         this.height = height;
     }
     /**
-     * berechnet die neue Position und das neue Aussehen der Figur
+     * Berechnet die neue Position und das neue Aussehen der Figur
      */
     protected abstract void update();
     /**
      * Visualisiert die Figur im Fenster
+     * @param g die Graphics, mit denen das Bild der Figur gezeichnet werden soll
      */
     protected void render(Graphics g) {
         g.drawImage(image, entityX, entityY, null);

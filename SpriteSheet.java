@@ -3,8 +3,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 /**
- * @author Janni, Ares, quizdroid
- * @version 10.05.19
+ * @author Janni, Ares, www.quizdroid.wordpress.com
+ * @version 0.01 (10.05.19)
  */
 public class SpriteSheet {
     /*
@@ -28,6 +28,7 @@ public class SpriteSheet {
      * @param moves die Anzahl der Richtungen der Bewegungen
      * @param width die Breite (px) des Charakters
      * @param height die Höhe (px) des Charakters
+     * @since 0.01 (10.05.2019)
      */
     public SpriteSheet(String path, int moves, int directions, int width, int height){
         sprite = new BufferedImage[moves][directions];
@@ -51,6 +52,7 @@ public class SpriteSheet {
      * @param x die Bewegung des Charakters
      * @param y die Richtung der Bewegung
      * @return ein BufferedImage, das die gewünschte Pose abbildet
+     * @since 0.01 (10.05.2019)
      */
     public BufferedImage getSpriteElement(int x, int y) {
         return sprite[x][y];

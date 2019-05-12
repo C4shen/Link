@@ -2,8 +2,8 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 
 /**
- * Jann, Ares, quizdroid
- * (10.05.19)
+ * @author Janni, Ares, www.quizdroid.wordpress.com
+ * @version 0.01 (10.05.19)
  */
 public abstract class Creature extends Entity {
     /**
@@ -29,7 +29,14 @@ public abstract class Creature extends Entity {
     protected int xMove, yMove;
     
     /**
-     * Erzeugt eine Figur (Entität) mit den angegebenen Atributwerten
+     * Erzeugt eine Kreatur (Entität)
+     * @param name der Name der Figur
+     * @param image ein Spritesheet, das das Aussehen der Figur beschreibt (stimmt das?)
+     * @param x die x-Position aud der die Entität gespawnt werden soll
+     * @param y die y-Position aud der die Entität gespawnt werden soll
+     * @param width die Breite der Figur
+     * @param height die Höhe der Figur
+     * @param speed die Geschwindigkeit der Entität
      */
     public Creature(String name, BufferedImage image, int x, int y, int width, int height, int health, int speed) {
         super(name, image, x, y, width, height);
@@ -39,7 +46,7 @@ public abstract class Creature extends Entity {
         yMove = 0;
     }
     /**
-     * die Figur bewegt sich mit ihrer bestimmten Geschwindigkeit auf eine neue Position 
+     * Die Figur bewegt sich mit ihrer bestimmten Geschwindigkeit auf eine neue Position 
      */
     public void move(){
         entityX += xMove * speed;
