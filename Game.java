@@ -77,6 +77,7 @@ public class Game implements Runnable {
     }
     static void update() 
     {
+        //test;
     }
     void render() 
     { }
