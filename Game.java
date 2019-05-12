@@ -1,6 +1,10 @@
+import java.awt.Canvas;
+import java.awt.Graphics;
+import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 /**
- * @author Cashen Adkins, Janni Röbbecke, quizdroid.wordpress.com
- * @version 0.01 10.05.2019
+ * @author Cashen Adkins, quizdroid.wordpress.com
+ * @version 0.01 09.05.2019
  */
 public class Game implements Runnable {
     /**
@@ -23,12 +27,14 @@ public class Game implements Runnable {
      * Attribut, das angiebt, ob das Spiel momentan läuft.
      */
     public boolean running = true;
+    
+    Player player; 
+    public Screen screen;
+    Graphics g;
     public static void main(String[] arg) 
     {
         //Es wird ein neues Objekt der Klasse Game erstellt.
         Game game = new Game();
-        //Es wird ein neues Fenster ertsellt mit dem Namen des Spiels als Titel und der Höhe und Breite der vorher angegebenen Attribute.
-        new Screen("LINK", SCREEN_WIDTH, SCREEN_HEIGHT);
         //Es wird ein neues Thread unabhängig von der Main-Thread erstellt, dass die run-Methode im Objekt "game" ausführt.
         new Thread(game).start();
     }
@@ -38,6 +44,10 @@ public class Game implements Runnable {
         //Es werden zwei Attribute zur Überprüfung der Berechnungszeit erstellt.
         long timestamp;
         long oldTimestamp;
+        //Es wird ein neues Fenster ertsellt mit dem Namen des Spiels als Titel und der Höhe und Breite der vorher angegebenen Attribute.
+        screen = new Screen("LINK", SCREEN_WIDTH, SCREEN_HEIGHT);
+        SpriteSheet playerSprite = new SpriteSheet("Unbenannt.png", 1, 1, 100, 100);
+        player = new Player(320, 320, playerSprite.getSpriteElement(0,0));
         //Solange das Spiel läuft wird die Gameloop wiederholt/ausgeführt. 
         while(running) 
         {
@@ -76,9 +86,23 @@ public class Game implements Runnable {
         }
     }
     static void update() 
-    {
-        //test;
-    }
+    {}
     void render() 
-    { }
+    {
+        Canvas c = screen.getCanvas();
+        //c.setBackground(Color.blue);
+        BufferStrategy bs = c.getBufferStrategy();
+        if(bs == null){screen.getCanvas().createBufferStrategy(3);}
+        else{
+            g = bs.getDrawGraphics();
+            //Clear Screen
+            g.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+            
+            //level.renderMap(g); // Erst die Spielfläche ...
+            player.render(g); // ... und darauf die Spielfigur
+            
+            bs.show();
+            g.dispose();
+        }
+    }
 }
