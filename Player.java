@@ -18,11 +18,11 @@ public class Player extends Creature {
      * Erzeugt eine Spielfigur
      * @param x die x-Position der Spielfigur
      * @param y die y-Position der Spielfigur
-     * @param ein Spritesheet, das das Aussehen der Spielfigur bestimmt
+     * @param playerSprite ein Spritesheet, das das Aussehen der Spielfigur bestimmt
      * @since 0.01 (10.05.2019)
      */
-    public Player(int x, int y, BufferedImage image) {
-        super("Player", image, x, y, Entity.DEFAULT_WIDTH, Entity.DEFAULT_HEIGHT, Player.DEFAULT_HEALTH, Player.DEFAULT_SPEED);
+    public Player(int x, int y, SpriteSheet playerSprite) {
+        super("Player", playerSprite, x, y, Entity.DEFAULT_WIDTH, Entity.DEFAULT_HEIGHT, Player.DEFAULT_HEALTH, Player.DEFAULT_SPEED);
     }
     
     /**

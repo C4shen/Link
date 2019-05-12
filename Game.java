@@ -62,8 +62,8 @@ public class Game implements Runnable {
         //Es werden zwei Attribute zur Überprüfung der vegrangegen Berechnungszeit erstellt.
         long timestamp;
         long oldTimestamp;
-        SpriteSheet playerSprite = new SpriteSheet("/res/spieler.png", 1, 1, 64, 64);
-        player = new Player(320, 320, playerSprite.getSpriteElement(0,0));
+        SpriteSheet playerSprite = new SpriteSheet("/res/sprites/playerDemo.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
+        player = new Player(320, 320, playerSprite);
         //Es wird ein neues Fenster ertsellt mit dem Namen des Spiels als Titel und der Höhe und Breite der vorher angegebenen Attribute.
         screen = new Screen("LINK - Prototyp 1: Version 0.01", SCREEN_WIDTH, SCREEN_HEIGHT);
         TileSet tileSet = new TileSet("/res/tilesets/standard-raum-ts.png", 3, 3);
@@ -81,28 +81,22 @@ public class Game implements Runnable {
             //Die Zeit, nach Berechnung der neuen Werte, wird gespeichert.
             timestamp = System.currentTimeMillis();
             //Die benötigte Zeit für die Neuberechnung wird mit der maximal erlaubten Berechenzeit verglichen.
-            if(timestamp-oldTimestamp <= maxLoopTime) 
-            {
+            if(timestamp-oldTimestamp <= maxLoopTime) {
                 //Die berechneten Werte werden neu grafisch angezeigt.
                 render();
                 //Die benötigte Zeit für Updaten und Rendern wird berechnet.
                 timestamp = System.currentTimeMillis();
-                System.out.println(maxLoopTime + " : " + (timestamp-oldTimestamp));
                 //Wenn das Rendern und Updaten schneller absolviert ist, als die maximal erlaubte Zeit, schläft der Thread für die restliche Zeit.
-                if(timestamp-oldTimestamp <= maxLoopTime) 
-                {
-                    try 
-                    {
+                if(timestamp-oldTimestamp <= maxLoopTime) {
+                    try {
                         Thread.sleep(maxLoopTime - (timestamp-oldTimestamp) );
                     } 
-                    catch (InterruptedException e) 
-                    {
+                    catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             }
-            else
-            {
+            else {
                 //Falls die Berechnung zu lange dauert, wird die neu berechneten Werte zunächst nicht "gerendert", sondern die Schleife beginnt von vorne.
                 System.out.println("Wir sind zu spät!");
             }
@@ -112,7 +106,7 @@ public class Game implements Runnable {
     /**
      * Aktualisiert die Spielmechanik
      */
-    void update() 
+    private void update() 
     {
         keyManager.update();
         player.setMove(getInput());

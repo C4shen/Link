@@ -34,7 +34,6 @@ public class Utils
      * @since 0.01 (12.05.2019)
      */
     public static File absoluteFileOf(String relativePath) {
-        System.out.println(new File("").getAbsolutePath()+relativePath);
         return new File(new File("").getAbsolutePath()+relativePath);
     }
     
