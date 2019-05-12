@@ -1,4 +1,5 @@
 import java.awt.image.BufferedImage;
+import java.awt.Point;
 /**
  * Jann, Ares, quizdroid
  * (10.05.19)
@@ -26,5 +27,10 @@ public class Player extends Creature {
     @Override
     public void update() {
         move();
+    }
+    
+    public void setMove(Point p){
+        xMove = p.x;
+        yMove = p.y;
     }
 }

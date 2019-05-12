@@ -1,5 +1,6 @@
 import java.awt.Canvas;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 /**
@@ -31,6 +32,7 @@ public class Game implements Runnable {
     Player player; 
     public Screen screen;
     Graphics g;
+    KeyManager keyManager;
     public static void main(String[] arg) 
     {
         //Es wird ein neues Objekt der Klasse Game erstellt.
@@ -44,10 +46,12 @@ public class Game implements Runnable {
         //Es werden zwei Attribute zur Überprüfung der Berechnungszeit erstellt.
         long timestamp;
         long oldTimestamp;
-        //Es wird ein neues Fenster ertsellt mit dem Namen des Spiels als Titel und der Höhe und Breite der vorher angegebenen Attribute.
-        screen = new Screen("LINK", SCREEN_WIDTH, SCREEN_HEIGHT);
         SpriteSheet playerSprite = new SpriteSheet("Unbenannt.png", 1, 1, 100, 100);
         player = new Player(320, 320, playerSprite.getSpriteElement(0,0));
+        //Es wird ein neues Fenster ertsellt mit dem Namen des Spiels als Titel und der Höhe und Breite der vorher angegebenen Attribute.
+        screen = new Screen("LINK", SCREEN_WIDTH, SCREEN_HEIGHT);
+        keyManager = new KeyManager();
+        screen.getFrame().addKeyListener(keyManager);
         //Solange das Spiel läuft wird die Gameloop wiederholt/ausgeführt. 
         while(running) 
         {
@@ -80,13 +84,30 @@ public class Game implements Runnable {
             }
             else
             {
-               //Falls die Berechnung zu lange dauert, wird die neu berechneten Werte zunächst nicht "gerendert", sondern die Schleife beginnt von vorne.
+                //Falls die Berechnung zu lange dauert, wird die neu berechneten Werte zunächst nicht "gerendert", sondern die Schleife beginnt von vorne.
                 System.out.println("Wir sind zu spät!");
             }
         }
     }
-    static void update() 
-    {}
+    void update() 
+    {
+        keyManager.update();
+        player.setMove(getInput());
+        player.update();
+    }
+    private Point getInput(){
+        int xMove = 0;
+        int yMove = 0;
+        if(keyManager.up)
+            yMove = -1;
+        if(keyManager.down)
+            yMove = 1;
+        if(keyManager.left)
+            xMove = -1;
+        if(keyManager.right)
+            xMove = 1;
+        return new Point(xMove, yMove);
+    }
     void render() 
     {
         Canvas c = screen.getCanvas();
