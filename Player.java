@@ -12,7 +12,7 @@ public class Player extends Creature {
     /**
      * Standard-Geschwindigkeit des Spielcharakters
      */
-    public static final int DEFAULT_SPEED = 1;
+    public static final int DEFAULT_SPEED = 2;
     
     /**
      * Erzeugt eine Spielfigur

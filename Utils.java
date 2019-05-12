@@ -1,4 +1,7 @@
 import java.net.URL;
+import java.io.*;
+import java.util.Scanner;
+
 /**
  * Eine Klasse mit nützlichen öfters benutzen Methoden, die keiner bestimmten Klasse zugeordnet werden können 
  * 
@@ -23,14 +26,44 @@ public class Utils
     }
     
     /**
-     * Gibt den absoluten Pfad (tatsächlicher Pfad im System) eines 
+     * Gibt einen File mit absoluten Pfad (tatsächlicher Pfad im System) eines 
      * relativen Pfads (Pfad von dem Ordner des BlueJ-Projekts aus) zurück
      * @author Jakob Kleine, Cashen Adkins
      * @param relativePath der relative Pfad, dessen absouter Pfad gesucht wird
-     * @return eine URL, die den absuluten Pfad des relativen Pfads enthält
+     * @return ein File mit dem absuluten Pfad des relativen Pfads
      * @since 0.01 (12.05.2019)
      */
-    public static URL absolutePathOf(String relativePath) {
-        return Utils.class.getResource(relativePath);
+    public static File absoluteFileOf(String relativePath) {
+        System.out.println(new File("").getAbsolutePath()+relativePath);
+        return new File(new File("").getAbsolutePath()+relativePath);
+    }
+    
+    /**
+     * Lädt eine Text-Datei (z.B. eine, die einen Room beschreibt) als String. 
+     * Im Tutorial wurden die Klassen File- und BufferedReader verwendet. 
+     * Die Klasse java.util.Scanner ist allerdings kompakter und übersichtlicher.
+     * @author Jakob Kleine, Cepehr Bromand
+     * @param path der relative Pfad der Textdatei
+     * @return ein String der mit der Textdatei überinstimmt
+     */
+    public static String loadFileAsString(String path){
+        StringBuilder builder = new StringBuilder(); //Effizienter, als immer zwei Strings zu verbindnen
+
+        Scanner sc = null; //Die Variable muss aßerhalb des try-Blocks deklariert werden, damit sie außerhalb verwendet werden kann
+        try {
+            sc = new Scanner(absoluteFileOf(path));
+        }
+        catch(FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        if(sc != null) { //Wenn die Datei gefunden wurde
+            while(sc.hasNextLine()) { //Solange der Scanner noch nicht am Ende angelangt ist
+                //Im Tutorial wurde ein Zeilenumbruch angehöngt, was allerdings nicht sinnvoll ist, weil dann der String bei Leerzeichen und Zeilenumbrüchen
+                //gesplittet werden muss. [WIR HABEN DAS ABER MAL TROTZDEM SO GELASSEN, SODASS WIRKLICH DIE DATEI VÖLLIG MIT DEM STRING ÜBEREINSTIMMT]
+                builder.append(sc.nextLine() + "\n"); 
+            }
+            sc.close();
+        }
+        return builder.toString();
     }
 }

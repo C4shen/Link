@@ -4,32 +4,37 @@ import java.awt.Point;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 /**
- * @author Cashen Adkins, quizdroid.wordpress.com
  * @version 0.01 09.05.2019
+ * @since 0.01 09.05.2019
  */
 public class Game implements Runnable {
     /**
-     * Dieses Attribut speichert die Bildfrequenz, die angibt, wie oft das Bild des Spieles innerhalb einer Sekunde aktualisiert wird (Frames per second).
+     * Die Bildfrequenz, die angibt, wie oft das Bild des Spieles innerhalb einer Sekunde aktualisiert wird (Frames per second).
      */
     public static final int FPS = 60;
     /**
-     * Dieses Attribut speichert die maximale Zeit, die eine Berechnung der Loop dauern sollte/darf.
+     * Die maximale Zeit, die eine Berechnung der Loop dauern sollte/darf.
      */
     public static final long maxLoopTime = 1000 / FPS;
-    /**
-     * Dieses Attribut speichert die Breite des Spielfensters in Pixel.
-     */
-    public static final int SCREEN_WIDTH = 640; // Das Spiel hat eine Breite von 10 Tiles (10*64px = 640px).
-    /**
-     * Dieses Attribut speichert die Höhe des Spielfensters in Pixel.
-     */
-    public static final int SCREEN_HEIGHT = 740; //Das Spiel hat erstmal eine Höhe von 10 Tiles und einem Platz für u.a. Leben und Punktzahl (10*64px + 100px = 740px).
-    /**
-     * Attribut, das angiebt, ob das Spiel momentan läuft.
-     */
-    public boolean running = true;
     
+    /**
+     * Die Höhe des Bereichs, in dem die HP, der Score usw. angezeigt wird
+     */
+    public static final int HP_BAR_HEIGHT = 0;
+    
+    /**
+     * Die Breite des Spielfensters in Pixel
+     */
+    public static final int SCREEN_WIDTH = 10*TileSet.TILE_WIDTH; // Das Spiel hat eine Breite von 10 Tiles
+    /**
+     * Die Höhe des Spielfensters in Pixel
+     */
+    public static final int SCREEN_HEIGHT = 10*TileSet.TILE_HEIGHT + HP_BAR_HEIGHT; //Das Spiel hat erstmal eine Höhe von 10 Tiles und einem Platz für u.a. Leben und Punktzahl (10*64px + 100px = 740px).
+    
+    
+    private boolean running = true; //Gibt an, ob das Spiel momentan läuft (beendet ggf. die Game-Loop)
     private Player player; //Die Spielfigur des Spielers
+    private Room room; //Der Raum, der gerade gespielt wird
     private Screen screen; //Der Screen, auf dem das Spiel visualisiert wird
     private Graphics g; //Die Graphics, mit denen die Figuren gemalt werden
     private KeyManager keyManager; //Der KeyManager, der die Eingaben über die Tastatur verwaltet
@@ -47,6 +52,9 @@ public class Game implements Runnable {
   
     /**
      * Enthält die Game-Loop, in der das Spiel dauerhaft durchlaufen wird, bis es beendet werden soll
+     * 
+     * @author Cashen Adkins, Cepehr Bromand, www.quizdroid.wordpress.com
+     * @since 0.01 (10.05.2019)
      */
     @Override
     public void run() 
@@ -54,10 +62,13 @@ public class Game implements Runnable {
         //Es werden zwei Attribute zur Überprüfung der vegrangegen Berechnungszeit erstellt.
         long timestamp;
         long oldTimestamp;
-        SpriteSheet playerSprite = new SpriteSheet("res/Unbenannt.png", 1, 1, 100, 100);
+        SpriteSheet playerSprite = new SpriteSheet("/res/spieler.png", 1, 1, 64, 64);
         player = new Player(320, 320, playerSprite.getSpriteElement(0,0));
         //Es wird ein neues Fenster ertsellt mit dem Namen des Spiels als Titel und der Höhe und Breite der vorher angegebenen Attribute.
-        screen = new Screen("LINK", SCREEN_WIDTH, SCREEN_HEIGHT);
+        screen = new Screen("LINK - Prototyp 1: Version 0.01", SCREEN_WIDTH, SCREEN_HEIGHT);
+        TileSet tileSet = new TileSet("/res/tilesets/standard-raum-ts.png", 3, 3);
+        room = new Room("/res/rooms/standard-raum.txt", tileSet);
+    
         keyManager = new KeyManager();
         screen.getFrame().addKeyListener(keyManager);
         //Solange das Spiel läuft wird die Gameloop wiederholt/ausgeführt. 
@@ -140,7 +151,7 @@ public class Game implements Runnable {
             //Clear Screen
             g.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
             
-            //level.renderMap(g); // Erst die Spielfläche ...
+            room.renderMap(g); // Erst die Spielfläche ...
             player.render(g); // ... und darauf die Spielfigur
             
             bs.show();

@@ -33,7 +33,7 @@ public class SpriteSheet {
     public SpriteSheet(String path, int moves, int directions, int width, int height){
         sprite = new BufferedImage[moves][directions];
         try {
-            sheet = ImageIO.read(Utils.absolutePathOf(path));
+            sheet = ImageIO.read(Utils.absoluteFileOf(path));
         } catch (IOException e) {
             e.printStackTrace();
             return;
