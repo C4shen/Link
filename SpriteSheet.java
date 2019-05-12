@@ -3,28 +3,36 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 /**
- * Jann, Ares, quizdroid
- * (10.05.19)
+ * @author Janni, Ares, quizdroid
+ * @version 10.05.19
  */
 public class SpriteSheet {
-    /**
+    /*
      * Datei mit dem gesamten Sprite-Sheet
      */
     private BufferedImage sheet;
-    /**
-     * Array mit den versiedenen Ansichten der Figur
+    
+    /*
+     * Array mit den versiedenen Ansichten der Figur: 
+     * Für jede Bewegung (1. Dimension) ein Bild für jede Richtung (2.Dimension) 
      */
     private BufferedImage[][] sprite;
     
     /**
-     * Ermittelt aus dem übwergebenen Sprite-Sheet, das die übergebene Höhe und Breite hat und den Charakter in moves 
-     * verschiedenen Bewegungen und directions verschiedenen Richtungenn zeigt, die einzelnen Ansichten der Figur 
-     * und speichert diese in einem Array
+     * Erstellt ein neues Srite-Sheet-Objekt, wobei die einzelnen Ansichten der Figur aus Bild am angegebenen
+     * Pfad ausgelesen werden.
+     * 
+     * @author Janni, Ares
+     * @param path der Pfad, bei dem das Sprite-Sheet liegt
+     * @param moves die Anzahl der Bewegungen des Charakters
+     * @param moves die Anzahl der Richtungen der Bewegungen
+     * @param width die Breite (px) des Charakters
+     * @param height die Höhe (px) des Charakters
      */
     public SpriteSheet(String path, int moves, int directions, int width, int height){
         sprite = new BufferedImage[moves][directions];
         try {
-            sheet = ImageIO.read(Game.class.getResource(path));
+            sheet = ImageIO.read(Utils.absolutePathOf(path));
         } catch (IOException e) {
             e.printStackTrace();
             return;
@@ -35,8 +43,14 @@ public class SpriteSheet {
             }
         }
     }
+    
     /**
-     * Giebt das Bild des Charakters in der entsprechenden Pose an 
+     * Gibt das Bild des Charakters in der entsprechenden Pose an 
+     * @author Janni, Ares
+     * 
+     * @param x die Bewegung des Charakters
+     * @param y die Richtung der Bewegung
+     * @return ein BufferedImage, das die gewünschte Pose abbildet
      */
     public BufferedImage getSpriteElement(int x, int y) {
         return sprite[x][y];

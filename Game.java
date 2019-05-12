@@ -37,13 +37,13 @@ public class Game implements Runnable {
     {
         //Es wird ein neues Objekt der Klasse Game erstellt.
         Game game = new Game();
-        //Es wird ein neues Thread unabhängig von der Main-Thread erstellt, dass die run-Methode im Objekt "game" ausführt.
+        //Es wird ein neuer Thread außerhalb des Main-Threads erstellt, in dem die run-Methode im Game-Objekt ausführt wird.
         new Thread(game).start();
     }
   
     public void run() 
     {
-        //Es werden zwei Attribute zur Überprüfung der Berechnungszeit erstellt.
+        //Es werden zwei Attribute zur Überprüfung der vegrangegen Berechnungszeit erstellt.
         long timestamp;
         long oldTimestamp;
         SpriteSheet playerSprite = new SpriteSheet("Unbenannt.png", 1, 1, 100, 100);

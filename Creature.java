@@ -7,11 +7,11 @@ import java.awt.image.BufferedImage;
  */
 public abstract class Creature extends Entity {
     /**
-     * Standard Lebenspunkte die eine Figur hat wenn sie im Spiel erscheind
+     * Standard-Lebenspunkte die eine Figur hat wenn sie im Spiel erscheind
      */
     public static final int DEFAULT_HEALTH = 10;
     /**
-     * Standard Geschwindigkeit einer Figur
+     * Standard-Geschwindigkeit einer Figur
      */
     public static final int DEFAULT_SPEED = 3;
     
