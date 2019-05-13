@@ -57,8 +57,6 @@ public class Utils
         }
         if(sc != null) { //Wenn die Datei gefunden wurde
             while(sc.hasNextLine()) { //Solange der Scanner noch nicht am Ende angelangt ist
-                //Im Tutorial wurde ein Zeilenumbruch angehöngt, was allerdings nicht sinnvoll ist, weil dann der String bei Leerzeichen und Zeilenumbrüchen
-                //gesplittet werden muss. [WIR HABEN DAS ABER MAL TROTZDEM SO GELASSEN, SODASS WIRKLICH DIE DATEI VÖLLIG MIT DEM STRING ÜBEREINSTIMMT]
                 builder.append(sc.nextLine() + "\n"); 
             }
             sc.close();

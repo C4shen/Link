@@ -57,8 +57,7 @@ public class Screen
     public Canvas getCanvas(){
         return canvas;
     }
-
-
+    
     /**
      * Gibt den Frame des Screens zurück
      * @author Cashen Adkins, Jakob Kleine

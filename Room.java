@@ -24,7 +24,7 @@ public class Room {
     public Room(String path, TileSet ts) {
         this.ts = ts;
         String file = Utils.loadFileAsString(path); //Liest das Level ein
-        String[] tokens = file.split("\\s+"); //Trennt den eingelesenen String an den Leerzeichen
+        String[] tokens = file.split("\\s+"); //Trennt den eingelesenen String an den Leerzeichen und Zeilenumbrüchen
         sizeX = Utils.parseInt(tokens[0]); //Die erste Zahl gibt die Anzahl der Kacheln in x-Richtung an
         sizeY = Utils.parseInt(tokens[1]); //Die zweite Zahl gibt die Anzahl der Kacheln in y-Richtung an
         tileMap = new int[sizeX][sizeY];
