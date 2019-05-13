@@ -29,3 +29,7 @@ Ersteres haben wir geschafft, zu implementieren, den zweiten Punkt (also v.A. Ko
 
 Diese Punkte werden aber im Folgenden in Angriff genommen, wobei der (über)nächste Schritt außerdem ist, die Gegner sich auf den Spieler 
 zubewegen zu lassen.
+
+PROBLEME / BUGS:
+Es gibt ein kleineres Problem, das durch einen leichten Denkfehler entstanden ist: Wenn der Spieler sich in zwei Richtungen bewegt, also 
+entlang der x- und y-Achse, ist er doppelt so schnell. Dieses Problem muss noch behoben werden.
