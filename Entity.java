@@ -17,13 +17,16 @@ public abstract class Entity {
      */
     public static final int DEFAULT_HEIGHT = 64;
     
+    /**
+     * Name der Figur
+     */
     protected String name;
     /**
-     * aktuelle x-Position der Figur
+     * Aktuelle x-Position der Figur
      */
     protected int entityX;
     /**
-     * aktuelle y-Position der Figur
+     * Aktuelle y-Position der Figur
      */
     protected int entityY;
     /**

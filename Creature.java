@@ -95,7 +95,7 @@ public abstract class Creature extends Entity {
      * @param xPos
      * @since 0.02 (13.05.2019)
      */
-    void setCurrentImage(int x, int y, int xPos) {
+    private void setCurrentImage(int x, int y, int xPos) {
         BufferedImage image; //Im Tutorial ist das ein Attribut. Der Sinn erschließt sich uns nicht.
         if(y == -1) {
             image = spriteSheet.getSpriteElement(xPos, 3);
