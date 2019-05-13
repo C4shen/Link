@@ -2,6 +2,7 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 
 /**
+ * Eine Kreatur ist eine Entity, die sich auf dem Spielfeld bewegen kann, und Lebenspunkte besitzt.
  * @author Janni Röbbecke, Ares Zühlke, Jakob Kleine, www.quizdroid.wordpress.com
  * @version 0.02 (13.05.2019)
  * @since 0.01 (10.05.2019
@@ -10,11 +11,11 @@ public abstract class Creature extends Entity {
     /**
      * Standard-Lebenspunkte die eine Figur hat wenn sie im Spiel erscheind
      */
-    public static final int DEFAULT_HEALTH = 10;
+    protected static final int DEFAULT_HEALTH = 10;
     /**
      * Standard-Geschwindigkeit einer Figur
      */
-    public static final int DEFAULT_SPEED = 3;
+    protected static final int DEFAULT_SPEED = 3;
     
     /**
      * Spritesheet mit Bildern für die Bewegung der Figur
@@ -34,13 +35,13 @@ public abstract class Creature extends Entity {
      */
     protected int xMove, yMove;
     
-    private int animationDelay = 0; //Zählt die Durchläufe der Game-Loop. Die Geh-Animation soll nur alle sieben Druchläufe erfolgen
+    private int animationDelay = 0; //Zählt die Durchläufe der Game-Loop. Die Bewegungs-Animation soll nur alle sieben Druchläufe erfolgen
     private int op = 1;
     private int xPos = 0;
     private int prevDirection; //Die Richtung, in die sich die Figur vor dem Stillstand bewegt hat
     /**
      * Erzeugt eine Kreatur (bzw. im Deutschen schöner Figur)
-     * @author 
+     * @author Ares Zühlke, Janni Röbbecke, www.quizdroid.wordpress.com
      * @param name der Name der Figur
      * @param spriteSheet ein Spritesheet, das das Aussehen der Figur beschreibt (stimmt das?)
      * @param x die x-Position aud der die Entität gespawnt werden soll
@@ -62,11 +63,11 @@ public abstract class Creature extends Entity {
     /**
      * Bewegt die Figur mit einer Animation in die Richtung, in die sie guckt
      * Die Animation erfolgt dabei nur alle sieben Durchläufe der Game-Loop
-     * @author
+     * @author Jakob Kleine, Cashen Adkins, www.quizdroid.wordpress.com
      * @since 0.01 (10.05.2019) [Animiert seit 13.05.2019]
      */
     public void move(){
-        entityX += xMove * speed; //Die Figur bewegt sich mit ihrer bestimmten Geschwindigkeit in ihre Richtung
+        entityX += xMove * speed; //Die Figur bewegt sich mit ihrer bestimmten Geschwindigkeit in ihre Richtung (x & y)
         entityY += yMove * speed;
         
         if(animationDelay++ >= 7) { //Wenn sieben Mal verzögert wurden, soll jetzt die Animation erfolgen
@@ -88,7 +89,7 @@ public abstract class Creature extends Entity {
     
     /**
      * Ändert im Zuge der Animation das Bild der Figur.
-     * @author Jakob Kleine, Cashen Adkins, Quizdroid.wordpress.com
+     * @author Jakob Kleine, Cashen Adkins, www.quizdroid.wordpress.com
      * @param x
      * @param y
      * @param xPos

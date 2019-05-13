@@ -1,9 +1,9 @@
-import java.net.URL;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 /**
- * Eine Klasse mit nützlichen öfters benutzen Methoden, die keiner bestimmten Klasse zugeordnet werden können 
+ * Eine Klasse mit nützlichen öfters benutzen Methoden, die nicht unbedingt einer bestimmten Klasse zugeordnet werden können 
  * 
  * @author Jakob Kleine, Cashen Adkins, Cepehr Bromand, quizdroid.wordpress.com
  * @since 0.01 (10.05.2019)
@@ -28,8 +28,8 @@ public class Utils
     }
     
     /**
-     * Gibt einen File mit absoluten Pfad (tatsächlicher Pfad im System) eines 
-     * relativen Pfads (Pfad von dem Ordner des BlueJ-Projekts aus) zurück
+     * Gibt einen File mit absoluten Pfad (tatsächlicher Pfad im System; z.B. C:/[...]) eines 
+     * relativen Pfads (Pfad von dem Ordner des BlueJ-Projekts aus; ../[...]) zurück
      * @author Jakob Kleine, Cashen Adkins
      * @param relativePath der relative Pfad, dessen absouter Pfad gesucht wird
      * @return ein File mit dem absuluten Pfad des relativen Pfads

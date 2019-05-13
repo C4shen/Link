@@ -4,8 +4,10 @@ import java.awt.Point;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 /**
- * @version 0.01 09.05.2019
- * @since 0.01 09.05.2019
+ * Die zentrale Klasse des Programms. Hier wird die Anzeige und Funktionalität des Spiels verwaltet.
+ * @author Cashen Adkins, Cepehr Bromand, www.quizdroid.wordpress.com
+ * @version 0.02 (12.05.2019)
+ * @since 0.01 (09.05.2019)
  */
 public class Game implements Runnable {
     /**
@@ -41,6 +43,9 @@ public class Game implements Runnable {
     
     /**
      * Startet ein neues Spiel
+     * 
+     * @author Cashen Adkins, Cepehr Bromand, www.quizdroid.wordpress.com
+     * @since 0.01 (10.05.2019)
      */
     public static void main(String[] arg) 
     {
@@ -62,7 +67,7 @@ public class Game implements Runnable {
         //Es werden zwei Attribute zur Überprüfung der vegrangegen Berechnungszeit erstellt.
         long timestamp;
         long oldTimestamp;
-        SpriteSheet playerSprite = new SpriteSheet("/res/sprites/player.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
+        SpriteSheet playerSprite = new SpriteSheet("/res/sprites/playerDemo.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
         player = new Player(320, 320, playerSprite);
         //Es wird ein neues Fenster ertsellt mit dem Namen des Spiels als Titel und der Höhe und Breite der vorher angegebenen Attribute.
         screen = new Screen("LINK - Prototyp 1: Version 0.01", SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -105,6 +110,8 @@ public class Game implements Runnable {
     
     /**
      * Aktualisiert die Spielmechanik
+     * @author Cashen Adkins, Jakob Kleine, www.quizdroid.wordpress.com
+     * @since 0.01 (9.05.2019)
      */
     private void update() 
     {
@@ -114,24 +121,29 @@ public class Game implements Runnable {
     }
     
     /**
-     * 
+     * Holt vom Key-Manager ein, welche Beweguns-Tasten gedückt werden
+     * @author Janni Röbbecke, Ares Zühlke, www.quizdroid.wordpress.com
+     * @since 0.02 (11.05.2019)
+     * @return ein Punkt, der die Bewegung in x- und y-Richtung angibt
      */
     private Point getInput(){
         int xMove = 0;
         int yMove = 0;
-        if(keyManager.up)
+        if(keyManager.up())
             yMove = -1;
-        if(keyManager.down)
+        if(keyManager.down())
             yMove += 1; //+=, sodass keine Bewegung erfolgt, wenn beide Pfeile in gegensätzlicher Richtung gedrückt werden
-        if(keyManager.left)
+        if(keyManager.left())
             xMove = -1;
-        if(keyManager.right)
+        if(keyManager.right())
             xMove += 1; //+=, sodass keine Bewegung erfolgt, wenn beide Pfeile in gegensätzlicher Richtung gedrückt werden
         return new Point(xMove, yMove);
     }
     
     /**
      * Aktualisiert die Anzeige des Spiels
+     * @author Cashen Adkins, Jakob Kleine, www.quizdroid.wordpress.com
+     * @since 0.01 (9.05.2019)
      */
     private void render() 
     {
