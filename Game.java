@@ -114,7 +114,7 @@ public class Game implements Runnable {
     }
     
     /**
-     * ?
+     * 
      */
     private Point getInput(){
         int xMove = 0;

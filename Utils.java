@@ -5,7 +5,9 @@ import java.util.Scanner;
 /**
  * Eine Klasse mit nützlichen öfters benutzen Methoden, die keiner bestimmten Klasse zugeordnet werden können 
  * 
- * @author Jakob Kleine, Cashen Adkins, quizdroid.wordpress.com
+ * @author Jakob Kleine, Cashen Adkins, Cepehr Bromand, quizdroid.wordpress.com
+ * @since 0.01 (10.05.2019)
+ * @version 0.02 (12.05.2019)
  */
 public class Utils 
 {
@@ -43,7 +45,8 @@ public class Utils
      * Die Klasse java.util.Scanner ist allerdings kompakter und übersichtlicher.
      * @author Jakob Kleine, Cepehr Bromand
      * @param path der relative Pfad der Textdatei
-     * @return ein String der mit der Textdatei überinstimmt
+     * @return ein String der mit der Textdatei übereinstimmt
+     * @since 0.01 (10.05.2019)
      */
     public static String loadFileAsString(String path){
         StringBuilder builder = new StringBuilder(); //Effizienter, als immer zwei Strings zu verbindnen

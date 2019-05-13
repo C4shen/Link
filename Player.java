@@ -35,8 +35,8 @@ public class Player extends Creature {
     }
     
     /**
-     * ?
-     * @param p ?
+     * 
+     * @param p 
      */
     public void setMove(Point p){
         xMove = p.x;
