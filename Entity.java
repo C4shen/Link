@@ -2,7 +2,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 /**
- * @author Janni Röbbecke, Ares Zühlke, Jakob Kleine, www.quizdroid.wordpress.com
+ * @author Janni Röbbecke, Ares Zühlke, Jakob Kleine, Cashen Adkins, www.quizdroid.wordpress.com
  * @version 0.02 (13.05.2019)
  * @since 0.01 (10.05.2019)
  */
@@ -67,7 +67,7 @@ public abstract class Entity {
     
     /**
      * Visualisiert die Figur im Fenster
-     * @author
+     * @author Janni, Ares, quizdroid.wordpress.com
      * @param g die Graphics, mit denen das Bild der Figur gezeichnet werden soll
      * @since 0.01 (10.05.2019)
      */
@@ -77,7 +77,7 @@ public abstract class Entity {
     
     /**
      * Ändert das zu rendernde Bild der Entität
-     * @author 
+     * @author Jakob Kleine, Cashen Adkins
      * @param image das neue Bild, das in der Methode <code>render()</code> gemalt werden soll
      * @since 0.02 (13.05.2019)
      */

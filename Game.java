@@ -20,7 +20,7 @@ public class Game implements Runnable {
     /**
      * Die Höhe des Bereichs, in dem die HP, der Score usw. angezeigt wird
      */
-    public static final int HP_BAR_HEIGHT = 0;
+    public static final int HP_BAR_HEIGHT = 100;
     
     /**
      * Die Breite des Spielfensters in Pixel
@@ -62,7 +62,7 @@ public class Game implements Runnable {
         //Es werden zwei Attribute zur Überprüfung der vegrangegen Berechnungszeit erstellt.
         long timestamp;
         long oldTimestamp;
-        SpriteSheet playerSprite = new SpriteSheet("/res/sprites/playerDemo.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
+        SpriteSheet playerSprite = new SpriteSheet("/res/sprites/player.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
         player = new Player(320, 320, playerSprite);
         //Es wird ein neues Fenster ertsellt mit dem Namen des Spiels als Titel und der Höhe und Breite der vorher angegebenen Attribute.
         screen = new Screen("LINK - Prototyp 1: Version 0.01", SCREEN_WIDTH, SCREEN_HEIGHT);

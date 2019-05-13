@@ -88,7 +88,7 @@ public abstract class Creature extends Entity {
     
     /**
      * Ändert im Zuge der Animation das Bild der Figur.
-     * @author
+     * @author Jakob Kleine, Cashen Adkins, Quizdroid.wordpress.com
      * @param x
      * @param y
      * @param xPos
