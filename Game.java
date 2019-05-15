@@ -73,7 +73,7 @@ public class Game implements Runnable {
         gegnerListe = new LinkedList<Enemy>();
         
         SpriteSheet krebsSprite = new SpriteSheet("/res/sprites/krebs.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
-        gegnerListe.add(new Krebs(150, 150, "krebs", krebsSprite));
+        gegnerListe.add(new SideEffect(150, 150, krebsSprite));
         //Es wird ein neues Fenster ertsellt mit dem Namen des Spiels als Titel und der Höhe und Breite der vorher angegebenen Attribute.
         screen = new Screen("LINK - Prototyp 1: Version 0.01", SCREEN_WIDTH, SCREEN_HEIGHT);
         TileSet tileSet = new TileSet("/res/tilesets/standard-raum-ts.png", 3, 3);
