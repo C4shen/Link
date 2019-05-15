@@ -3,6 +3,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.util.LinkedList;
 /**
  * Die zentrale Klasse des Programms. Hier wird die Anzeige und Funktionalität des Spiels verwaltet.
  * @author Cashen Adkins, Cepehr Bromand, www.quizdroid.wordpress.com
@@ -33,9 +34,9 @@ public class Game implements Runnable {
      */
     public static final int SCREEN_HEIGHT = 10*TileSet.TILE_HEIGHT + HP_BAR_HEIGHT; //Das Spiel hat erstmal eine Höhe von 10 Tiles und einem Platz für u.a. Leben und Punktzahl (10*64px + 100px = 740px).
     
-    
     private boolean running = true; //Gibt an, ob das Spiel momentan läuft (beendet ggf. die Game-Loop)
     private Player player; //Die Spielfigur des Spielers
+    private LinkedList<Enemy> gegnerListe; //Eine Liste mit allen Gegnern im Spiel
     private Room room; //Der Raum, der gerade gespielt wird
     private Screen screen; //Der Screen, auf dem das Spiel visualisiert wird
     private Graphics g; //Die Graphics, mit denen die Figuren gemalt werden
@@ -69,6 +70,10 @@ public class Game implements Runnable {
         long oldTimestamp;
         SpriteSheet playerSprite = new SpriteSheet("/res/sprites/player.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
         player = new Player(320, 320, playerSprite);
+        gegnerListe = new LinkedList<Enemy>();
+        
+        SpriteSheet krebsSprite = new SpriteSheet("/res/sprites/krebs.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
+        gegnerListe.add(new Krebs(150, 150, "krebs", krebsSprite));
         //Es wird ein neues Fenster ertsellt mit dem Namen des Spiels als Titel und der Höhe und Breite der vorher angegebenen Attribute.
         screen = new Screen("LINK - Prototyp 1: Version 0.01", SCREEN_WIDTH, SCREEN_HEIGHT);
         TileSet tileSet = new TileSet("/res/tilesets/standard-raum-ts.png", 3, 3);
@@ -118,6 +123,9 @@ public class Game implements Runnable {
         keyManager.update();
         player.setMove(getInput());
         player.update();
+        for(Enemy e : gegnerListe) {
+            e.update();
+        }
     }
     
     /**
@@ -159,6 +167,9 @@ public class Game implements Runnable {
             
             room.renderMap(g); // Erst die Spielfläche ...
             player.render(g); // ... und darauf die Spielfigur
+            for(Enemy e :  gegnerListe) {
+                e.render(g);
+            }
             
             bs.show();
             g.dispose();
