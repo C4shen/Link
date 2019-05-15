@@ -2,6 +2,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 /**
+ * Entities sind alle Objekte, die auf dem Spielfeld auftauchen und verschwinden können, also Gegenstände (Items) und Kreaturen (Creatures).
  * @author Janni Röbbecke, Ares Zühlke, Jakob Kleine, Cashen Adkins, www.quizdroid.wordpress.com
  * @version 0.02 (13.05.2019)
  * @since 0.01 (10.05.2019)
@@ -16,13 +17,16 @@ public abstract class Entity {
      */
     public static final int DEFAULT_HEIGHT = 64;
     
+    /**
+     * Name der Figur
+     */
     protected String name;
     /**
-     * aktuelle x-Position der Figur
+     * Aktuelle x-Position der Figur
      */
     protected int entityX;
     /**
-     * aktuelle y-Position der Figur
+     * Aktuelle y-Position der Figur
      */
     protected int entityY;
     /**
@@ -34,13 +38,13 @@ public abstract class Entity {
      */
     protected int height;
     /**
-     * Bild das die Entität abbildet
+     * Bild das die Entität für die Identität gerendert wird
      */
     protected BufferedImage image;
     
     /**
      * Erzeugt eine Entität (Figur)
-     * @author 
+     * @author Janni Röbbecke, Ares Zühlke, www.quizdroid.wordpress.com
      * @param name der Name der Entität
      * @param image das Bild, das die Entität abbildet
      * @param x die x-Position der Figur
@@ -60,14 +64,14 @@ public abstract class Entity {
     
     /**
      * Berechnet die neue Position und das neue Aussehen der Figur
-     * @author
+     * @author Janni Röbbecke, Ares Zühlke, quizdroid.wordpress.com
      * @since 0.01 (10.05.2019)
      */
     protected abstract void update();
     
     /**
      * Visualisiert die Figur im Fenster
-     * @author Janni, Ares, quizdroid.wordpress.com
+     * @author Janni Röbbecke, Ares Zühlke, quizdroid.wordpress.com
      * @param g die Graphics, mit denen das Bild der Figur gezeichnet werden soll
      * @since 0.01 (10.05.2019)
      */

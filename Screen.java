@@ -4,17 +4,18 @@ import javax.swing.JFrame;
 
 /**
  * Mit dem Screen wird ein Spiel visualisiert. 
- * Er besitzt eine Leinwand (Canvas), auf der der Hintergrund und Entities etc. angezeigt werden.
+ * Er besitzt eine Leinwand (Canvas), auf der der Hintergrund und Entities etc. gemalt werden.
+ * und eienen 
  * @author Cashen Adkins, Jakob Kleine, quizdroid.wordpress.com
  * @version 0.01 09.05.2019
  */
 public class Screen 
 {
-    private JFrame frame;
-    private Canvas canvas;
+    private JFrame frame; //Enthält die Leinwand
+    private Canvas canvas; //Leinwand: Hierauf wird gemalt
 
-    private String title;
-    private int width, height;
+    private String title; //Name des Frames
+    private int width, height; //Maße des Frames
 
     /**
      * Erstellt einen neuen Screen, auf dem das Spiel visualisiert werden kann.

@@ -1,8 +1,10 @@
 import java.awt.image.BufferedImage;
 import java.awt.Point;
 /**
- * @author Janni, Ares, www.quizdroid.wordpress.com
- * @version 0.01 (10.05.19)
+ * Der Player ist die Spielfigur, die vom Spieler gesteuert wird.
+ * @author Janni Rübbecke, Ares Zühlke, www.quizdroid.wordpress.com
+ * @version 0.01 (10.05.2019)
+ * @since 0.01 (10.05.2019)
  */
 public class Player extends Creature {
     /**
@@ -16,6 +18,7 @@ public class Player extends Creature {
     
     /**
      * Erzeugt eine Spielfigur
+     * @author Ares Zühlke, Janni Röbbecke, www.qizdroid.wordpress.com
      * @param x die x-Position der Spielfigur
      * @param y die y-Position der Spielfigur
      * @param playerSprite ein Spritesheet, das das Aussehen der Spielfigur bestimmt
@@ -27,6 +30,7 @@ public class Player extends Creature {
     
     /**
      * Berechnet die neue Position des Spielcharakters
+     * @author Ares Zühlke, Janni Röbbecke, www.qizdroid.wordpress.com
      * @since 0.01 (10.05.2019)
      */
     @Override
@@ -35,8 +39,10 @@ public class Player extends Creature {
     }
     
     /**
-     * 
-     * @param p 
+     * Ändert die Bewegungsrichtung der Spielfigur
+     * @author Ares Zühlke, Janni Röbbecke, www.qizdroid.wordpress.com
+     * @param p Punkt (xP|yP), der die Bewegungsrichtung in x-Richtung (xP) und y-Richtung (yP)angibt
+     * @since 0.01 (10.05.2019)
      */
     public void setMove(Point p){
         xMove = p.x;
