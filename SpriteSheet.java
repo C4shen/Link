@@ -35,6 +35,7 @@ public class SpriteSheet {
     public SpriteSheet(String path, int moves, int directions, int width, int height){
         sprite = new BufferedImage[moves][directions];
         try {
+            System.out.println(Utils.absoluteFileOf(path));
             sheet = ImageIO.read(Utils.absoluteFileOf(path));
         } catch (IOException e) {
             e.printStackTrace();

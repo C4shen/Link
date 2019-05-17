@@ -1,4 +1,5 @@
 import java.awt.image.BufferedImage;
+import java.awt.Point;
 /**
  * 
  * @author Jakob Kleine, Janni Röbbecke
@@ -6,6 +7,7 @@ import java.awt.image.BufferedImage;
  * @since 17.05.2019
  */
 public abstract class Weapon extends Movable {
+    
     /**
      * Ersellt eine neue Waffe
      * @author Jakob Kleine, Janni Röbbecke
@@ -20,4 +22,12 @@ public abstract class Weapon extends Movable {
     public Weapon(String name, SpriteSheet spriteSheet, int x, int y, int width, int height, int speed) {
         super(name, spriteSheet, x, y, width, height, speed);
     }
+    
+    /**
+     * Startet den Angriff mit dieser Waffe
+     * @param direction die Richtung, in die der Spieler zum Startpunkt des Angriffs guckt
+     * @author Jakob Kleine, Janni Röbbecke
+     * @since 0.01 (17.05.2019)
+     */
+    public abstract void startAttack(Point direction);
 }

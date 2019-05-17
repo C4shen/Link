@@ -24,11 +24,11 @@ public abstract class Entity {
     /**
      * Aktuelle x-Position der Figur
      */
-    protected int entityX;
+    protected double entityX;
     /**
      * Aktuelle y-Position der Figur
      */
-    protected int entityY;
+    protected double entityY;
     /**
      * Breite der Figur
      */
@@ -76,7 +76,7 @@ public abstract class Entity {
      * @since 0.01 (10.05.2019)
      */
     protected void render(Graphics g) {
-        g.drawImage(image, entityX, entityY, null);
+        g.drawImage(image, (int) Math.round(entityX), (int) Math.round(entityY), null);
     }
     
     /**

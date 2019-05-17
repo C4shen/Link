@@ -1,4 +1,5 @@
 import java.awt.image.BufferedImage;
+import java.awt.Point;
 
 /**
  * Entitäten, die sich auf dem Spielfeld bewegen können
@@ -11,7 +12,7 @@ public abstract class Movable extends Entity {
     /**
      * Standard-Geschwindigkeit einer Figur
      */
-    protected static final int DEFAULT_SPEED = 3;
+    protected static final double DEFAULT_SPEED = 3;
     
     /**
      * Spritesheet mit Bildern für die Bewegung der Figur
@@ -21,9 +22,10 @@ public abstract class Movable extends Entity {
     /**
      * Geschwindigkeit der Figur
      */
-    protected int speed;
+    protected double speed;
+    
     /**
-     * speichert ob die Figur sich gerade in x- bzw. y-Richtung bewegt
+     * Speichert ob die Figur sich gerade in x- bzw. y-Richtung bewegt
      */
     protected int xMove, yMove;
     
@@ -44,7 +46,7 @@ public abstract class Movable extends Entity {
      * @param speed die Geschwindigkeit der bewegbaren Entität
      * @since 0.01 (17.05.2019)
      */
-    public Movable(String name, SpriteSheet spriteSheet, int x, int y, int width, int height, int speed) {
+    public Movable(String name, SpriteSheet spriteSheet, int x, int y, int width, int height, double speed) {
         super(name, spriteSheet.getSpriteElement(0, 1), x, y, width, height);
         this.spriteSheet = spriteSheet;
         this.speed = speed;
@@ -81,6 +83,17 @@ public abstract class Movable extends Entity {
                 setCurrentImage(xMove, yMove, xPos); //Aktualisiert das Bild entsprechend
             }
         }
+    }
+
+    /**
+     * Ändert die Bewegungsrichtung der Spielfigur
+     * @author Ares Zühlke, Janni Röbbecke, www.qizdroid.wordpress.com
+     * @param p Punkt (xP|yP), der die Bewegungsrichtung in x-Richtung (xP) und y-Richtung (yP)angibt
+     * @since 0.01 (10.05.2019)
+     */
+    public void setMove(Point p){
+        xMove = p.x;
+        yMove = p.y;
     }
     
     /**
