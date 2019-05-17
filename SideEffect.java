@@ -42,7 +42,7 @@ public class SideEffect extends Enemy
     {
         if(entityX<20)
             setMove(new Point(1, 0));
-        if(entityX>400)
+        if(entityX>550)
             setMove(new Point(-1, 0));
         move();
     }
