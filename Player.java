@@ -1,5 +1,4 @@
 import java.awt.image.BufferedImage;
-import java.awt.Graphics;
 /**
  * Der Player ist die Spielfigur, die vom Spieler gesteuert wird.
  * @author Janni Rübbecke, Ares Zühlke, www.quizdroid.wordpress.com
@@ -16,7 +15,6 @@ public class Player extends Creature {
      */
     public static final double DEFAULT_SPEED = 1.5;
     
-    public Weapon weapon;
     
     /**
      * Erzeugt eine Spielfigur
@@ -27,33 +25,9 @@ public class Player extends Creature {
      * @since 0.01 (10.05.2019)
      */
     public Player(int x, int y, SpriteSheet playerSprite) {
-        super("Player", playerSprite, x, y, Entity.DEFAULT_WIDTH, Entity.DEFAULT_HEIGHT, Player.DEFAULT_HEALTH, Player.DEFAULT_SPEED);
+        super("Player", playerSprite, x, y, Entity.DEFAULT_WIDTH, Entity.DEFAULT_HEIGHT, Player.DEFAULT_HEALTH, Player.DEFAULT_SPEED, new Cursor(new SpriteSheet("/res/sprites/weapons/cursor.png", 4,4, 16, 16), x, y, DEFAULT_SPEED));
         weapon = new Cursor(new SpriteSheet("/res/sprites/weapons/cursor.png",4,4,16,16), x+7, y+30, Player.DEFAULT_SPEED);
     }
     
-    public void startAttack() {
-        weapon.startAttack(new java.awt.Point(xMove,yMove));
-    }
     
-    /**
-     * Berechnet die neue Position des Spielcharakters
-     * @author Ares Zühlke, Janni Röbbecke, www.qizdroid.wordpress.com
-     * @since 0.01 (10.05.2019)
-     */
-    @Override
-    public void update() {
-        move();
-        weapon.update();
-    }
-    
-    @Override 
-    public void render(Graphics g) {
-        super.render(g);
-        weapon.render(g);
-    }
-    
-    public void setMove(java.awt.Point p ){
-        super.setMove(p);
-        weapon.setMove(p);
-    }
 }

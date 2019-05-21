@@ -7,6 +7,8 @@ import java.awt.Point;
  * @since 17.05.2019
  */
 public abstract class Weapon extends Movable {
+    protected boolean isAttacking;
+    protected double ownerSpeed;
     
     /**
      * Ersellt eine neue Waffe
@@ -19,8 +21,8 @@ public abstract class Weapon extends Movable {
      * @param height die Höhe der Waffe
      * @since 0.01 (17.05.2019)
      */
-    public Weapon(String name, SpriteSheet spriteSheet, int x, int y, int width, int height, double speed) {
-        super(name, spriteSheet, x, y, width, height, speed);
+    public Weapon(String name, SpriteSheet spriteSheet, int x, int y, int width, int height, double ownerSpeed) {
+        super(name, spriteSheet, x, y, width, height, ownerSpeed);
     }
     
     /**
@@ -30,4 +32,8 @@ public abstract class Weapon extends Movable {
      * @since 0.01 (17.05.2019)
      */
     public abstract void startAttack(Point direction);
+    
+    public boolean isAttacking(){
+        return isAttacking;
+    }
 }

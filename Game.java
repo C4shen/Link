@@ -122,6 +122,8 @@ public class Game implements Runnable {
     {
         keyManager.update();
         player.setMove(getInput());
+        if(keyManager.attack())
+            player.startAttack();
         player.update();
         for(Enemy e : gegnerListe) {
             e.update();
