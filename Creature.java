@@ -19,7 +19,7 @@ public abstract class Creature extends Movable {
      */
     protected int health;
     
-    public Weapon weapon;
+    private Weapon weapon;
     
     /**
      * Erzeugt eine Kreatur (bzw. im Deutschen schöner Figur)
@@ -53,13 +53,16 @@ public abstract class Creature extends Movable {
     
     /**
      * Berechnet die neue Position des Spielcharakters
-     * @author Ares Zühlke, Janni Röbbecke, www.qizdroid.wordpress.com
+     * @author Ares Zühlke, Janni Röbbecke, www.quizdroid.wordpress.com
      * @since 0.01 (10.05.2019)
      */
     @Override
     public void update() {
         move();
-        weapon.update();
+        if(weapon.isAttacking())
+            weapon.update();
+        else
+            weapon.setPositionAccordingly(entityX, entityY, xPos, prevDirection);
     }
     
     @Override 
@@ -71,7 +74,6 @@ public abstract class Creature extends Movable {
     public void setMove(java.awt.Point p ){
         if(!weapon.isAttacking()){
             super.setMove(p);
-            weapon.setMove(p);
         }
     }
 }

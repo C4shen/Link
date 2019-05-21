@@ -4,6 +4,12 @@ public class Cursor extends Weapon {
     private static final int DEFAULT_WIDTH = 16;
     private static final int DEFAULT_HEIGHT = 16;
     private static final double DEFAULT_ATTACK_SPEED = 4;
+    private static final Point[][] posAdjustments = new Point[][]{
+        new Point[]{ new Point(25, 20), new Point(14, 26), new Point(18, 23) },
+        new Point[]{ new Point(25, 19), new Point(17, 17), new Point(2,6) },
+        new Point[]{ new Point(0,0), new Point(0,0), new Point(0,0) },
+        new Point[]{ new Point(0,0), new Point(0,0), new Point(0,0) }
+    };
     
     private double startX;
     private double startY;
@@ -23,9 +29,8 @@ public class Cursor extends Weapon {
      */
     @Override
     public void update() {
-        move();
         if(isAttacking) {
-            //if(entityX == startX && entityY == startY) {
+            move();
             if(beyondStart()){
                 stopAttack();
             }
@@ -33,6 +38,15 @@ public class Cursor extends Weapon {
                 speed -= 0.2;
             }
         }
+        //sont muss die Position bereits aktualisiert worden sein.
+    }
+    
+    @Override
+    public void setPositionAccordingly(double ownerX, double ownerY, int xPos, int direction) {
+        entityX = ownerX + posAdjustments[direction][xPos].x;
+        entityY = ownerY + posAdjustments[direction][xPos].y;
+        
+        setEntityImage(spriteSheet.getSpriteElement(xPos, direction));
     }
     
     /**

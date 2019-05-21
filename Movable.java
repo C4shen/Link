@@ -31,8 +31,9 @@ public abstract class Movable extends Entity {
     
     private int animationDelay; //Zählt die Durchläufe der Game-Loop. Die Bewegungs-Animation soll nur alle sieben Druchläufe erfolgen
     private int op; //Die Zahl, um die xPos erhöht wird
-    private int xPos; //Die Position der Beine usw. Sie zirkluiert folgendermaßen: 0->1->2->1->0 usw.
+    protected int xPos; //Die Position der Beine usw. Sie zirkluiert folgendermaßen: 0->1->2->1->0 usw.
     protected int prevDirection; //Die Richtung, in die sich die Figur vor dem Stillstand bewegt hat
+    
     /**
      * Erzeugt ein bewegbares Element
      * @author Jakob Kleine, Janni Röbbecke
@@ -87,7 +88,7 @@ public abstract class Movable extends Entity {
 
     /**
      * Ändert die Bewegungsrichtung der Spielfigur
-     * @author Ares Zühlke, Janni Röbbecke, www.qizdroid.wordpress.com
+     * @author Ares Zühlke, Janni Röbbecke, www.quizdroid.wordpress.com
      * @param p Punkt (xP|yP), der die Bewegungsrichtung in x-Richtung (xP) und y-Richtung (yP)angibt
      * @since 0.01 (10.05.2019)
      */

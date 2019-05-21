@@ -34,7 +34,9 @@ public abstract class Weapon extends Movable {
      */
     public abstract void startAttack(Point direction);
     
-    public boolean isAttacking(){
+    public abstract void setPositionAccordingly(double ownerX, double ownerY, int xPos, int direction);
+    
+    public boolean isAttacking() {
         return isAttacking;
     }
 }
