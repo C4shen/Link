@@ -5,7 +5,6 @@ public class Cursor extends Weapon {
     private static final int DEFAULT_HEIGHT = 16;
     private static final double DEFAULT_ATTACK_SPEED = 3;
     
-    private boolean isAttacking;
     private double startX;
     private double startY;
     /**
@@ -14,8 +13,8 @@ public class Cursor extends Weapon {
      * @param x die x-Position des Cursors
      * @param y die y-Position des Cursors
      */
-    public Cursor(SpriteSheet spriteSheet, int x, int y, double speed) {
-        super("Cursor", spriteSheet, x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, speed);
+    public Cursor(SpriteSheet spriteSheet, int x, int y, double ownerSpeed) {
+        super("Cursor", spriteSheet, x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, ownerSpeed);
     }
     
     /**
@@ -30,7 +29,7 @@ public class Cursor extends Weapon {
                 stopAttack();
             }
             else {
-                speed -= 0.000001;
+                speed -= 0.1;
             }
         }
     }
@@ -57,6 +56,6 @@ public class Cursor extends Weapon {
      */
     private void stopAttack() {
         isAttacking = false;
-        speed = Cursor.DEFAULT_SPEED;
+        speed = ownerSpeed;
     }
 }    

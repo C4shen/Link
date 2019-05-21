@@ -27,7 +27,7 @@ public class SideEffect extends Enemy
      */
     public SideEffect(int x, int y, SpriteSheet enemySprite) 
     {
-        super(x, y, "Krebs", enemySprite, DEFAULT_HEALTH, DEFAULT_SPEED);
+        super(x, y, "Krebs", enemySprite, DEFAULT_HEALTH, DEFAULT_SPEED, new Cursor(new SpriteSheet("/res/sprites/weapons/cursor.png", 4,4, 16, 16), x, y, DEFAULT_SPEED));
         setMove(new Point(-1, 0));
     }
     
@@ -44,17 +44,6 @@ public class SideEffect extends Enemy
             setMove(new Point(1, 0));
         if(entityX>550)
             setMove(new Point(-1, 0));
-        move();
-    }
-    
-    /**
-     * Ändert die Bewegungsrichtung des Nebeneffekts
-     * @author Janni Röbbecke, Jakob Kleine, Cashen Adkins
-     * @since 15.05.2019
-     * @param p Punkt (xP|yP), der die Bewegungsrichtung in x-Richtung (xP) und y-Richtung (yP)angibt
-     */
-    public void setMove(Point p){
-        xMove = p.x;
-        yMove = p.y;
+        super.update();
     }
 }

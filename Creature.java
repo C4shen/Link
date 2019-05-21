@@ -1,5 +1,6 @@
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.awt.Graphics;
 
 /**
  * Eine Kreatur ist eine bewegbare Entität, die sich auf dem Spielfeld bewegen kann, und Lebenspunkte besitzt.
@@ -18,6 +19,8 @@ public abstract class Creature extends Movable {
      */
     protected int health;
     
+    public Weapon weapon;
+    
     /**
      * Erzeugt eine Kreatur (bzw. im Deutschen schöner Figur)
      * @author Ares Zühlke, Janni Röbbecke, www.quizdroid.wordpress.com
@@ -30,9 +33,37 @@ public abstract class Creature extends Movable {
      * @param health die HP der Figur
      * @param speed die Geschwindigkeit der Figur
      */
-    public Creature(String name, SpriteSheet spriteSheet, int x, int y, int width, int height, int health, double speed) {
+    public Creature(String name, SpriteSheet spriteSheet, int x, int y, int width, int height, int health, double speed, Weapon weapon) {
         super(name, spriteSheet, x, y, width, height, speed);
+        this.weapon = weapon;
         this.health = health;
     }
     
+    public void startAttack() {
+        weapon.startAttack(new java.awt.Point(1,1));
+    }
+    
+    /**
+     * Berechnet die neue Position des Spielcharakters
+     * @author Ares Zühlke, Janni Röbbecke, www.qizdroid.wordpress.com
+     * @since 0.01 (10.05.2019)
+     */
+    @Override
+    public void update() {
+        move();
+        weapon.update();
+    }
+    
+    @Override 
+    public void render(Graphics g) {
+        super.render(g);
+        weapon.render(g);
+    }
+    
+    public void setMove(java.awt.Point p ){
+        if(!weapon.isAttacking()){
+            super.setMove(p);
+            weapon.setMove(p);
+        }
+    }
 }

@@ -8,7 +8,7 @@ import java.awt.event.KeyListener;
  */
 public class KeyManager implements KeyListener {
     private boolean[] keys; //Speichert für alle Tasten, ob sie gedrückt werden
-    private boolean up, down, left, right; //Speichert, ob die Tasten für eine Bewegung nach oben, unten usw. gedrückt werden
+    private boolean up, down, left, right, attack; //Speichert, ob die Tasten für eine Bewegung nach oben, unten usw. gedrückt werden
     
     /**
      * Erstellt einen neuen KeyManager.
@@ -29,6 +29,7 @@ public class KeyManager implements KeyListener {
         down = keys[KeyEvent.VK_S];
         left = keys[KeyEvent.VK_A];
         right = keys[KeyEvent.VK_D];
+        attack = keys[KeyEvent.VK_SPACE];
     }
     
     /**
@@ -102,5 +103,15 @@ public class KeyManager implements KeyListener {
      */
     public boolean right() {
         return right;
+    }
+    
+    /**
+     * Ermittelt, ob die Taste nach rechts gerade gedrückt wird
+     * @author Jakob Kleine, Janni Röbbecke
+     * @return ein boolean, der angibt, ob die Taste für eine Bewegung nach rechts gedrückt wird
+     * @since 0.02 (12.05.2019)
+     */
+    public boolean attack() {
+        return attack;
     }
 }
