@@ -23,6 +23,7 @@ public abstract class Weapon extends Movable {
      */
     public Weapon(String name, SpriteSheet spriteSheet, int x, int y, int width, int height, double ownerSpeed) {
         super(name, spriteSheet, x, y, width, height, ownerSpeed);
+        this.ownerSpeed = ownerSpeed;
     }
     
     /**

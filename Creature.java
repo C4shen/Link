@@ -40,7 +40,15 @@ public abstract class Creature extends Movable {
     }
     
     public void startAttack() {
-        weapon.startAttack(new java.awt.Point(1,1));
+        Point weaponDirection;
+        switch(prevDirection){
+            case 0: weaponDirection = new Point(0,1); break;
+            case 1: weaponDirection = new Point(-1,0); break;
+            case 2: weaponDirection = new Point(1,0); break;
+            default: weaponDirection = new Point(0,-1); break;
+        }
+        setMove(new Point(0,0));
+        weapon.startAttack(weaponDirection);
     }
     
     /**

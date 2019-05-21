@@ -25,7 +25,8 @@ public class Cursor extends Weapon {
     public void update() {
         move();
         if(isAttacking) {
-            if(entityX == startX && entityY == startY) {
+            //if(entityX == startX && entityY == startY) {
+            if(beyondStart()){
                 stopAttack();
             }
             else {
@@ -56,6 +57,12 @@ public class Cursor extends Weapon {
      */
     private void stopAttack() {
         isAttacking = false;
+        entityX = startX;
+        entityY = startY;
         speed = ownerSpeed;
+    }
+    
+    private boolean beyondStart(){
+        return (xMove==0 || (xMove<0 && entityX>=startX) || (xMove>0 && entityX<=startX)) && (yMove==0 || (yMove<0 && entityY>=startY) || (yMove>0 && entityY<=startY));
     }
 }    

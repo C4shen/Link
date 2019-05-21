@@ -32,7 +32,7 @@ public abstract class Movable extends Entity {
     private int animationDelay; //Zählt die Durchläufe der Game-Loop. Die Bewegungs-Animation soll nur alle sieben Druchläufe erfolgen
     private int op; //Die Zahl, um die xPos erhöht wird
     private int xPos; //Die Position der Beine usw. Sie zirkluiert folgendermaßen: 0->1->2->1->0 usw.
-    private int prevDirection; //Die Richtung, in die sich die Figur vor dem Stillstand bewegt hat
+    protected int prevDirection; //Die Richtung, in die sich die Figur vor dem Stillstand bewegt hat
     /**
      * Erzeugt ein bewegbares Element
      * @author Jakob Kleine, Janni Röbbecke
