@@ -1,15 +1,22 @@
 import java.awt.image.BufferedImage;
 import java.awt.Point;
 /**
+ * <code>Weapons</code> (Waffen) werden von <code>Creatures</code> (Kreaturen) verwendet, um anderen Kreaturen Schaden zuzufügen.
+ * Waffen haben einen Angriffs-Modus, der mit der Methode {@link #startAttack(Point) startAttack} aktiviert wird, und automatisch abklingt.
+ * Sie bewegen sich in der Regel mit ihren Besitzern mit und werden realtiv zu ihnen positioniert. 
+ * Beim Angriff mit einer Waffe bewegt sich diese aber selbstständig und kehrt, wenn der Angriff vorbei ist, wieder zu ihrem Benutzer zurück.
  * 
  * @author Jakob Kleine, Janni Röbbecke
  * @version 0.01 (17.05.2019)
  * @since 17.05.2019
  */
 public abstract class Weapon extends Movable {
+    /**
+     * Speichert, ob die Waffe gerade im Angriffs-Modus ist
+     * @since 21.05.2019
+     */
     protected boolean isAttacking;
-    protected double ownerSpeed;
-    
+    //Eigentlich könnte Waffe auch ein Interface sein!! -> Wäre das sinnvoll?
     /**
      * Ersellt eine neue Waffe
      * @author Jakob Kleine, Janni Röbbecke
@@ -21,9 +28,8 @@ public abstract class Weapon extends Movable {
      * @param height die Höhe der Waffe
      * @since 0.01 (17.05.2019)
      */
-    public Weapon(String name, SpriteSheet spriteSheet, int x, int y, int width, int height, double ownerSpeed) {
-        super(name, spriteSheet, x, y, width, height, ownerSpeed);
-        this.ownerSpeed = ownerSpeed;
+    public Weapon(String name, SpriteSheet spriteSheet, int x, int y, int width, int height, double speed) {
+        super(name, spriteSheet, x, y, width, height, speed);
     }
     
     /**
@@ -34,8 +40,29 @@ public abstract class Weapon extends Movable {
      */
     public abstract void startAttack(Point direction);
     
+    /**
+     * Ändert die Position der Waffe so, dass sie in der Hand des Benutzers liegt
+     * @param ownerX die x-Koordinate des Besitzers
+     * @param ownerY die y-Koordinate des Besitzers
+     * @param xPos die Pose in der Bewegung (beim Laufen)
+     * @param direction die Richtung, in die sich die Waffe bewegen soll. Momentan sin nur 4 Richtungen implementiert: 
+     *                  <ul>
+     *                      <li>0 -> Süden</li>
+     *                      <li>1 -> Westen</li>
+     *                      <li>2 -> Osten</li>
+     *                      <li>3 -> Norden</li>
+     *                  </ul>    
+     * @author Janni Röbbecke, Jakob Kleine
+     * @since 21.05.2019                   
+     */
     public abstract void setPositionAccordingly(double ownerX, double ownerY, int xPos, int direction);
     
+    /**
+     * Gibt an, ob die Waffe momentan angreift
+     * @return true, wenn die Waffe gerade im Angriffs-Modus ist, sonst false
+     * @author Janni Röbbecke, Jakob Kleine
+     * @since 21.05.2019                   
+     */
     public boolean isAttacking() {
         return isAttacking;
     }
