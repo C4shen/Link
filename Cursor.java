@@ -3,7 +3,7 @@ import java.awt.Point;
 public class Cursor extends Weapon {
     private static final int DEFAULT_WIDTH = 16;
     private static final int DEFAULT_HEIGHT = 16;
-    private static final double DEFAULT_ATTACK_SPEED = 3;
+    private static final double DEFAULT_ATTACK_SPEED = 4;
     
     private double startX;
     private double startY;
@@ -30,7 +30,7 @@ public class Cursor extends Weapon {
                 stopAttack();
             }
             else {
-                speed -= 0.1;
+                speed -= 0.2;
             }
         }
     }

@@ -68,7 +68,7 @@ public class Game implements Runnable {
         //Es werden zwei Attribute zur Überprüfung der vegrangegen Berechnungszeit erstellt.
         long timestamp;
         long oldTimestamp;
-        SpriteSheet playerSprite = new SpriteSheet("/res/sprites/player.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
+        SpriteSheet playerSprite = new SpriteSheet("/res/sprites/player1.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
         player = new Player(320, 320, playerSprite);
         gegnerListe = new LinkedList<Enemy>();
         

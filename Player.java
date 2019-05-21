@@ -25,8 +25,8 @@ public class Player extends Creature {
      * @since 0.01 (10.05.2019)
      */
     public Player(int x, int y, SpriteSheet playerSprite) {
-        super("Player", playerSprite, x, y, Entity.DEFAULT_WIDTH, Entity.DEFAULT_HEIGHT, Player.DEFAULT_HEALTH, Player.DEFAULT_SPEED, new Cursor(new SpriteSheet("/res/sprites/weapons/cursor.png", 4,4, 16, 16), x, y, DEFAULT_SPEED));
-        weapon = new Cursor(new SpriteSheet("/res/sprites/weapons/cursor.png",4,4,16,16), x+7, y+30, Player.DEFAULT_SPEED);
+        super("Player", playerSprite, x, y, Entity.DEFAULT_WIDTH, Entity.DEFAULT_HEIGHT, Player.DEFAULT_HEALTH, Player.DEFAULT_SPEED, 
+                new Cursor(new SpriteSheet("/res/sprites/weapons/cursor.png", 3 /*moves*/, 4 /*directions*/, 16 /*width*/, 16 /*height*/), x+10, y+30, DEFAULT_SPEED));
     }
     
     

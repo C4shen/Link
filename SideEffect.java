@@ -27,7 +27,8 @@ public class SideEffect extends Enemy
      */
     public SideEffect(int x, int y, SpriteSheet enemySprite) 
     {
-        super(x, y, "Krebs", enemySprite, DEFAULT_HEALTH, DEFAULT_SPEED, new Cursor(new SpriteSheet("/res/sprites/weapons/cursor.png", 4,4, 16, 16), x, y, DEFAULT_SPEED));
+        super(x, y, "Krebs", enemySprite, DEFAULT_HEALTH, DEFAULT_SPEED, 
+                new Cursor(new SpriteSheet("/res/sprites/weapons/cursor.png", 3 /*moves*/, 4 /*directions*/, 16 /*width*/, 16 /*height*/), x+10, y+30, DEFAULT_SPEED));
         setMove(new Point(-1, 0));
     }
     
