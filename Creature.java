@@ -67,7 +67,7 @@ public abstract class Creature extends Movable {
         if(weapon.isAttacking()) //Wenn die Waffe sich bewegt, soll sie sich eigenständig updaten, sonst wird ihre Bewegung vorgegeben
             weapon.update();
         else
-            weapon.setPositionAccordingly(entityX, entityY, xPos, prevDirection);
+            weapon.setPositionInHand(getHandPosition(prevDirection,xPos));
     }
     
     /**
@@ -87,4 +87,6 @@ public abstract class Creature extends Movable {
             super.setMove(p);
         }
     }
+    
+    public abstract Point getHandPosition(int xPos, int direction);
 }
