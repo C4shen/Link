@@ -55,6 +55,8 @@ public class SideEffect extends Enemy
         super.update();
     }
     
+    public boolean weaponBehind(){return false;}
+    
     public Point getHandPosition(int xPos, int direction){
         return handPosition[xPos][direction];
     }
