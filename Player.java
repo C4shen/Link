@@ -1,5 +1,6 @@
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.awt.Graphics;
 /**
  * Der Player ist die Spielfigur, die vom Spieler gesteuert wird.
  * @author Janni Rübbecke, Ares Zühlke, www.quizdroid.wordpress.com
@@ -35,6 +36,10 @@ public class Player extends Creature {
         super("Player", playerSprite, x, y, Entity.DEFAULT_WIDTH, Entity.DEFAULT_HEIGHT, Player.DEFAULT_HEALTH, Player.DEFAULT_SPEED, 
                 new Cursor(new SpriteSheet("/res/sprites/weapons/cursor.png", 3 /*moves*/, 4 /*directions*/, 16 /*width*/, 16 /*height*/), x+10, y+30, DEFAULT_SPEED)); 
                 //Eigentlich Waffe nicht im Konstruktor!
+    }
+    
+    public boolean weaponBehind(){
+        return prevDirection == 1 || prevDirection == 3;
     }
     
     public Point getHandPosition(int xPos, int direction){

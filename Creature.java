@@ -19,7 +19,7 @@ public abstract class Creature extends Movable {
      */
     protected int health;
     
-    private Weapon weapon; //Die Waffe der Figur
+    protected Weapon weapon; //Die Waffe der Figur
     
     /**
      * Erzeugt eine Kreatur (bzw. im Deutschen schöner Figur)
@@ -78,8 +78,14 @@ public abstract class Creature extends Movable {
      */
     @Override 
     public void render(Graphics g) {
-        super.render(g);
-        weapon.render(g);
+        if(weaponBehind()){
+            weapon.render(g);
+            super.render(g);
+        }
+        else{
+            super.render(g);
+            weapon.render(g);
+        }
     }
     
     public void setMove(java.awt.Point p ){
@@ -87,6 +93,8 @@ public abstract class Creature extends Movable {
             super.setMove(p);
         }
     }
+    
+    public abstract boolean weaponBehind();
     
     public abstract Point getHandPosition(int xPos, int direction);
 }
