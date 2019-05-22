@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 /**
  * Die zentrale Klasse des Programms. Hier wird die Anzeige und Funktionalität des Spiels verwaltet.
- * @author Cashen Adkins, Cepehr Bromand, www.quizdroid.wordpress.com
+ * @author Cashen Adkins, Cepehr Bromand, Janni Röbbecke, Jakob Kleine, www.quizdroid.wordpress.com
  * @version 0.02 (12.05.2019)
  * @since 0.01 (09.05.2019)
  */
@@ -121,8 +121,8 @@ public class Game implements Runnable {
     private void update() 
     {
         keyManager.update();
-        player.setMove(getInput());
-        if(keyManager.attack())
+        player.setMove(getInput()); //Bewegt den Spieler entsprechend der Eingabe über die Tasten
+        if(keyManager.attack()) //Wenn die Taste zum Angriff gedrückt wurde, greift der Spieler an
             player.startAttack();
         player.update();
         for(Enemy e : gegnerListe) {

@@ -1,6 +1,6 @@
 import java.awt.Point;
 /**
- * Ein SideEffect (Nebeneffekt ) ist eine Art von Gegner. 
+ * Ein SideEffect (Nebeneffekt) ist eine Art von Gegner. 
  * Er wird durch einen Krebs verkörpert und kann sich dementsprechend nur entlang der x-Achse bewegen.
  * @author Janni Röbbecke, Jakob Kleine, Cashen Adkins
  * @version 0.01 (15.05.2019)
@@ -29,7 +29,7 @@ public class SideEffect extends Enemy
     {
         super(x, y, "Krebs", enemySprite, DEFAULT_HEALTH, DEFAULT_SPEED, 
                 new Cursor(new SpriteSheet("/res/sprites/weapons/cursor.png", 3 /*moves*/, 4 /*directions*/, 16 /*width*/, 16 /*height*/), x+10, y+30, DEFAULT_SPEED));
-        setMove(new Point(-1, 0));
+        setMove(new Point(-1, 0)); //Zu Beginn bewegt sich der Side-Effect immer nach links
     }
     
     /**
