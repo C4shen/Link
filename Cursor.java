@@ -18,12 +18,8 @@ public class Cursor extends Weapon {
      * Der Cursor ist eine Waffe des Players. Das sind also die zusätzlichen Werte für die 
      * x-/y-Koordinaten des Cursors in der bestimmten Pose [2.Dimension] einer Bewegungsrichtung [1.Dimension]
      */
-    private static final Point[][] posAdjustments = new Point[][]{
-        new Point[]{ new Point(25, 20), new Point(14, 26), new Point(18, 23) },
-        new Point[]{ new Point(25, 19), new Point(17, 17), new Point(02, 06) },
-        new Point[]{ new Point(27, 19), new Point(32, 22), new Point(43, 11) },
-        new Point[]{ new Point(32, 18), new Point(37, 26), new Point(34, 22) }
-    };
+    
+    protected static final  Point handel = new Point(0,0);
     
     private double startX; //Die Startposition vor dem Angriff. Der Cursor kehrt hierhin zurück
     private double startY;
@@ -56,11 +52,11 @@ public class Cursor extends Weapon {
     }
     
     @Override
-    public void setPositionAccordingly(double ownerX, double ownerY, int xPos, int direction) {
-        entityX = ownerX + posAdjustments[direction][xPos].x;
-        entityY = ownerY + posAdjustments[direction][xPos].y;
+    public void setPositionInHand(Point handPosition) {
+        entityX = handPosition.x + handel.x;
+        entityY = handPosition.y + handel.y;
         
-        setEntityImage(spriteSheet.getSpriteElement(xPos, direction));
+        setEntityImage(spriteSheet.getSpriteElement(xPos, prevDirection));
     }
     
     /**

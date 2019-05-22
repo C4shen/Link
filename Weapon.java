@@ -16,6 +16,7 @@ public abstract class Weapon extends Movable {
      * @since 21.05.2019
      */
     protected boolean isAttacking;
+    //public abstract Point handel;
     //Eigentlich könnte Waffe auch ein Interface sein!! -> Wäre das sinnvoll?
     /**
      * Ersellt eine neue Waffe
@@ -55,7 +56,7 @@ public abstract class Weapon extends Movable {
      * @author Janni Röbbecke, Jakob Kleine
      * @since 21.05.2019                   
      */
-    public abstract void setPositionAccordingly(double ownerX, double ownerY, int xPos, int direction);
+    public abstract void setPositionInHand(Point handPosition);
     
     /**
      * Gibt an, ob die Waffe momentan angreift
