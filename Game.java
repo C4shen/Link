@@ -3,7 +3,6 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.util.LinkedList;
 /**
  * Die zentrale Klasse des Programms. Hier wird die Anzeige und Funktionalität des Spiels verwaltet.
  * @author Cashen Adkins, Cepehr Bromand, Janni Röbbecke, Jakob Kleine, www.quizdroid.wordpress.com
@@ -33,14 +32,10 @@ public class Game implements Runnable {
      * Die Höhe des Spielfensters in Pixel
      */
     public static final int SCREEN_HEIGHT = 10*TileSet.TILE_HEIGHT + HP_BAR_HEIGHT; //Das Spiel hat erstmal eine Höhe von 10 Tiles und einem Platz für u.a. Leben und Punktzahl (10*64px + 100px = 740px).
-    
-    private boolean running = true; //Gibt an, ob das Spiel momentan läuft (beendet ggf. die Game-Loop)
-    private Player player; //Die Spielfigur des Spielers
-    private LinkedList<Enemy> gegnerListe; //Eine Liste mit allen Gegnern im Spiel
-    private Room room; //Der Raum, der gerade gespielt wird
     private Screen screen; //Der Screen, auf dem das Spiel visualisiert wird
-    private Graphics g; //Die Graphics, mit denen die Figuren gemalt werden
-    private KeyManager keyManager; //Der KeyManager, der die Eingaben über die Tastatur verwaltet
+    private boolean running = true; //Gibt an, ob das Spiel momentan läuft (beendet ggf. die Game-Loop)
+    private KeyManager keyManager; //Der KeyManager, der die Eingaben über die Tastatur verwaltet.
+    private Graphics g; //Die Graphics, mit denen die Figuren gemalt werden.
     
     /**
      * Startet ein neues Spiel
@@ -68,24 +63,30 @@ public class Game implements Runnable {
         //Es werden zwei Attribute zur Überprüfung der vegrangegen Berechnungszeit erstellt.
         long timestamp;
         long oldTimestamp;
-        SpriteSheet playerSprite = new SpriteSheet("/res/sprites/player1.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
-        player = new Player(320, 320, playerSprite);
-        gegnerListe = new LinkedList<Enemy>();
-        
-        SpriteSheet krebsSprite = new SpriteSheet("/res/sprites/krebs.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
-        gegnerListe.add(new SideEffect(150, 150, krebsSprite));
         //Es wird ein neues Fenster ertsellt mit dem Namen des Spiels als Titel und der Höhe und Breite der vorher angegebenen Attribute.
         screen = new Screen("LINK - Prototyp 1: Version 0.01", SCREEN_WIDTH, SCREEN_HEIGHT);
-        TileSet tileSet = new TileSet("/res/tilesets/standard-raum-ts.png", 3, 3);
-        room = new Room("/res/rooms/standard-raum.txt", tileSet);
-    
         keyManager = new KeyManager();
         screen.getFrame().addKeyListener(keyManager);
+        State gameState = new GameState(this);
+        State menuState = new MenuState(this);
+        State.setState(gameState);
         //Solange das Spiel läuft wird die Gameloop wiederholt/ausgeführt. 
         while(running) 
         {
             //Die Zeit, vor Berechnung der neuen Werte, wird gespeichert.
             oldTimestamp = System.currentTimeMillis();
+            //Überprüft ob gerade Escape gedrückt wird und ändert die State entweder von gameState zu menuState oder von menuState zu gameState.
+            if(keyManager.escape())
+            {
+                if(State.getState()==gameState)
+                {
+                    State.setState(menuState);
+                }
+                else
+                {
+                    State.setState(gameState);
+                }
+            }
             //Die Update-Methode wird aufgerufen, die u.a. die Positionen der Spielcharaktere neu berechnet.
             update();
             //Die Zeit, nach Berechnung der neuen Werte, wird gespeichert.
@@ -114,29 +115,23 @@ public class Game implements Runnable {
     }
     
     /**
-     * Aktualisiert die Spielmechanik
+     * Aktualisiert die Spielmechanik durch Aufrufen der Update-Methode der momentanen State
      * @author Cashen Adkins, Jakob Kleine, www.quizdroid.wordpress.com
      * @since 0.01 (9.05.2019)
      */
     private void update() 
     {
         keyManager.update();
-        player.setMove(getInput()); //Bewegt den Spieler entsprechend der Eingabe über die Tasten
-        if(keyManager.attack()) //Wenn die Taste zum Angriff gedrückt wurde, greift der Spieler an
-            player.startAttack();
-        player.update();
-        for(Enemy e : gegnerListe) {
-            e.update();
-        }
+        State.getState().update();
     }
     
     /**
      * Holt vom Key-Manager ein, welche Beweguns-Tasten gedückt werden
-     * @author Janni Röbbecke, Ares Zühlke, www.quizdroid.wordpress.com
+     * @author Janni Röbbecke, Ares Zühlke, Cashen Adkins, www.quizdroid.wordpress.com
      * @since 0.02 (11.05.2019)
      * @return ein Punkt, der die Bewegung in x- und y-Richtung angibt
      */
-    private Point getInput(){
+    public Point getInput(){
         int xMove = 0;
         int yMove = 0;
         if(keyManager.up())
@@ -157,24 +152,17 @@ public class Game implements Runnable {
      */
     private void render() 
     {
-        Canvas c = screen.getCanvas();
-        //c.setBackground(Color.blue);
-        BufferStrategy bs = c.getBufferStrategy();
-        if(bs == null)
-            screen.getCanvas().createBufferStrategy(3);
-        else{
-            g = bs.getDrawGraphics();
-            //Clear Screen
-            g.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-            
-            room.renderMap(g); // Erst die Spielfläche ...
-            player.render(g); // ... und darauf die Spielfigur
-            for(Enemy e :  gegnerListe) {
-                e.render(g);
-            }
-            
-            bs.show();
-            g.dispose();
-        }
+        State.getState().render(g);
     }
+    
+    public KeyManager getKeyManager()
+    {
+        return keyManager;
+    }
+    
+    public Canvas getCanvas()
+    {
+        return screen.getCanvas();
+    }
+    
 }
