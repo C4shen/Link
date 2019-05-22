@@ -1,4 +1,5 @@
 import java.awt.Point;
+import java.awt.Rectangle;
 /**
  * Ein SideEffect (Nebeneffekt) ist eine Art von Gegner. 
  * Er wird durch einen Krebs verkörpert und kann sich dementsprechend nur entlang der x-Achse bewegen.
@@ -8,6 +9,7 @@ import java.awt.Point;
  */
 public class SideEffect extends Enemy
 {
+    //Noch nicht bestimmt
     private static final Point[][] handPosition = new Point[][]{
         new Point[]{ new Point(25, 20), new Point(14, 26), new Point(18, 23) },
         new Point[]{ new Point(25, 19), new Point(17, 17), new Point(02, 06) },
@@ -55,9 +57,22 @@ public class SideEffect extends Enemy
         super.update();
     }
     
-    public boolean weaponBehind(){return false;}
+    //Noch nicht bestimmt
+    public boolean weaponBehind(){ return false; }
     
+    /**
+     * @author Janni Röbbecke, Jakob Kleine
+     * @since 22.05.2019
+     */
     public Point getHandPosition(int xPos, int direction){
         return handPosition[xPos][direction];
+    }
+    
+    /**
+     * @author Jakob Kleine, Cepehr Bromand, Ares Zühlke
+     * @since 22.05.2019
+     */
+    public Rectangle getHitbox() {
+        return new Rectangle((int) Math.round(entityX), (int) Math.round(entityY), 64, 64);
     }
 }

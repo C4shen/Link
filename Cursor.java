@@ -1,5 +1,5 @@
 import java.awt.Point;
-
+import java.awt.Rectangle;
 /**
  * Der Cursor ist eine Art von Waffe, die der Spieler einsammeln kann, um Gegner zu bekämpfen.
  * Beim Angriff wird der Cursor geworfen, und trifft eventuell dabei einen Gegner.
@@ -19,7 +19,12 @@ public class Cursor extends Weapon {
      * x-/y-Koordinaten des Cursors in der bestimmten Pose [2.Dimension] einer Bewegungsrichtung [1.Dimension]
      */
     
-    protected static final  Point handel = new Point(0,0);
+    protected static final Point[][] handelPositions = new Point[][]{
+        new Point[] { new Point(06, 14), new Point(06, 14), new Point(06, 14), new Point(06, 14) },
+        new Point[] { new Point(10, 13), new Point(10, 13), new Point(10, 13), new Point(0,0) },
+        new Point[] { new Point(0, 0), new Point(0,0), new Point(0,0), new Point(0,0) },
+        new Point[] { new Point(0, 0), new Point(0,0), new Point(0,0), new Point(0,0) }
+    };
     
     private double startX; //Die Startposition vor dem Angriff. Der Cursor kehrt hierhin zurück
     private double startY;
@@ -53,8 +58,8 @@ public class Cursor extends Weapon {
     
     @Override
     public void setPositionInHand(Point handPosition) {
-        entityX = handPosition.x + handel.x;
-        entityY = handPosition.y + handel.y;
+        entityX = handPosition.x; // - handelPositions[0][0].x;
+        entityY = handPosition.y; // - handelPositions[0][0].y;
         
         setEntityImage(spriteSheet.getSpriteElement(xPos, prevDirection));
     }
@@ -95,5 +100,13 @@ public class Cursor extends Weapon {
         return (xMove==0 || (xMove<0 && entityX>=startX) || (xMove>0 && entityX<=startX))
                 && //y.Richtung muss genauso überprüft werden
                (yMove==0 || (yMove<0 && entityY>=startY) || (yMove>0 && entityY<=startY));
+    }
+    
+    /**
+     * @author Jakob Kleine, Cepehr Bromand, Ares Zühlke
+     * @since 22.05.2019
+     */
+    public Rectangle getHitbox() {
+        return new Rectangle((int) Math.round(entityX), (int) Math.round(entityY), 16, 16);
     }
 }    

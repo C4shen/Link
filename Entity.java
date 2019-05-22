@@ -1,6 +1,6 @@
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-
+import java.awt.Rectangle;
 /**
  * Entities sind alle Objekte, die auf dem Spielfeld auftauchen und verschwinden können, also Gegenstände (Items) und Kreaturen (Creatures).
  * @author Janni Röbbecke, Ares Zühlke, Jakob Kleine, Cashen Adkins, www.quizdroid.wordpress.com
@@ -88,4 +88,12 @@ public abstract class Entity {
     protected void setEntityImage(BufferedImage image) {
         this.image = image;
     }
+    
+    /**
+     * Gibt die Hitbox der Entität zurück.
+     * @return ein Rechteck, das den Bereich markiert, in dem die Entität mit anderen Entitäten kollidiert
+     * @author Jakob Kleine, Cepehr Bromand, Ares Zühlke
+     * @since 22.05.2019
+     */
+    public abstract Rectangle getHitbox();
 }

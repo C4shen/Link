@@ -1,4 +1,5 @@
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics;
 /**
@@ -17,6 +18,9 @@ public class Player extends Creature {
      */
     public static final double DEFAULT_SPEED = 1.5;
     
+    /**
+     * Die Koordinaten der Hand in den verschiedenen Bildern/Positionen
+     */
     private static final Point[][] handPosition = new Point[][]{
         new Point[]{ new Point(25, 20), new Point(14, 26), new Point(18, 23) },
         new Point[]{ new Point(25, 19), new Point(17, 17), new Point(02, 06) },
@@ -38,11 +42,27 @@ public class Player extends Creature {
                 //Eigentlich Waffe nicht im Konstruktor!
     }
     
-    public boolean weaponBehind(){
+    /**
+     * @author Janni Röbbecke, Jakob Kleine
+     * @since 22.05.2019
+     */
+    protected boolean weaponBehind(){ 
         return prevDirection == 1 || prevDirection == 3;
     }
     
+    /**
+     * @author Janni Röbbecke, Jakob Kleine
+     * @since 22.05.2019
+     */
     public Point getHandPosition(int xPos, int direction){
-        return new Point(handPosition[xPos][direction].x + (int)Math.round(entityX), handPosition[xPos][direction].y + (int)Math.round(entityY));
+        return new Point(handPosition[xPos][direction].x + (int) Math.round(entityX), handPosition[xPos][direction].y + (int)Math.round(entityY));
+    }
+
+    /**
+     * @author Jakob Kleine, Cepehr Bromand, Ares Zühlke
+     * @since 22.05.2019
+     */
+    public Rectangle getHitbox() {
+        return new Rectangle((int) Math.round(entityX), (int) Math.round(entityY), 64, 64); 
     }
 }
