@@ -14,8 +14,8 @@ public class GameState extends State
 {
     private Player player; //Die Spielfigur des Spielers
     private LinkedList<Enemy> gegnerListe; //Eine Liste mit allen Gegnern im Spiel
-    private LinkedList<Weapon> attackingWeapons; 
-    private LinkedList<Border> roomBorders; 
+    private LinkedList<Weapon> attackingWeapons; //Die Waffen, die sich gerade im Angriff befinden
+    private LinkedList<Border> roomBorders; //Die Wände des Raums
     private Room room; //Der Raum, der gerade gespielt wird
     public GameState(Game game)
     {
@@ -83,14 +83,14 @@ public class GameState extends State
         }
         
         for(Weapon w : attackingWeapons) {
-            if(! w.isAttacking()) {
+            if(!w.isAttacking()) {
                 attackingWeapons.remove(w);
-                System.out.println("Die Waffe "+w+"greift nicht mehr an!");
+                System.out.println("Die Waffe "+w+"greift nicht mehr an.");
             }
         }
         
         if(collidesWithBorder(player)) {
-            System.out.println("Kollision mit der Border entdeckt");
+            System.out.println("Kollision vom Spieler mit der Border entdeckt");
         }
         if(collidesWith(player, gegnerListe).size() > 0)
             System.out.println("Kollision vom Spieler mit einem Gegner");
