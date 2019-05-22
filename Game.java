@@ -36,6 +36,8 @@ public class Game implements Runnable {
     private boolean running = true; //Gibt an, ob das Spiel momentan läuft (beendet ggf. die Game-Loop)
     private KeyManager keyManager; //Der KeyManager, der die Eingaben über die Tastatur verwaltet.
     private Graphics g; //Die Graphics, mit denen die Figuren gemalt werden.
+    private State gameState;
+    private State menuState;
     
     /**
      * Startet ein neues Spiel
@@ -67,26 +69,14 @@ public class Game implements Runnable {
         screen = new Screen("LINK - Prototyp 1: Version 0.01", SCREEN_WIDTH, SCREEN_HEIGHT);
         keyManager = new KeyManager();
         screen.getFrame().addKeyListener(keyManager);
-        State gameState = new GameState(this);
-        State menuState = new MenuState(this);
+        gameState = new GameState(this);
+        menuState = new MenuState(this);
         State.setState(gameState);
         //Solange das Spiel läuft wird die Gameloop wiederholt/ausgeführt. 
         while(running) 
         {
             //Die Zeit, vor Berechnung der neuen Werte, wird gespeichert.
             oldTimestamp = System.currentTimeMillis();
-            //Überprüft ob gerade Escape gedrückt wird und ändert die State entweder von gameState zu menuState oder von menuState zu gameState.
-            if(keyManager.escape())
-            {
-                if(State.getState()==gameState)
-                {
-                    State.setState(menuState);
-                }
-                else
-                {
-                    State.setState(gameState);
-                }
-            }
             //Die Update-Methode wird aufgerufen, die u.a. die Positionen der Spielcharaktere neu berechnet.
             update();
             //Die Zeit, nach Berechnung der neuen Werte, wird gespeichert.
@@ -122,7 +112,23 @@ public class Game implements Runnable {
     private void update() 
     {
         keyManager.update();
-        State.getState().update();
+        //Überprüft ob gerade Escape gedrückt wird und ändert die State entweder von gameState zu menuState oder von menuState zu gameState.
+        if(keyManager.escape()) 
+        {
+            if(State.getState() == gameState)
+            {
+                State.setState(menuState);
+            }
+            else if(State.getState()==menuState)
+            {
+                State.setState(gameState);
+            }
+        }
+        //Nur wenn das Spiel in einer State ist, wird die State-spezifische Methode aufgerufen
+        if(State.getState() != null)
+        {
+            State.getState().update();
+        }
     }
     
     /**

@@ -9,7 +9,7 @@ import java.awt.event.KeyListener;
 public class KeyManager implements KeyListener {
     private boolean[] keys; //Speichert für alle Tasten, ob sie gedrückt werden
     private boolean up, down, left, right, attack, escape; //Speichert, ob die Tasten für eine Bewegung nach oben, unten usw. gedrückt werden
-    private boolean letzterStatusEscape;
+    private boolean letzterStatusEscape; //Speichert den letzten Status der Escape-Taste sodass die Taste nicht mehrmals pro Loop "gedrückt" wird, obwohl man sie nur einmal drücken will.
     
     /**
      * Erstellt einen neuen KeyManager.
@@ -119,12 +119,21 @@ public class KeyManager implements KeyListener {
     }
     
     /**
-     * Ermittelt, ob die Escape-Taste momentan gedrückt wird
+     * Ermittelt, ob die Escape-Taste ihren Status geändert hat, sodass egal wie lange man die Taste drückt, nur einmal das Puasenmenü geöffnet wird.
      * @author Cashen Adkins, Janni Röbbecke
      * @return ein boolean, der angibt, ob die Taste für eine Bewegung nach rechts gedrückt wird
      * @since 0.02 (12.05.2019)
      */
     public boolean escape() {
-        return escape;
+        if(escape && !letzterStatusEscape)
+        {
+            letzterStatusEscape = escape;
+            return true;
+        }
+        else
+        {
+            letzterStatusEscape = escape;
+            return false;
+        }
     }
 }
