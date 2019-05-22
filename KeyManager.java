@@ -9,6 +9,7 @@ import java.awt.event.KeyListener;
 public class KeyManager implements KeyListener {
     private boolean[] keys; //Speichert für alle Tasten, ob sie gedrückt werden
     private boolean up, down, left, right, attack, escape; //Speichert, ob die Tasten für eine Bewegung nach oben, unten usw. gedrückt werden
+    private boolean letzterStatusEscape;
     
     /**
      * Erstellt einen neuen KeyManager.
@@ -17,6 +18,7 @@ public class KeyManager implements KeyListener {
      */
     public KeyManager(){
         keys = new boolean[256];
+        letzterStatusEscape = false;
     }
     
     /**

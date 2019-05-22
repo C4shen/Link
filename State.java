@@ -7,8 +7,13 @@ import java.awt.Graphics;
 public abstract class State 
 {
     private static State currentState = null;
+    protected Game game;
+    public State(Game game)
+    {
+      this.game = game;
+    }
     
-    public static void setState(State state)
+        public static void setState(State state)
     {
       currentState = state;
     }
@@ -16,11 +21,6 @@ public abstract class State
     public static State getState()
     {
       return currentState;
-    }
-    protected Game game;
-    public State(Game game)
-    {
-      this.game = game;
     }
     
     public abstract void update();
