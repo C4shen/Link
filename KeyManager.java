@@ -2,13 +2,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 /**
  * Der KeyManager verwaltet die Eingaben über die Tastatur
- * @author Ares Zühlke, Janni Röbbecke, Jakob Kleine, www.quizdroid.wordpress.com
+ * @author Ares Zühlke, Janni Röbbecke, Jakob Kleine, Cashen Adkins, www.quizdroid.wordpress.com
  * @version 0.02 (12.05.2019)
  * @since 0.01 (11.05.2019)
  */
 public class KeyManager implements KeyListener {
     private boolean[] keys; //Speichert für alle Tasten, ob sie gedrückt werden
-    private boolean up, down, left, right, attack; //Speichert, ob die Tasten für eine Bewegung nach oben, unten usw. gedrückt werden
+    private boolean up, down, left, right, attack, escape; //Speichert, ob die Tasten für eine Bewegung nach oben, unten usw. gedrückt werden
     
     /**
      * Erstellt einen neuen KeyManager.
@@ -20,8 +20,8 @@ public class KeyManager implements KeyListener {
     }
     
     /**
-     * Aktualisiert die Werte der Attribute <code>up</code>, <code>down</code>, <code>left</code> und <code>right</code>
-     * @author Janni Röbbecke, Jakob Kleine, Ares Zühlke, www.quizdroid.wordpress.com
+     * Aktualisiert die Werte der Attribute <code>up</code>, <code>down</code>, <code>left</code>, <code>right</code>, <code>attack</code> und <code>escape</code>
+     * @author Janni Röbbecke, Jakob Kleine, Ares Zühlke, Cashen Adkins, www.quizdroid.wordpress.com
      * @since 0.01 (11.05.2019)
      */
     public void update(){
@@ -30,6 +30,7 @@ public class KeyManager implements KeyListener {
         left = keys[KeyEvent.VK_A];
         right = keys[KeyEvent.VK_D];
         attack = keys[KeyEvent.VK_SPACE];
+        escape = keys[KeyEvent.VK_ESCAPE];
     }
     
     /**
@@ -66,7 +67,7 @@ public class KeyManager implements KeyListener {
     }
     
     /**
-     * Ermittelt, ob die Taste nach oben gerade gedrückt wird
+     * Ermittelt, ob die Taste nach oben momentan gedrückt wird
      * @author Jakob Kleine, Janni Röbbecke
      * @return ein boolean, der angibt, ob die Taste für eine Bewegung nach oben gedrückt wird
      * @since 0.02 (12.05.2019)
@@ -76,7 +77,7 @@ public class KeyManager implements KeyListener {
     }
     
     /**
-     * Ermittelt, ob die Taste nach unten gerade gedrückt wird
+     * Ermittelt, ob die Taste nach unten momentan gedrückt wird
      * @author Jakob Kleine, Janni Röbbecke
      * @return ein boolean, der angibt, ob die Taste für eine Bewegung nach unten gedrückt wird
      * @since 0.02 (12.05.2019)
@@ -86,8 +87,8 @@ public class KeyManager implements KeyListener {
     }
     
     /**
-     * Ermittelt, ob die Taste nach oben links gedrückt wird
-     * @author Jakob Kleine, Janni Röbbecke
+     * Ermittelt, ob die Taste nach links momentan gedrückt wird
+     * @author Jakob Kleine, Janni Röbbecke, Cashen Adkins
      * @return ein boolean, der angibt, ob die Taste für eine Bewegung nach links gedrückt wird
      * @since 0.02 (12.05.2019)
      */
@@ -96,8 +97,8 @@ public class KeyManager implements KeyListener {
     }
     
     /**
-     * Ermittelt, ob die Taste nach rechts gerade gedrückt wird
-     * @author Jakob Kleine, Janni Röbbecke
+     * Ermittelt, ob die Taste nach rechts momentan gedrückt wird
+     * @author Jakob Kleine, Janni Röbbecke, Cashen Adkins
      * @return ein boolean, der angibt, ob die Taste für eine Bewegung nach rechts gedrückt wird
      * @since 0.02 (12.05.2019)
      */
@@ -106,12 +107,22 @@ public class KeyManager implements KeyListener {
     }
     
     /**
-     * Ermittelt, ob die Taste nach rechts gerade gedrückt wird
-     * @author Jakob Kleine, Janni Röbbecke
+     * Ermittelt, ob die Angriffs-Taste momentan gedrückt wird
+     * @author Jakob Kleine, Janni Röbbecke, Cashen Adkins
      * @return ein boolean, der angibt, ob die Taste für eine Bewegung nach rechts gedrückt wird
      * @since 0.02 (12.05.2019)
      */
     public boolean attack() {
         return attack;
+    }
+    
+    /**
+     * Ermittelt, ob die Escape-Taste momentan gedrückt wird
+     * @author Cashen Adkins, Janni Röbbecke
+     * @return ein boolean, der angibt, ob die Taste für eine Bewegung nach rechts gedrückt wird
+     * @since 0.02 (12.05.2019)
+     */
+    public boolean escape() {
+        return escape;
     }
 }
