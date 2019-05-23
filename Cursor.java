@@ -94,6 +94,7 @@ public class Cursor extends Weapon {
      * Überprüft, ob die Waffe wieder an ihrem Startpunkt angekommen ist, bzw. ob sie schon darüber hinaus (beyond) bewegt wurde
      * 
      * @return true, wenn die Position der Waffe ihrer Startposition gleicht, oder sie (in der Bewegungsrichtung der Waffe) größer ist. Sonst false
+     * 
      */
     private boolean beyondStart(){
         //Wenn keine Bewegung entlang x || Bewegung nach links -> entityX soll >= startX sein || Bewegung nach rechts -> ...
