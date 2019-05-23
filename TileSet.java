@@ -66,4 +66,5 @@ public class TileSet
     public void renderTile(Graphics g, int tileNum, int x, int y) {
         g.drawImage(tiles[tileNum], x, y, TILE_WIDTH, TILE_HEIGHT, null);
     }
+    //Gideon war hier (:
 }
