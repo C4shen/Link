@@ -27,10 +27,10 @@ public class KeyManager implements KeyListener {
      * @since 0.01 (11.05.2019)
      */
     public void update(){
-        up = keys[KeyEvent.VK_W];
-        down = keys[KeyEvent.VK_S];
-        left = keys[KeyEvent.VK_A];
-        right = keys[KeyEvent.VK_D];
+        up = keys[KeyEvent.VK_W] || keys[KeyEvent.VK_UP];
+        down = keys[KeyEvent.VK_S] || keys[KeyEvent.VK_DOWN];
+        left = keys[KeyEvent.VK_A] || keys[KeyEvent.VK_LEFT];
+        right = keys[KeyEvent.VK_D] || keys[KeyEvent.VK_RIGHT];
         attack = keys[KeyEvent.VK_SPACE];
         escape = keys[KeyEvent.VK_ESCAPE];
     }

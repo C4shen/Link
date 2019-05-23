@@ -9,6 +9,7 @@ import java.awt.Graphics;
  */
 public class Border extends Entity
 {
+    public static final int BORDER_WIDTH = 10;
     //Die Border wird nur über ihre Hitbox definiert
     private Rectangle hitBox; 
     /**
