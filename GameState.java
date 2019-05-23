@@ -77,8 +77,8 @@ public class GameState extends State
         player.setMove(game.getInput()); //Bewegt den Spieler entsprechend der Eingabe über die Tasten
         if(game.getKeyManager().attack()) { //Wenn die Taste zum Angriff gedrückt wurde, greift der Spieler an
             Weapon attackingWeapon = player.startAttack();
-            if(attackingWeapon != null) 
-                attackingWeapons.add(attackingWeapon);
+            if(attackingWeapon != null) //Wenn ein neuer Angriff ausgeführt wurde
+                attackingWeapons.add(attackingWeapon); //Speichert die Waffe, um Kollisionen mit Gegnern zu prüfen
         }
         player.update();
         for(Enemy e : gegnerListe) {
@@ -86,28 +86,28 @@ public class GameState extends State
         }
         
         for(Weapon w : attackingWeapons) {
-            if(!w.isAttacking()) {
+            if(!w.isAttacking())
                 attackingWeapons.remove(w);
-                System.out.println("Die Waffe "+w+"greift nicht mehr an.");
-            }
             else {//Auf Kollision prüfen
                 LinkedList<Entity> getroffeneGegner = collidesWith(w, gegnerListe);
-                if(getroffeneGegner.size() > 0) 
-                    System.out.println("Der Cursor hat zugeschlagen");
+                for(Entity e : getroffeneGegner) {
+                    ((Enemy) e).startBeingAttacked(w);
+                }
             }
         }
         
         keepInside(player);
         for(Weapon w : attackingWeapons)
             keepInside(w);
-        keepInside(player.weapon);
+        for(Enemy e : gegnerListe)
+            keepInside(e);
     }
     
     private void keepInside(Movable e) {
         if(collision(e, roomBorders[0])) //Border Oben
             e.setEntityY(Game.HP_BAR_HEIGHT + Border.BORDER_WIDTH);
         else if(collision(e, roomBorders[1])) //Border Unten
-            e.setEntityY(Game.SCREEN_HEIGHT - (int) e.getHitbox().getHeight() - Border.BORDER_WIDTH); //Ide für Glitch -> -Borderwidth weglassen
+            e.setEntityY(Game.SCREEN_HEIGHT - (int) e.getHitbox().getHeight() - Border.BORDER_WIDTH); //Idee für Glitch -> -Borderwidth weglassen
         //Kein else hier, weil auch 2 Borders getroffen werden können
         if(collision(e, roomBorders[2])) //Border Links
             e.setEntityX(Border.BORDER_WIDTH);

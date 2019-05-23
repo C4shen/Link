@@ -65,4 +65,8 @@ public class Player extends Creature {
     public Rectangle getHitbox() {
         return new Rectangle((int) Math.round(entityX), (int) Math.round(entityY), 64, 64); 
     }
+    
+    public void startBeingAttacked(Weapon w) {
+        
+    }
 }

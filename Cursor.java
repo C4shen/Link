@@ -5,20 +5,17 @@ import java.awt.Rectangle;
  * Beim Angriff wird der Cursor geworfen, und trifft eventuell dabei einen Gegner.
  */
 public class Cursor extends Weapon {
-    /**
-     * Die Standard-Größe eines Cursors
-     */
-    private static final int DEFAULT_WIDTH = 16, DEFAULT_HEIGHT = 16;
-    /**
-     * Die Standard-Geschwindigkeit eines Cursors, die er zu Beginn seines Angriffs besitzt
-     */
-    private static final double DEFAULT_ATTACK_SPEED = 4;
+    private static final int DEFAULT_WIDTH = 16, DEFAULT_HEIGHT = 16; //Die Standard-Größe eines Cursors
+    private static final double DEFAULT_ATTACK_SPEED = 4; //Die Standard-Geschwindigkeit eines Cursors, die er zu Beginn seines Angriffs besitzt
+    private static final int KB_AMOUNT = 50; //Die Standard-Weite des Knockbacks
+    private static final double KB_STRENGTH = 5; //Die Standard-Stärke des Knockbacks
+    private static final int DEFAULT_DAMAGE = 5; //Der Standard-Schaden des Cursors
+    
     /**
      * Die Waffen werden immer relativ zu ihren Besitzern positioniert. 
      * Der Cursor ist eine Waffe des Players. Das sind also die zusätzlichen Werte für die 
      * x-/y-Koordinaten des Cursors in der bestimmten Pose [2.Dimension] einer Bewegungsrichtung [1.Dimension]
      */
-    
     protected static final Point[][] handelPositions = new Point[][]{
         new Point[] { new Point(06, 14), new Point(06, 14), new Point(06, 14), new Point(06, 14) },
         new Point[] { new Point(10, 13), new Point(10, 13), new Point(10, 13), new Point(0,0) },
@@ -56,6 +53,10 @@ public class Cursor extends Weapon {
         //Sonst muss die Waffe von ihrem Besitzer gelenkt werden
     }
     
+    /**
+     * @author Janni Röbbecke, Jakob Kleine
+     * @since 22.05.2019
+     */
     @Override
     public void setPositionInHand(Point handPosition) {
         entityX = handPosition.x; // - handelPositions[0][0].x;
@@ -101,6 +102,23 @@ public class Cursor extends Weapon {
         return (xMove==0 || (xMove<0 && entityX>=startX) || (xMove>0 && entityX<=startX))
                 && //y.Richtung muss genauso überprüft werden
                (yMove==0 || (yMove<0 && entityY>=startY) || (yMove>0 && entityY<=startY));
+    }
+
+    /**
+     * @author Jakob Kleine, Cashen Adkins
+     * @since 23.05.2019
+     */
+    public Knockback getKnockback() {
+        return new Knockback(KB_AMOUNT, KB_STRENGTH, xMove, yMove);
+    }
+    
+    
+    /**
+     * @author Jakob Kleine, Cashen Adkins
+     * @since 23.05.2019
+     */
+    public int getDamage() {
+        return DEFAULT_DAMAGE;
     }
     
     /**

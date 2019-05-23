@@ -19,8 +19,15 @@ public abstract class Creature extends Movable {
      */
     protected int health;
     
-    protected Weapon weapon; //Die Waffe der Figur
+    /**
+     * Die Waffe der Figur
+     */
+    protected Weapon weapon;
     
+    /**
+     * Das Knockback, das die Figur erleidet. null, wenn kein Knockback erfolgen soll
+     */
+    protected Knockback knockback;
     /**
      * Erzeugt eine Kreatur (bzw. im Deutschen schöner Figur)
      * @author Ares Zühlke, Janni Röbbecke, www.quizdroid.wordpress.com
@@ -63,6 +70,14 @@ public abstract class Creature extends Movable {
             return weapon;
         }
     }
+    
+    /**
+     * Teilt der Kreatur mit, dass sie angegriffen wurde
+     * @param attackingWeapon die Waffe, mit der die Kreatur angegriffen wurde
+     * @author Jakob Kleine, Janni Röbbecke
+     * @since 23.05.2019
+     */
+    public abstract void startBeingAttacked(Weapon attackingWeapon);
     
     /**
      * Berechnet die neue Position der Kreatur. Außerdem muss die Waffe neu Positioniert werden.

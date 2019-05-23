@@ -26,6 +26,8 @@ public class SideEffect extends Enemy
      */
     public static final int DEFAULT_SPEED = 5;
     
+    private int health;
+    
     /**
      * Ertellt einen neuen Nebeneffekt
      * @author Janni Röbbecke, Jakob Kleine, Cashen Adkins
@@ -39,6 +41,7 @@ public class SideEffect extends Enemy
         super(x, y, "Krebs", enemySprite, DEFAULT_HEALTH, DEFAULT_SPEED, 
                 new Cursor(new SpriteSheet("/res/sprites/weapons/cursor.png", 3 /*moves*/, 4 /*directions*/, 16 /*width*/, 16 /*height*/), x+10, y+30, DEFAULT_SPEED));
         setMove(new Point(-1, 0)); //Zu Beginn bewegt sich der Side-Effect immer nach links
+        health = SideEffect.DEFAULT_HEALTH;
     }
     
     /**
@@ -50,11 +53,26 @@ public class SideEffect extends Enemy
     @Override
     public void update()
     {
-        if(entityX<20)
-            setMove(new Point(1, 0));
-        if(entityX>550)
-            setMove(new Point(-1, 0));
-        super.update();
+        if(knockback != null) {
+            if(knockback.getAmountLeft() <= 0) {
+                if(knockback.getDirectionX() != 0) 
+                    xMove = knockback.getDirectionX();
+                knockback = null;
+            }
+            else {
+                int zusatzX = (int) Math.round(knockback.getDirectionX() * knockback.getStrength()), zusatzY = (int) Math.round(knockback.getDirectionY() * knockback.getStrength());
+                entityX += zusatzX;
+                entityY += zusatzY;
+                knockback.reduceAmountLeft(Math.max(Math.abs(zusatzX), Math.abs(zusatzY)));
+            }
+        }
+        else {
+            if(entityX<20)
+                setMove(new Point(1, 0));
+            if(entityX>550)
+                setMove(new Point(-1, 0));
+            super.update();
+        }
     }
     
     //Noch nicht bestimmt
@@ -74,5 +92,12 @@ public class SideEffect extends Enemy
      */
     public Rectangle getHitbox() {
         return new Rectangle((int) Math.round(entityX), (int) Math.round(entityY), 64, 64);
+    }
+    
+    public void startBeingAttacked(Weapon w) {
+        health -= w.getDamage();
+        System.out.println("Schaden genommen: neue HP "+health);
+        knockback = w.getKnockback();
+        update();
     }
 }
