@@ -51,15 +51,17 @@ public class GameState extends State
             g.clearRect(0, 0, game.SCREEN_WIDTH, game.SCREEN_HEIGHT);
             room.renderMap(g); // Erst die Spielfläche ...
             player.render(g); // ... und darauf die Spielfigur
-            hitBoxAnzeigen(player, g);
-            for(Enemy e :  gegnerListe) {
+            for(Enemy e :  gegnerListe)
                 e.render(g);
+            /*
+            hitBoxAnzeigen(player, g);
+            for(Enemy e :  gegnerListe)
                 hitBoxAnzeigen(e, g);
-            }
             for(Weapon w : attackingWeapons) 
                 hitBoxAnzeigen(w, g);
             for(Border b : roomBorders) 
                 hitBoxAnzeigen(b, g);
+            */
             bs.show();
             g.dispose();
         }
@@ -88,22 +90,29 @@ public class GameState extends State
                 attackingWeapons.remove(w);
                 System.out.println("Die Waffe "+w+"greift nicht mehr an.");
             }
+            else {//Auf Kollision prüfen
+                LinkedList<Entity> getroffeneGegner = collidesWith(w, gegnerListe);
+                if(getroffeneGegner.size() > 0) 
+                    System.out.println("Der Cursor hat zugeschlagen");
+            }
         }
         
-        /*  0
-         * 2 3
-         *  1
-         */
-        if(collision(player, roomBorders[0]))
-            player.setEntityY(Game.HP_BAR_HEIGHT + Border.BORDER_WIDTH);
-        else if(collision(player, roomBorders[1]))
-            player.setEntityY(Game.SCREEN_HEIGHT - (int) player.getHitbox().getHeight() - Border.BORDER_WIDTH); //Ide für Glitch -> -Borderwidth weglassen
-        if(collision(player, roomBorders[2]))
-            player.setEntityX(Border.BORDER_WIDTH);
-        else if(collision(player, roomBorders[3]))
-            player.setEntityX(Game.SCREEN_WIDTH - (int) player.getHitbox().getWidth() - Border.BORDER_WIDTH);
-        if(collidesWith(player, gegnerListe).size() > 0)
-            System.out.println("Kollision vom Spieler mit einem Gegner");
+        keepInside(player);
+        for(Weapon w : attackingWeapons)
+            keepInside(w);
+        keepInside(player.weapon);
+    }
+    
+    private void keepInside(Movable e) {
+        if(collision(e, roomBorders[0])) //Border Oben
+            e.setEntityY(Game.HP_BAR_HEIGHT + Border.BORDER_WIDTH);
+        else if(collision(e, roomBorders[1])) //Border Unten
+            e.setEntityY(Game.SCREEN_HEIGHT - (int) e.getHitbox().getHeight() - Border.BORDER_WIDTH); //Ide für Glitch -> -Borderwidth weglassen
+        //Kein else hier, weil auch 2 Borders getroffen werden können
+        if(collision(e, roomBorders[2])) //Border Links
+            e.setEntityX(Border.BORDER_WIDTH);
+        else if(collision(e, roomBorders[3])) //Border Rechts
+            e.setEntityX(Game.SCREEN_WIDTH - (int) e.getHitbox().getWidth() - Border.BORDER_WIDTH);
     }
     
     private boolean collision(Entity e1, Entity e2) {
@@ -113,7 +122,7 @@ public class GameState extends State
     private LinkedList<Entity> collidesWith(Entity e, LinkedList<Enemy> es) {
         LinkedList<Entity> collidedEntities = new LinkedList<Entity>();
         for(Entity ex : es) {
-            if(e.getHitbox().intersects(ex.getHitbox()))
+            if(collision(e, ex))
                 collidedEntities.add(ex);
         }
         return collidedEntities;
