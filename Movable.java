@@ -126,4 +126,12 @@ public abstract class Movable extends Entity {
         }
         setEntityImage(image); //Ändert das tatsächlich angezeigte Bild
     }
+    
+    public void setEntityX(int xNeu) {
+        entityX = xNeu;
+    }
+    
+    public void setEntityY(int yNeu) {
+        entityY = yNeu;
+    }
 }
