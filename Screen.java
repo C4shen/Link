@@ -37,7 +37,8 @@ public class Screen
         frame.setResizable(false);
         frame.setLocationRelativeTo(null); //Positioniert den Frame in der Mitte des Bildschirms
         frame.setVisible(true);
-
+        frame.setIconImage(new javax.swing.ImageIcon(Utils.absoluteFileOf("/res/icon.png").toString()).getImage());
+        
         canvas = new Canvas();
         //Das Canvas soll genauso groß sein, wie der JFrame
         canvas.setPreferredSize(new Dimension(width, height));

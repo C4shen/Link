@@ -26,7 +26,6 @@ public class SideEffect extends Enemy
      */
     public static final int DEFAULT_SPEED = 5;
     
-    private int health;
     
     /**
      * Ertellt einen neuen Nebeneffekt
@@ -94,10 +93,14 @@ public class SideEffect extends Enemy
         return new Rectangle((int) Math.round(entityX), (int) Math.round(entityY), 64, 64);
     }
     
+    /**
+     * @author Janni Röbbecke, Jakob Kleine
+     * @since 22.05.2019
+     */
     public void startBeingAttacked(Weapon w) {
-        health -= w.getDamage();
-        System.out.println("Schaden genommen: neue HP "+health);
+        if(knockback == null) { //Wenn gerade die Kreatur nicht angegriffen wird, erleidet sie Schaden
+            health -= w.getDamage();
+        }
         knockback = w.getKnockback();
-        update();
     }
 }

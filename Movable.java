@@ -109,10 +109,10 @@ public abstract class Movable extends Entity {
      */
     private void setCurrentImage(int xMove, int yMove, int xPos) {
         BufferedImage image; //Im Tutorial ist das ein Attribut. Der Sinn erschließt sich uns nicht.
-        if(yMove == -1) { //Bewegung nach unten
+        if(yMove == -1) { //Bewegung nach oben
             image = spriteSheet.getSpriteElement(xPos, 3);
             prevDirection = 3;
-        } else if(yMove == 1) { //Bewegung nach oben
+        } else if(yMove == 1) { //Bewegung nach unten
             image = spriteSheet.getSpriteElement(xPos, 0);
             prevDirection = 0;
         } else if(xMove == -1) { //Bewegung nach links

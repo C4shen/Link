@@ -66,7 +66,7 @@ public class Game implements Runnable {
         long timestamp;
         long oldTimestamp;
         //Es wird ein neues Fenster ertsellt mit dem Namen des Spiels als Titel und der Höhe und Breite der vorher angegebenen Attribute.
-        screen = new Screen("LINK - Prototyp 1: Version 0.01", SCREEN_WIDTH, SCREEN_HEIGHT);
+        screen = new Screen("LINK - Legend of INformatik Kurs", SCREEN_WIDTH, SCREEN_HEIGHT);
         keyManager = new KeyManager();
         screen.getFrame().addKeyListener(keyManager);
         gameState = new GameState(this);

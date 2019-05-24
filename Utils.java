@@ -1,7 +1,8 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-
+import java.awt.image.BufferedImage;
+import java.awt.Color;
 /**
  * Eine Klasse mit nützlichen öfters benutzen Methoden, die nicht unbedingt einer bestimmten Klasse zugeordnet werden können 
  * 
@@ -25,6 +26,48 @@ public class Utils
         catch(NumberFormatException nfe) {
             return -1;
         }
+    }
+    
+    /**
+     * Färbt ein Bild ein der angegebenen Farbe mit der angegeben Transparenz ein
+     * @author Jakob Kleine, Janni Röbbecke
+     * since 24.05.2019
+     * @param i das Bild das eingefärbt werden soll
+     * @param dye die Farbe, die über das Bild gelegt werden soll
+     * @param alpha die Transparent (0-255; inklusiv) mit der die Farbe über das Bild gelegt werden soll
+     * @return ein Bild das entsprechend eingefärbt wurde
+     */
+    public static BufferedImage dyeImage(BufferedImage i, Color dye, int alpha) {
+        BufferedImage gefaerbtesBild = new BufferedImage(i.getWidth(), i.getHeight(), i.getType());
+
+        for (int x = 0; x < i.getWidth(); x++) { //Alle Pixel werden durchgegangen
+            for (int y = 0; y < i.getHeight(); y++) {
+                int pixel = i.getRGB(x,y); //Der Pixel an der aktuellen Stelle im Originalbild
+                if(new Color(pixel, true).getAlpha() == 0) //Wenn das Bild an dieser Stelle transparent ist 
+                    gefaerbtesBild.setRGB(x, y, pixel); //Der Pixel soll übernommen werden und nicht rot gefärbt sein
+                else //Sonst werden die beiden Farben gemischt
+                    gefaerbtesBild.setRGB(x, y, mixColorsWithAlpha(new Color(pixel, true), dye, alpha).getRGB());
+            }
+        }
+        return gefaerbtesBild;
+    }
+    
+    /**
+     * Vermischt zwei Farben mit der angegebenen Tranzparenz so, dass die zweite Farbe quais über die ertse gelegt wird
+     * @author Jakob Kleine, Janni Röbbecke, https://stackoverflow.com/questions/8409827/combining-2-rgb-colors-with-alpha
+     * since 24.05.2019
+     * @param color1 die "untere" Farbe
+     * @param color2 die "obere" Farbe
+     * @param alpha die Transparenz, mit der color2 über color1 gelegt werden soll; von 0-255, inklusive
+     * @return eine Farbe, die bei der Vermischung entsteht
+     */
+    private static Color mixColorsWithAlpha(Color color1, Color color2, int alpha)
+    {
+        float factor = alpha / 255f;
+        int red = (int) (color1.getRed() * (1 - factor) + color2.getRed() * factor);
+        int green = (int) (color1.getGreen() * (1 - factor) + color2.getGreen() * factor);
+        int blue = (int) (color1.getBlue() * (1 - factor) + color2.getBlue() * factor);
+        return new Color(red, green, blue);
     }
     
     /**

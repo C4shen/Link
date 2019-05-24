@@ -8,7 +8,7 @@ public class Cursor extends Weapon {
     private static final int DEFAULT_WIDTH = 16, DEFAULT_HEIGHT = 16; //Die Standard-Größe eines Cursors
     private static final double DEFAULT_ATTACK_SPEED = 4; //Die Standard-Geschwindigkeit eines Cursors, die er zu Beginn seines Angriffs besitzt
     private static final int KB_AMOUNT = 50; //Die Standard-Weite des Knockbacks
-    private static final double KB_STRENGTH = 5; //Die Standard-Stärke des Knockbacks
+    private static final double KB_STRENGTH = 7; //Die Standard-Stärke des Knockbacks
     private static final int DEFAULT_DAMAGE = 5; //Der Standard-Schaden des Cursors
     
     /**
@@ -65,6 +65,11 @@ public class Cursor extends Weapon {
         setEntityImage(spriteSheet.getSpriteElement(xPos, prevDirection));
     }
     
+    public void notifySuccess() {
+        // speed = 0; //Der Cursor soll sofort zurückkehren?
+        image = spriteSheet.getSpriteElement(0, prevDirection+4); //Das müsste eigentlich länger sein, man sieht das fast garnicht
+    }
+    
     /**
      * @author Jakob Kleine, Janni Röbbecke
      * @since 17.05.2019
@@ -93,9 +98,7 @@ public class Cursor extends Weapon {
     
     /**
      * Überprüft, ob die Waffe wieder an ihrem Startpunkt angekommen ist, bzw. ob sie schon darüber hinaus (beyond) bewegt wurde
-     * 
      * @return true, wenn die Position der Waffe ihrer Startposition gleicht, oder sie (in der Bewegungsrichtung der Waffe) größer ist. Sonst false
-     * 
      */
     private boolean beyondStart(){
         //Wenn keine Bewegung entlang x || Bewegung nach links -> entityX soll >= startX sein || Bewegung nach rechts -> ...
@@ -111,7 +114,6 @@ public class Cursor extends Weapon {
     public Knockback getKnockback() {
         return new Knockback(KB_AMOUNT, KB_STRENGTH, xMove, yMove);
     }
-    
     
     /**
      * @author Jakob Kleine, Cashen Adkins

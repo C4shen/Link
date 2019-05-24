@@ -40,6 +40,8 @@ public abstract class Weapon extends Movable {
      */
     public abstract void startAttack(Point direction);
     
+    public abstract void notifySuccess();
+    
     /**
      * Ändert die Position der Waffe so, dass sie in der Hand des Benutzers liegt
      * @param ownerX die x-Koordinate des Besitzers

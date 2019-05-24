@@ -1,6 +1,7 @@
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics;
+import java.awt.Color;
 
 /**
  * Eine Kreatur ist eine bewegbare Entität (<a href="Entity.html">Movable</a>), die sich auf dem Spielfeld bewegen kann, Lebenspunkte und eine Waffe (<a href="Weapon.html">Weapon</a>) besitzt.
@@ -72,7 +73,7 @@ public abstract class Creature extends Movable {
     }
     
     /**
-     * Teilt der Kreatur mit, dass sie angegriffen wurde
+     * Teilt der Kreatur mit, dass sie angegriffen wurde, sodass sie entsprechend reagieren kann
      * @param attackingWeapon die Waffe, mit der die Kreatur angegriffen wurde
      * @author Jakob Kleine, Janni Röbbecke
      * @since 23.05.2019
@@ -101,12 +102,15 @@ public abstract class Creature extends Movable {
      */
     @Override 
     public void render(Graphics g) {
+        if(knockback != null) //Wenn die Kreatur gerade Knockback erleidet, wird sie leicht rot gefärbt
+            image = Utils.dyeImage(image, Color.RED, 20); //Es wäre Performance-technisch sicher besser, alle Bilder einmal zu färben und dann zu speichern
+            
         if(weaponBehind()){
             weapon.render(g); //Wenn die Waffe hinter der Kreatur sein soll, wird sie zuerst gemalt, die 
             super.render(g); //Die Kreatur malt sich dann "drüber"
         }
         else{
-            super.render(g);
+            super.render(g); //Sonst andersrum
             weapon.render(g);
         }
     }
