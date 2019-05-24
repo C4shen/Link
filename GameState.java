@@ -28,7 +28,7 @@ public class GameState extends State
         TileSet tileSet = new TileSet("/res/tilesets/standard-raum-ts.png", 3, 3);
         room = new Room("/res/rooms/standard-raum.txt", tileSet);
         SpriteSheet krebsSprite = new SpriteSheet("/res/sprites/krebs.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
-        gegnerListe.add(new SideEffect(150, 150, krebsSprite));
+        gegnerListe.add(new SideEffect(new java.util.Random().nextInt(400)+200, new java.util.Random().nextInt(400)+200, krebsSprite));
         
         roomBorders = new Border[] {
             new Border(                    0,    Game.HP_BAR_HEIGHT,   Game.SCREEN_WIDTH, Border.BORDER_WIDTH), //links oben -> rechts oben
@@ -92,11 +92,15 @@ public class GameState extends State
     }
     
     /*
-     * Zuständig, um die Objekte auf dem Spielfeld auf Kollisionen zu überprüfen, und diese zu verwalten.
+     * Zuständig, um die Entitäten auf dem Spielfeld auf Kollisionen zu überprüfen, und diese zu verwalten.
      * Es wäreauch möglich, die Methoden direkt in die Klasse GameState zu schreiben, mit dieser inneren Klasse
      * wird allerdings der Kollision-Teil separiert, um die Kohäsion und Übersichtlichkeit zu verbessern
      */
     private class CollisionDetector {
+        /*
+         * Aktualisiert den CollisionDetector, der daraufhin alle Entitäten auf dem Spielfeld auf Kollision überprüft und 
+         * diese Kollision auswertet
+         */
         public void update() {
             for(Weapon w : attackingWeapons) {
                 if(!w.isAttacking())
@@ -120,7 +124,7 @@ public class GameState extends State
     
         /*
          * Hält eine bewegbare Entity, die eventuell aus dem Spielfeld gelaufen ist, innerhalb des Spielfelds
-         * @author Jakob Kleine, Janni Röbbecke
+         * @author Jakob Kleine, Janni Röbbecke, Cepehr Bromand, Ares Zühlke
          * @since 24.05.2019
          * @param e die bewegbare Entität, für die sichergestellt werden soll, dass sie nicht mit den Mauern am Rand kollidiert
          */
@@ -138,7 +142,7 @@ public class GameState extends State
     
         /*
          * Überprüft, ob zwei Entitäten miteinander kollidieren
-         * @author Jakob Kleine, Janni Röbbecke
+         * @author Jakob Kleine, Janni Röbbecke, Cepehr Bromand, Ares Zühlke
          * @since 24.05.2019
          * @param e1 die eine zu überprüfende Entität
          * @param e2 die andere zu überprüfende Entität
@@ -148,9 +152,22 @@ public class GameState extends State
             return e1.getHitbox().intersects(e2.getHitbox());
         }
         
-        private LinkedList<Entity> collidesWith(Entity e, LinkedList<Enemy> es) {
+        /*
+         * Gibt eine Liste mit allen Entitäten aus der angegebenen Liste zurück, mit denen die Angegebene Entität kollidiert
+         * @author Jakob Kleine, Janni Röbbecke, Cepehr Bromand, Ares Zühlke
+         * @param e die Entität, die auf Kollision geprüft wird
+         * @param es eine Liste mit Entitäten, die auf Kollision mit e geprüft werden 
+         * @returns eine Liste mit allen Entitäten aus es, mit denen e kollidiert
+         */
+        public LinkedList<Entity> collidesWith(Entity e, LinkedList es) {
             LinkedList<Entity> collidedEntities = new LinkedList<Entity>();
-            for(Entity ex : es) {
+            for(Object object : es) {
+                /*
+                 * Aus einem uns nicht verständlichem Grund, ist es nicht möglich entity als Parameter
+                 * der LinkedList anzugeben, und dann z.B. eine List<Enemy> zu übergeben, also wird eine "rohe" LinkedList verwendet,
+                 * weswegen die Objekte gecastet werden müssen
+                 */
+                Entity ex = (Entity) object; 
                 if(collision(e, ex))
                     collidedEntities.add(ex);
             }

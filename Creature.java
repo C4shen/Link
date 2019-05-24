@@ -53,7 +53,7 @@ public abstract class Creature extends Movable {
      * @since 21.05.2019
      * @return die Waffe, mit der der Angriff begonnen wird. Ihre Kollisiion mit einem Gegner wird in der Spiel-Klasse verwaltet.
      *         <br>null, wenn die Waffe des Spielers sich gerade im Angriff befindet.
-     * @see ---
+     * @see <a href="Weapon.html">Klasse Weapon</a>
      */
     public Weapon startAttack() {
         if(weapon.isAttacking()) 
@@ -73,12 +73,19 @@ public abstract class Creature extends Movable {
     }
     
     /**
-     * Teilt der Kreatur mit, dass sie angegriffen wurde, sodass sie entsprechend reagieren kann
+     * Teilt der Kreatur mit, dass sie angegriffen wurde, sodass sie Knockback und Schaden erleidet
      * @param attackingWeapon die Waffe, mit der die Kreatur angegriffen wurde
      * @author Jakob Kleine, Janni Röbbecke
      * @since 23.05.2019
      */
-    public abstract void startBeingAttacked(Weapon attackingWeapon);
+    public void startBeingAttacked(Weapon w) {
+        if(knockback == null) { //Wenn gerade die Kreatur nicht angegriffen wird, erleidet sie Schaden
+            health -= w.getDamage();
+        }
+        knockback = w.getKnockback();
+        if(knockback.getDirectionX() != 0) 
+            xMove = knockback.getDirectionX();
+    }
     
     /**
      * Berechnet die neue Position der Kreatur. Außerdem muss die Waffe neu Positioniert werden.

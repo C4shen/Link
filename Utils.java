@@ -39,14 +39,23 @@ public class Utils
      */
     public static BufferedImage dyeImage(BufferedImage i, Color dye, int alpha) {
         BufferedImage gefaerbtesBild = new BufferedImage(i.getWidth(), i.getHeight(), i.getType());
-
+        boolean vorherTransparent = true; //Speichert, ob der vorherige Pixel transparent war, sodass ein opaker Rahmen um das Bild gezogen werden kann
         for (int x = 0; x < i.getWidth(); x++) { //Alle Pixel werden durchgegangen
             for (int y = 0; y < i.getHeight(); y++) {
                 int pixel = i.getRGB(x,y); //Der Pixel an der aktuellen Stelle im Originalbild
-                if(new Color(pixel, true).getAlpha() == 0) //Wenn das Bild an dieser Stelle transparent ist 
+                if(new Color(pixel, true).getAlpha() == 0) { //Wenn das Bild an dieser Stelle transparent ist 
                     gefaerbtesBild.setRGB(x, y, pixel); //Der Pixel soll übernommen werden und nicht rot gefärbt sein
-                else //Sonst werden die beiden Farben gemischt
-                    gefaerbtesBild.setRGB(x, y, mixColorsWithAlpha(new Color(pixel, true), dye, alpha).getRGB());
+                    vorherTransparent = true;
+                }
+                else {//Sonst werden die beiden Farben gemischt
+                    //Wenn der vorherige Pixel transparent ist || (Wenn y noch nicht am Ende ist && der nächste Pixel transparent ist)
+                    //  dann wird der Pixel eingefärbt aber nicht mit der angegebenen Transparenz, sondern völlig opak
+                    if(vorherTransparent || (y+1 < i.getHeight() && new Color(i.getRGB(x, y+1), true).getAlpha() == 0)) 
+                        gefaerbtesBild.setRGB(x, y, dye.getRGB());
+                    else
+                        gefaerbtesBild.setRGB(x, y, mixColorsWithAlpha(new Color(pixel, true), dye, alpha).getRGB());
+                    vorherTransparent = false;
+                }
             }
         }
         return gefaerbtesBild;

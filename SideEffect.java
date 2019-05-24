@@ -54,8 +54,6 @@ public class SideEffect extends Enemy
     {
         if(knockback != null) {
             if(knockback.getAmountLeft() <= 0) {
-                if(knockback.getDirectionX() != 0) 
-                    xMove = knockback.getDirectionX();
                 knockback = null;
             }
             else {
@@ -91,16 +89,5 @@ public class SideEffect extends Enemy
      */
     public Rectangle getHitbox() {
         return new Rectangle((int) Math.round(entityX), (int) Math.round(entityY), 64, 64);
-    }
-    
-    /**
-     * @author Janni Röbbecke, Jakob Kleine
-     * @since 22.05.2019
-     */
-    public void startBeingAttacked(Weapon w) {
-        if(knockback == null) { //Wenn gerade die Kreatur nicht angegriffen wird, erleidet sie Schaden
-            health -= w.getDamage();
-        }
-        knockback = w.getKnockback();
     }
 }
