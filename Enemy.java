@@ -22,4 +22,6 @@ public abstract class Enemy extends Creature
     {
         super(name, enemySprite, x, y, Entity.DEFAULT_WIDTH, Entity.DEFAULT_HEIGHT, health, speed, weapon);
     }
+    
+    public abstract int getScoreValue();
 }

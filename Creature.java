@@ -83,8 +83,6 @@ public abstract class Creature extends Movable {
             health -= w.getDamage();
         }
         knockback = w.getKnockback();
-        if(knockback.getDirectionX() != 0) 
-            xMove = knockback.getDirectionX();
     }
     
     /**
@@ -148,6 +146,10 @@ public abstract class Creature extends Movable {
         if(!weapon.isAttacking()){
             super.setMove(p);
         }
+    }
+    
+    public boolean isAlive() {
+        return health > 0;
     }
     
     /**

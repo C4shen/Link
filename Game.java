@@ -3,6 +3,10 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.awt.RenderingHints;
+import java.awt.Graphics2D;
+import java.util.LinkedList;
+import java.awt.Font;
 /**
  * Die zentrale Klasse des Programms. Hier wird die Anzeige und Funktionalität des Spiels verwaltet.
  * @author Cashen Adkins, Cepehr Bromand, Janni Röbbecke, Jakob Kleine, www.quizdroid.wordpress.com
@@ -36,6 +40,7 @@ public class Game implements Runnable {
     private boolean running = true; //Gibt an, ob das Spiel momentan läuft (beendet ggf. die Game-Loop)
     private KeyManager keyManager; //Der KeyManager, der die Eingaben über die Tastatur verwaltet.
     private Graphics g; //Die Graphics, mit denen die Figuren gemalt werden.
+    private State currentState;
     private State gameState;
     private State menuState;
     
@@ -69,9 +74,9 @@ public class Game implements Runnable {
         screen = new Screen("LINK - Legend of INformatik Kurs", SCREEN_WIDTH, SCREEN_HEIGHT);
         keyManager = new KeyManager();
         screen.getFrame().addKeyListener(keyManager);
-        gameState = new GameState(this);
-        menuState = new MenuState(this);
-        State.setState(gameState);
+        gameState = new GameState();
+        menuState = new BreakMenuState();
+        currentState = gameState;
         //Solange das Spiel läuft wird die Gameloop wiederholt/ausgeführt. 
         while(running) 
         {
@@ -113,22 +118,15 @@ public class Game implements Runnable {
     {
         keyManager.update();
         //Überprüft ob gerade Escape gedrückt wird und ändert die State entweder von gameState zu menuState oder von menuState zu gameState.
-        if(keyManager.escapeEinmal()) 
-        {
-            if(State.getState() == gameState)
-            {
-                State.setState(menuState);
-            }
-            else if(State.getState()==menuState)
-            {
-                State.setState(gameState);
-            }
+        if(keyManager.escapeEinmal()) {
+            if(currentState == gameState)
+                currentState = menuState;
+            else if(currentState == menuState)
+                currentState = gameState;
         }
         //Nur wenn das Spiel in einer State ist, wird die State-spezifische Methode aufgerufen
-        if(State.getState() != null)
-        {
-            State.getState().update();
-        }
+        if(currentState != null)
+            currentState.update();
     }
     
     /**
@@ -158,17 +156,238 @@ public class Game implements Runnable {
      */
     private void render() 
     {
-        State.getState().render(g);
+        currentState.render(g);
     }
-    
-    public KeyManager getKeyManager()
+
+    private interface State
     {
-        return keyManager;
+        /**
+         * Aktualisiert den State.
+         * @author Cashen Adkins, Janni Röbbecke, www.quizdroid.wordpress.com
+         * @since 0.01 (22.05.2019)
+         */
+        void update();
+        
+        /**
+         * Rendert den State.
+         * @author Cashen Adkins, Janni Röbbecke, www.quizdroid.wordpress.com
+         * @since 0.01 (22.05.2019)
+         */
+        void render(Graphics g);
     }
     
-    public Canvas getCanvas()
+    
+    /**
+     * Der GameState ist der State, in dem sich das Spiel während dem Spielen befindet. Hier werden die Figuen aktualisiert und neu gerendert
+     * @author Cashen Adkins,Janni Röbbecke, Jakob Kleine, www.quizdroid.wordpress.com
+     * @version 0.02 (22.05.2019)
+     * @since 0.01 (22.05.2019
+     */
+    public class GameState implements State 
     {
-        return screen.getCanvas();
+        private int score;
+        private Player player; //Die Spielfigur des Spielers
+        private LinkedList<Enemy> gegnerListe; //Eine Liste mit allen Gegnern im Spiel
+        private LinkedList<Weapon> attackingWeapons; //Die Waffen, die sich gerade im Angriff befinden
+        private Border[] roomBorders; //Die Wände des Raums
+        private Room room; //Der Raum, der gerade gespielt wird
+        private CollisionDetector collisionDet;
+        public GameState()
+        {
+            SpriteSheet playerSprite = new SpriteSheet("/res/sprites/creatures/player.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
+            player = new Player(320, 320, playerSprite);
+            gegnerListe = new LinkedList<Enemy>();
+            attackingWeapons = new LinkedList<Weapon>();
+            TileSet tileSet = new TileSet("/res/tilesets/standard-raum-ts.png", 3, 3);
+            room = new Room("/res/rooms/standard-raum.txt", tileSet);
+            SpriteSheet krebsSprite = new SpriteSheet("/res/sprites/creatures/krebs.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
+            gegnerListe.add(new SideEffect(new java.util.Random().nextInt(400)+200, new java.util.Random().nextInt(400)+200, krebsSprite));
+            
+            roomBorders = new Border[] {
+                new Border(                    0,    Game.HP_BAR_HEIGHT,   Game.SCREEN_WIDTH, Border.BORDER_WIDTH), //links oben -> rechts oben
+                new Border(                    0, Game.SCREEN_HEIGHT-10,   Game.SCREEN_WIDTH, Border.BORDER_WIDTH), //links unten -> rechts unten
+                new Border(                    0,    Game.HP_BAR_HEIGHT, Border.BORDER_WIDTH,   Game.SCREEN_WIDTH), //links oben -> links unten
+                new Border( Game.SCREEN_WIDTH-10,    Game.HP_BAR_HEIGHT, Border.BORDER_WIDTH,   Game.SCREEN_WIDTH) //rechts oben -> rechts unten
+            };
+            
+            collisionDet = new CollisionDetector();
+        }
+        
+        @Override
+        public void render(Graphics g) 
+        {
+            Canvas c = screen.getCanvas();
+            //c.setBackground(Color.blue);
+            BufferStrategy bs = c.getBufferStrategy();
+            if(bs == null)
+                c.createBufferStrategy(3);
+            else{
+                g = bs.getDrawGraphics();
+                //Clear Screen
+                g.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+                room.renderMap(g); // Erst die Spielfläche ...
+                player.render(g); // ... und darauf die Spielfigur
+                for(Enemy e :  gegnerListe)
+                    e.render(g);
+                /*
+                hitBoxAnzeigen(player, g);
+                for(Enemy e :  gegnerListe)
+                    hitBoxAnzeigen(e, g);
+                for(Weapon w : attackingWeapons) 
+                    hitBoxAnzeigen(w, g);
+                for(Border b : roomBorders) 
+                    hitBoxAnzeigen(b, g);
+                */
+                Graphics2D g2d = (Graphics2D) g; //Damit RenderingHints gesetzt werden können, muss das Graphics-Objekt in ein Graphics2D-Objekt gecastet werden
+                g2d.setRenderingHint(
+                    RenderingHints.KEY_TEXT_ANTIALIASING, //Text-Anti-Aliasing -> weichere Kanten
+                    RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+                g2d.setRenderingHint(
+                    RenderingHints.KEY_FRACTIONALMETRICS, //Fractional-Metrics -> konsistente Buchstabengröße
+                    RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+                g2d.setFont(new Font("Comic Sans MS", Font.BOLD, 40)); //Comic Sans ist nur ein Beispiel, sorry Cepehr 
+                g.drawString("Score: "+score, 10, Game.HP_BAR_HEIGHT-40);
+                bs.show();
+                g.dispose();
+            }
+        }
+          
+        private void hitBoxAnzeigen(Entity e, Graphics g) {
+            g.drawRect(e.getHitbox().x, e.getHitbox().y, e.getHitbox().width, e.getHitbox().height); //Nur temporär, um die Hitbox anzuzeigen
+        }
+        
+        @Override
+        public void update() 
+        {
+            player.setMove(getInput()); //Bewegt den Spieler entsprechend der Eingabe über die Tasten
+            if(keyManager.attack()) { //Wenn die Taste zum Angriff gedrückt wurde, greift der Spieler an
+                Weapon attackingWeapon = player.startAttack();
+                if(attackingWeapon != null) //Wenn ein neuer Angriff ausgeführt wurde
+                    attackingWeapons.add(attackingWeapon); //Speichert die Waffe, um Kollisionen mit Gegnern zu prüfen
+            }
+            player.update();
+            for(Enemy e : gegnerListe) {
+                if(e.isAlive())
+                    e.update();
+                else {
+                    // e.die();
+                    score += e.getScoreValue();
+                    gegnerListe.remove(e);
+                }
+            }
+            
+            collisionDet.update();
+        }
+        
+        /*
+         * Zuständig, um die Entitäten auf dem Spielfeld auf Kollisionen zu überprüfen, und diese zu verwalten.
+         * Es wäreauch möglich, die Methoden direkt in die Klasse GameState zu schreiben, mit dieser inneren Klasse
+         * wird allerdings der Kollision-Teil separiert, um die Kohäsion und Übersichtlichkeit zu verbessern
+         * [Hinweis: weil diese innere Klasse privat ist, wird sie mit allen ihren Methoden nicht in JavaDoc angezeigt, weswegen
+         *  das hier zwar angedeutet, aber nicht verwendet wurde]
+         *  @author Jakob Kleine, Janni Röbbecke, Cepehr Bromand, Ares Zühlke
+         */
+        private class CollisionDetector {
+            /*
+             * Aktualisiert den CollisionDetector, der daraufhin alle Entitäten auf dem Spielfeld auf Kollision überprüft und 
+             * diese Kollision auswertet
+             */
+            public void update() {
+                for(Weapon w : attackingWeapons) {
+                    if(!w.isAttacking())
+                        attackingWeapons.remove(w);
+                    else {//Auf Kollision prüfen
+                        LinkedList<Entity> getroffeneGegner = collidesWith(w, gegnerListe);
+                        for(Entity e : getroffeneGegner) {
+                            ((Enemy) e).startBeingAttacked(w); 
+                            w.notifySuccess();
+                        }
+                    }
+                }
+                
+                //Jetzt muss sichergestellt werden, dass kein Element aus dem Spielfeld geworfen wurde.
+                keepInside(player);
+                for(Weapon w : attackingWeapons)
+                    keepInside(w);
+                for(Enemy e : gegnerListe)
+                    keepInside(e);
+            }
+        
+            /*
+             * Hält eine bewegbare Entity, die eventuell aus dem Spielfeld gelaufen ist, innerhalb des Spielfelds
+             * @author Jakob Kleine, Janni Röbbecke, Cepehr Bromand, Ares Zühlke
+             * @since 24.05.2019
+             * @param e die bewegbare Entität, für die sichergestellt werden soll, dass sie nicht mit den Mauern am Rand kollidiert
+             */
+            private void keepInside(Movable e) {
+                if(collision(e, roomBorders[0])) //Border Oben
+                    e.setEntityY(Game.HP_BAR_HEIGHT + Border.BORDER_WIDTH);
+                else if(collision(e, roomBorders[1])) //Border Unten
+                    e.setEntityY(Game.SCREEN_HEIGHT - (int) e.getHitbox().getHeight() - Border.BORDER_WIDTH); //Idee für Glitch -> -Borderwidth weglassen
+                //Kein else hier, weil auch 2 Borders getroffen werden können
+                if(collision(e, roomBorders[2])) //Border Links
+                    e.setEntityX(Border.BORDER_WIDTH);
+                else if(collision(e, roomBorders[3])) //Border Rechts
+                    e.setEntityX(Game.SCREEN_WIDTH - (int) e.getHitbox().getWidth() - Border.BORDER_WIDTH);
+            }
+        
+            /*
+             * Überprüft, ob zwei Entitäten miteinander kollidieren
+             * @author Jakob Kleine, Janni Röbbecke, Cepehr Bromand, Ares Zühlke
+             * @since 24.05.2019
+             * @param e1 die eine zu überprüfende Entität
+             * @param e2 die andere zu überprüfende Entität
+             * @return true, wenn sich die Hitboxen von e1 und e2 schneiden, sonst false
+             */
+            private boolean collision(Entity e1, Entity e2) {
+                return e1.getHitbox().intersects(e2.getHitbox());
+            }
+            
+            /*
+             * Gibt eine Liste mit allen Entitäten aus der angegebenen Liste zurück, mit denen die Angegebene Entität kollidiert
+             * @author Jakob Kleine, Janni Röbbecke, Cepehr Bromand, Ares Zühlke
+             * @param e die Entität, die auf Kollision geprüft wird
+             * @param es eine Liste mit Entitäten, die auf Kollision mit e geprüft werden 
+             * @returns eine Liste mit allen Entitäten aus es, mit denen e kollidiert
+             */
+            public LinkedList<Entity> collidesWith(Entity e, LinkedList es) {
+                LinkedList<Entity> collidedEntities = new LinkedList<Entity>();
+                for(Object object : es) {
+                    /*
+                     * Aus einem uns nicht verständlichem Grund, ist es nicht möglich entity als Parameter
+                     * der LinkedList anzugeben, und dann z.B. eine List<Enemy> zu übergeben, also wird eine "rohe" LinkedList verwendet,
+                     * weswegen die Objekte gecastet werden müssen
+                     */
+                    Entity ex = (Entity) object; 
+                    if(collision(e, ex))
+                        collidedEntities.add(ex);
+                }
+                return collidedEntities;
+            }
+        }
     }
     
+    /**
+     * Der Break-Menu-State ist der State, in dem sich das Spiel befindet, wenn eine Pause gemacht wird
+     * @author Cashen Adkins, Janni Röbbecke, www.quizdroid.wordpress.com
+     * @version 0.02 (22.05.2019)
+     * @since 0.01 (22.05.2019
+     */
+    public class BreakMenuState implements State 
+    {
+        public BreakMenuState() {
+            
+        }
+        
+        @Override
+        public void render(Graphics g)  {
+            
+        }
+        
+        @Override
+        public void update() {
+            
+        }
+    }
+
 }

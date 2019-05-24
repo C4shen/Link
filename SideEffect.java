@@ -20,13 +20,13 @@ public class SideEffect extends Enemy
     /**
      * Standard-Lebenspunkte, die der Spielcharakter zu Beginn des Spiels hat
      */
-    public static final int DEFAULT_HEALTH = 100;
+    public static final int DEFAULT_HEALTH = 20;
     /**
      * Standard-Geschwindigkeit des Spielcharakters
      */
     public static final int DEFAULT_SPEED = 5;
     
-    
+    public static final int DEFAULT_SCORE_VALUE = 50;
     /**
      * Ertellt einen neuen Nebeneffekt
      * @author Janni Röbbecke, Jakob Kleine, Cashen Adkins
@@ -71,6 +71,13 @@ public class SideEffect extends Enemy
             super.update();
         }
     }
+   
+    @Override
+    public void startBeingAttacked(Weapon attackingWeapon) {
+        super.startBeingAttacked(attackingWeapon);
+        if(knockback.getDirectionX() != 0) 
+            xMove = knockback.getDirectionX();
+    }
     
     //Noch nicht bestimmt
     public boolean weaponBehind(){ return false; }
@@ -89,5 +96,9 @@ public class SideEffect extends Enemy
      */
     public Rectangle getHitbox() {
         return new Rectangle((int) Math.round(entityX), (int) Math.round(entityY), 64, 64);
+    }
+    
+    public int getScoreValue() {
+        return DEFAULT_SCORE_VALUE;
     }
 }

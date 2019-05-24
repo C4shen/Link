@@ -51,7 +51,7 @@ public class KeyManager implements KeyListener {
      */
     @Override
     public void keyPressed(KeyEvent e) {
-        keys[e.getKeyCode()] = true; //Der gedrückte Knopf wird jetzt gedrückt
+        keys[e.getKeyCode()] = true; //Der gedrückte Knopf wird jetzt als gedrückt gespeichert
     }
     
     /**
@@ -86,7 +86,7 @@ public class KeyManager implements KeyListener {
         return up;
     }
     
-     /**
+    /**
      * Ermittelt, ob die Up-Taste ihren Status geändert hat, sodass egal wie lange man die Taste drückt, nur bei der ersten Abfrage true zurückgegeben wird.
      * @author Cashen Adkins, Janni Röbbecke
      * @return ein boolean, der angibt, ob die Taste für eine Bewegung nach oben mit einer Statusveränderung gedrückt wird.
@@ -142,25 +142,6 @@ public class KeyManager implements KeyListener {
      */
     public boolean left() {
         return left;
-    }
-    
-     /**
-     * Ermittelt, ob die Left-Taste ihren Status geändert hat, sodass egal wie lange man die Taste drückt, nur bei der ersten Abfrage true zurückgegeben wird.
-     * @author Cashen Adkins, Janni Röbbecke
-     * @return ein boolean, der angibt, ob die Taste für eine Bewegung nach links mit einer Statusveränderung gedrückt wird.
-     * @since 0.02 (24.05.2019)
-     */
-    public boolean leftEinmal() {
-        if(left && !letzterStatusLeft)
-        {
-            letzterStatusLeft = left;
-            return true;
-        }
-        else
-        {
-            letzterStatusLeft = left;
-            return false;
-        }
     }
     
     /**
