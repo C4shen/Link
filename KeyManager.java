@@ -9,6 +9,10 @@ import java.awt.event.KeyListener;
 public class KeyManager implements KeyListener {
     private boolean[] keys; //Speichert für alle Tasten, ob sie gedrückt werden
     private boolean up, down, left, right, attack, escape; //Speichert, ob die Tasten für eine Bewegung nach oben, unten usw. gedrückt werden
+    private boolean letzterStatusUp; //Speichert den letzten Status der Up-Taste sodass die Taste nicht mehrmals pro Loop "gedrückt" wird, obwohl man sie nur einmal drücken will.
+    private boolean letzterStatusDown; //Speichert den letzten Status der Down-Taste sodass die Taste nicht mehrmals pro Loop "gedrückt" wird, obwohl man sie nur einmal drücken will.
+    private boolean letzterStatusLeft; //Speichert den letzten Status der Left-Taste sodass die Taste nicht mehrmals pro Loop "gedrückt" wird, obwohl man sie nur einmal drücken will.
+    private boolean letzterStatusRight; //Speichert den letzten Status der Right-Taste sodass die Taste nicht mehrmals pro Loop "gedrückt" wird, obwohl man sie nur einmal drücken will.
     private boolean letzterStatusEscape; //Speichert den letzten Status der Escape-Taste sodass die Taste nicht mehrmals pro Loop "gedrückt" wird, obwohl man sie nur einmal drücken will.
     
     /**
@@ -18,6 +22,10 @@ public class KeyManager implements KeyListener {
      */
     public KeyManager(){
         keys = new boolean[256];
+        letzterStatusUp = false;
+        letzterStatusDown = false;
+        letzterStatusLeft = false;
+        letzterStatusRight = false;
         letzterStatusEscape = false;
     }
     
@@ -78,6 +86,25 @@ public class KeyManager implements KeyListener {
         return up;
     }
     
+     /**
+     * Ermittelt, ob die Up-Taste ihren Status geändert hat, sodass egal wie lange man die Taste drückt, nur bei der ersten Abfrage true zurückgegeben wird.
+     * @author Cashen Adkins, Janni Röbbecke
+     * @return ein boolean, der angibt, ob die Taste für eine Bewegung nach oben mit einer Statusveränderung gedrückt wird.
+     * @since 0.02 (24.05.2019)
+     */
+    public boolean upEinmal() {
+        if(up && !letzterStatusUp)
+        {
+            letzterStatusUp = up;
+            return true;
+        }
+        else
+        {
+            letzterStatusUp = up;
+            return false;
+        }
+    }
+    
     /**
      * Ermittelt, ob die Taste nach unten momentan gedrückt wird
      * @author Jakob Kleine, Janni Röbbecke
@@ -88,6 +115,25 @@ public class KeyManager implements KeyListener {
         return down;
     }
     
+     /**
+     * Ermittelt, ob die Down-Taste ihren Status geändert hat, sodass egal wie lange man die Taste drückt, nur bei der ersten Abfrage true zurückgegeben wird.
+     * @author Cashen Adkins, Janni Röbbecke
+     * @return ein boolean, der angibt, ob die Taste für eine Bewegung nach unten mit einer Statusveränderung gedrückt wird.
+     * @since 0.02 (24.05.2019)
+     */
+    public boolean downEinmal() {
+        if(down && !letzterStatusDown)
+        {
+            letzterStatusDown = down;
+            return true;
+        }
+        else
+        {
+            letzterStatusDown = down;
+            return false;
+        }
+    }
+    
     /**
      * Ermittelt, ob die Taste nach links momentan gedrückt wird
      * @author Jakob Kleine, Janni Röbbecke, Cashen Adkins
@@ -96,6 +142,25 @@ public class KeyManager implements KeyListener {
      */
     public boolean left() {
         return left;
+    }
+    
+     /**
+     * Ermittelt, ob die Left-Taste ihren Status geändert hat, sodass egal wie lange man die Taste drückt, nur bei der ersten Abfrage true zurückgegeben wird.
+     * @author Cashen Adkins, Janni Röbbecke
+     * @return ein boolean, der angibt, ob die Taste für eine Bewegung nach links mit einer Statusveränderung gedrückt wird.
+     * @since 0.02 (24.05.2019)
+     */
+    public boolean leftEinmal() {
+        if(left && !letzterStatusLeft)
+        {
+            letzterStatusLeft = left;
+            return true;
+        }
+        else
+        {
+            letzterStatusLeft = left;
+            return false;
+        }
     }
     
     /**
@@ -109,6 +174,25 @@ public class KeyManager implements KeyListener {
     }
     
     /**
+     * Ermittelt, ob die Right-Taste ihren Status geändert hat, sodass egal wie lange man die Taste drückt, nur bei der ersten Abfrage true zurückgegeben wird.
+     * @author Cashen Adkins, Janni Röbbecke
+     * @return ein boolean, der angibt, ob die Taste für eine Bewegung nach rechts mit einer Statusveränderung gedrückt wird.
+     * @since 0.02 (24.05.2019)
+     */
+    public boolean rightEinmal() {
+        if(right && !letzterStatusRight)
+        {
+            letzterStatusRight = right;
+            return true;
+        }
+        else
+        {
+            letzterStatusRight = right;
+            return false;
+        }
+    }
+    
+    /**
      * Ermittelt, ob die Angriffs-Taste momentan gedrückt wird
      * @author Jakob Kleine, Janni Röbbecke, Cashen Adkins
      * @return ein boolean, der angibt, ob die Taste für eine Bewegung nach rechts gedrückt wird
@@ -119,12 +203,12 @@ public class KeyManager implements KeyListener {
     }
     
     /**
-     * Ermittelt, ob die Escape-Taste ihren Status geändert hat, sodass egal wie lange man die Taste drückt, nur einmal das Puasenmenü geöffnet wird.
+     * Ermittelt, ob die Escape-Taste ihren Status geändert hat, sodass egal wie lange man die Taste drückt, nur einmal das Pausenmenü geöffnet wird.
      * @author Cashen Adkins, Janni Röbbecke
-     * @return ein boolean, der angibt, ob die Taste für eine Bewegung nach rechts gedrückt wird
-     * @since 0.02 (12.05.2019)
+     * @return ein boolean, der angibt, ob die Taste escape mit einer Statusveränderung gedrückt wird
+     * @since 0.02 (22.05.2019)
      */
-    public boolean escape() {
+    public boolean escapeEinmal() {
         if(escape && !letzterStatusEscape)
         {
             letzterStatusEscape = escape;

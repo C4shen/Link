@@ -113,7 +113,7 @@ public class Game implements Runnable {
     {
         keyManager.update();
         //Überprüft ob gerade Escape gedrückt wird und ändert die State entweder von gameState zu menuState oder von menuState zu gameState.
-        if(keyManager.escape()) 
+        if(keyManager.escapeEinmal()) 
         {
             if(State.getState() == gameState)
             {
