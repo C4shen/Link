@@ -203,7 +203,7 @@ public class Game implements Runnable {
             room = new Room("/res/rooms/standard-raum.txt", tileSet);
             //SpriteSheet krebsSprite = new SpriteSheet("/res/sprites/creatures/sideEffect.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
             //gegnerListe.add(new SideEffect(new java.util.Random().nextInt(400)+200, new java.util.Random().nextInt(400)+200, krebsSprite));
-            SpriteSheet virusSprite = new SpriteSheet("/res/sprites/creatures/virus.png", 1 /*moves*/, 1 /*directions*/, 25 /*width*/, 48 /*height*/);
+            SpriteSheet virusSprite = new SpriteSheet("/res/sprites/creatures/virus.png", 3 /*moves*/, 4 /*directions*/, 25 /*width*/, 48 /*height*/);
             gegnerListe.add(new Virus(new java.util.Random().nextInt(400)+200, new java.util.Random().nextInt(400)+200, virusSprite));
             
             roomBorders = new Border[] {

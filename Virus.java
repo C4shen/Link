@@ -38,7 +38,7 @@ public class Virus extends Enemy
     public Virus(int x, int y, SpriteSheet enemySprite) 
     {
         super(x, y, "Virus", enemySprite, DEFAULT_HEALTH, DEFAULT_SPEED, 
-                new Cursor(new SpriteSheet("/res/sprites/weapons/cursor.png", 3 /*moves*/, 4 /*directions*/, 25 /*width*/, 48 /*height*/), x+10, y+30, DEFAULT_SPEED, false));
+                new Cursor(new SpriteSheet("/res/sprites/weapons/cursor.png", 3 /*moves*/, 4 /*directions*/, 16 /*width*/, 16 /*height*/), x+10, y+30, DEFAULT_SPEED, false));
         health = SideEffect.DEFAULT_HEALTH;
     }
    
@@ -77,9 +77,12 @@ public class Virus extends Enemy
             return startAttack();
         }
         else {
-            double xAbstand = player.entityX - entityX;
-            double yAbstand = player.entityY - entityY;
-            setMove(xAbstand/yAbstand, yAbstand/xAbstand);
+            double xAbstand = (player.entityX - entityX);
+            double yAbstand = (player.entityY - entityY);
+            double faktor = Math.sqrt(1/((xAbstand*xAbstand)+(yAbstand*yAbstand)));
+            double xm = xAbstand*faktor;
+            double ym = yAbstand*faktor;
+            setMove(xm, ym);
             
             return null;
         }
