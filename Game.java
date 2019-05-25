@@ -268,8 +268,11 @@ public class Game implements Runnable {
             }
             player.update();
             for(Enemy e : gegnerListe) {
-                if(e.isAlive())
+                if(e.isAlive()){
+                    Weapon enemyWeapon = e.target(player);
+                    if(enemyWeapon!=null) attackingWeapons.add(enemyWeapon);
                     e.update();
+                }
                 else {
                     // e.die();
                     score += e.getScoreValue();
@@ -298,10 +301,18 @@ public class Game implements Runnable {
                     if(!w.isAttacking())
                         attackingWeapons.remove(w);
                     else {//Auf Kollision prüfen
-                        LinkedList<Entity> getroffeneGegner = collidesWith(w, gegnerListe);
-                        for(Entity e : getroffeneGegner) {
-                            ((Enemy) e).startBeingAttacked(w); 
-                            w.notifySuccess();
+                        if(w.isFriendly()){
+                            LinkedList<Entity> getroffeneGegner = collidesWith(w, gegnerListe);
+                            for(Entity e : getroffeneGegner) {
+                                ((Enemy) e).startBeingAttacked(w); 
+                                w.notifySuccess();
+                            }
+                        }
+                        else {
+                            if(collision(w, player)){
+                                player.startBeingAttacked(w); 
+                                w.notifySuccess();
+                            }
                         }
                     }
                 }

@@ -24,4 +24,6 @@ public abstract class Enemy extends Creature
     }
     
     public abstract int getScoreValue();
+    
+    public abstract Weapon target(Player player);
 }

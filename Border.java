@@ -10,6 +10,7 @@ import java.awt.Graphics;
 public class Border extends Entity
 {
     public static final int BORDER_WIDTH = 10;
+    
     //Die Border wird nur über ihre Hitbox definiert
     private Rectangle hitBox; 
     /**
@@ -22,7 +23,7 @@ public class Border extends Entity
      * @since 22.05.2019
      */
     public Border(int x, int y, int width, int height) {
-        super("Room-Border", null, x, y, width, height);
+        super("Game Border", null, x, y, width, height);
         hitBox = new Rectangle(x, y, width, height);
     }
     
@@ -33,24 +34,8 @@ public class Border extends Entity
     public Rectangle getHitbox() {
         return hitBox;
     }
-      
-    /**
-     * Die render-Methode sollte nicht aufgerufen werden. Die Border wird nicht angezeigt.
-     * @author Jakob Kleine, Cepehr Bromand, Ares Zühlke
-     * @since 22.05.2019
-     */
-    @Override
-    public void render(Graphics g) { 
-        
-    }
-     
-    /**
-     * Die render-Methode sollte nicht aufgerufen werden. Die Border besitzt keine Funktionalität
-     * @author Jakob Kleine, Cepehr Bromand, Ares Zühlke
-     * @since 22.05.2019
-     */
-    @Override
-    public void update() {
-        
-    }
+    
+    protected void update(){}
+    
+    protected void render(Graphics g) {}
 }

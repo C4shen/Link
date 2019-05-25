@@ -92,11 +92,24 @@ public abstract class Creature extends Movable {
      */
     @Override
     public void update() {
-        move();
-        if(weapon.isAttacking()) //Wenn die Waffe sich bewegt, soll sie sich eigenständig updaten, sonst wird ihre Bewegung vorgegeben
-            weapon.update();
-        else
-            weapon.setPositionInHand(getHandPosition(prevDirection,xPos));
+        if(knockback != null) {
+            if(knockback.getAmountLeft() <= 0) {
+                knockback = null;
+            }
+            else {
+                int zusatzX = (int) Math.round(knockback.getDirectionX() * knockback.getStrength()), zusatzY = (int) Math.round(knockback.getDirectionY() * knockback.getStrength());
+                entityX += zusatzX;
+                entityY += zusatzY;
+                knockback.reduceAmountLeft(Math.max(Math.abs(zusatzX), Math.abs(zusatzY))); //Das eben durchgeführte Knockback wird vom noch auszuführenden abgezogen
+            }
+        }
+        else {
+            move();
+            if(weapon.isAttacking()) //Wenn die Waffe sich bewegt, soll sie sich eigenständig updaten, sonst wird ihre Bewegung vorgegeben
+                weapon.update();
+            else
+                weapon.setPositionInHand(getHandPosition(prevDirection,xPos));
+        }
     }
     
     /**
