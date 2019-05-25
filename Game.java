@@ -195,7 +195,7 @@ public class Game implements Runnable {
         private CollisionDetector collisionDet;
         public GameState()
         {
-            SpriteSheet playerSprite = new SpriteSheet("/res/sprites/creatures/player.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
+            SpriteSheet playerSprite = new SpriteSheet("/res/sprites/creatures/virusSprite.png", 3 /*moves*/, 4 /*directions*/, 25 /*width*/, 48 /*height*/);
             player = new Player(320, 320, playerSprite);
             gegnerListe = new LinkedList<Enemy>();
             attackingWeapons = new LinkedList<Weapon>();
