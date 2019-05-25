@@ -201,7 +201,7 @@ public class Game implements Runnable {
             attackingWeapons = new LinkedList<Weapon>();
             TileSet tileSet = new TileSet("/res/tilesets/standard-raum-ts.png", 3, 3);
             room = new Room("/res/rooms/standard-raum.txt", tileSet);
-            SpriteSheet krebsSprite = new SpriteSheet("/res/sprites/creatures/krebs.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
+            SpriteSheet krebsSprite = new SpriteSheet("/res/sprites/creatures/sideEffect.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
             gegnerListe.add(new SideEffect(new java.util.Random().nextInt(400)+200, new java.util.Random().nextInt(400)+200, krebsSprite));
             
             roomBorders = new Border[] {
