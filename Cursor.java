@@ -11,6 +11,8 @@ public class Cursor extends Weapon {
     private static final double KB_STRENGTH = 7; //Die Standard-Stärke des Knockbacks
     private static final int DEFAULT_DAMAGE = 5; //Der Standard-Schaden des Cursors
     
+    
+    private boolean isFriendly;
     /**
      * Die Waffen werden immer relativ zu ihren Besitzern positioniert. 
      * Der Cursor ist eine Waffe des Players. Das sind also die zusätzlichen Werte für die 
@@ -31,8 +33,9 @@ public class Cursor extends Weapon {
      * @param x die x-Position des Cursors
      * @param y die y-Position des Cursors
      */
-    public Cursor(SpriteSheet spriteSheet, int x, int y, double ownerSpeed) {
+    public Cursor(SpriteSheet spriteSheet, int x, int y, double ownerSpeed, boolean isFriendly) {
         super("Cursor", spriteSheet, x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, ownerSpeed);
+        this.isFriendly = isFriendly;
     }
     
     /**
@@ -129,5 +132,9 @@ public class Cursor extends Weapon {
      */
     public Rectangle getHitbox() {
         return new Rectangle((int) Math.round(entityX), (int) Math.round(entityY), 16, 16);
+    }
+    
+    public boolean isFriendly(){
+        return isFriendly;
     }
 }    

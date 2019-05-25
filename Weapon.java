@@ -82,4 +82,6 @@ public abstract class Weapon extends Movable {
     public boolean isAttacking() {
         return isAttacking;
     }
+    
+    public abstract boolean isFriendly();
 }

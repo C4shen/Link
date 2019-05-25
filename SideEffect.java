@@ -38,38 +38,9 @@ public class SideEffect extends Enemy
     public SideEffect(int x, int y, SpriteSheet enemySprite) 
     {
         super(x, y, "Krebs", enemySprite, DEFAULT_HEALTH, DEFAULT_SPEED, 
-                new Cursor(new SpriteSheet("/res/sprites/weapons/cursor.png", 3 /*moves*/, 4 /*directions*/, 16 /*width*/, 16 /*height*/), x+10, y+30, DEFAULT_SPEED));
+                new Cursor(new SpriteSheet("/res/sprites/weapons/cursor.png", 3 /*moves*/, 8 /*directions*/, 16 /*width*/, 16 /*height*/), x+10, y+30, DEFAULT_SPEED, false));
         setMove(new Point(-1, 0)); //Zu Beginn bewegt sich der Side-Effect immer nach links
         health = SideEffect.DEFAULT_HEALTH;
-    }
-    
-    /**
-     * Aktualisiert die Bewegung des Nebeneffekts. Er bewegt sich nur entlang der 
-     * x-Achse.
-     * @author Janni Röbbecke, Jakob Kleine, Cashen Adkins
-     * @since 15.05.2019
-     */
-    @Override
-    public void update()
-    {
-        if(knockback != null) {
-            if(knockback.getAmountLeft() <= 0) {
-                knockback = null;
-            }
-            else {
-                int zusatzX = (int) Math.round(knockback.getDirectionX() * knockback.getStrength()), zusatzY = (int) Math.round(knockback.getDirectionY() * knockback.getStrength());
-                entityX += zusatzX;
-                entityY += zusatzY;
-                knockback.reduceAmountLeft(Math.max(Math.abs(zusatzX), Math.abs(zusatzY))); //Das eben durchgeführte Knockback wird vom noch auszuführenden abgezogen
-            }
-        }
-        else {
-            if(entityX<20)
-                setMove(new Point(1, 0));
-            if(entityX>550)
-                setMove(new Point(-1, 0));
-            super.update();
-        }
     }
    
     @Override
@@ -100,5 +71,22 @@ public class SideEffect extends Enemy
     
     public int getScoreValue() {
         return DEFAULT_SCORE_VALUE;
+    }
+    
+    public Weapon target(Player player){
+        if(player.getHitbox().intersects(getHitbox())){
+            return startAttack();
+        }
+        else {
+            if(xMove == 0){
+                if(player.entityX < entityX)setMove(new Point(-1,0));
+                else setMove(new Point(1,0));
+            }
+            if(entityX<20)
+                setMove(new Point(1, 0));
+            if(entityX>550)
+                setMove(new Point(-1, 0));
+            return null;
+        }
     }
 }
