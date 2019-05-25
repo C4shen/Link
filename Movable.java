@@ -70,19 +70,17 @@ public abstract class Movable extends Entity {
         entityY += yMove * speed;
         
         if(animationDelay++ >= 7) { //Wenn sieben Mal verzögert wurden, soll jetzt die Animation erfolgen
-            if(xMove == 0 && yMove == 0) { //Wenn die Figur gerade nicht bewegt wird
-                animationDelay = 7; //Die Animation soll nicht verzögert erfolgen, wenn die Figur wieder bewegt wird
-                setCurrentImage(0, 0, 0); //Das Bild der Figur im Stillstand
-            } else {
-                animationDelay = 0; //Setzt die Verzögerung zurück. Sie erfolgt alle sieben Durchläufe
-                if(op == -1 && xPos <= 0) { //Wenn xPos <=0, soll es langsam zu 2 erhöht werden
+            if(xMove == 0 && yMove == 0)  //Wenn die Figur gerade nicht bewegt wird
+                animationDelay = 7; //Die Animation soll nicht verzögert erfolgen, wenn die Figur wieder bewegt wird -> sie soll sofort loslaufen
+            else {
+                animationDelay = 0; //Setzt die Verzögerung zurück. 
+                if(op == -1 && xPos <= 0) //Wenn xPos <=0, soll es langsam zu 2 erhöht werden
                     op = 1; //-> es soll immer 1 addiert werden
-                } else if(op == 1 && xPos >= 2) { //Wenn xPos >= 2, soll es langsam zu 0 verringert werden
+                else if(op == 1 && xPos >= 2) //Wenn xPos >= 2, soll es langsam zu 0 verringert werden
                     op = -1; //-> es soll immer 1 abgezogen werden
-                }
                 xPos += op; //Erhöht xPos um 1 (Bzw. verringert es um 1)
-                setCurrentImage(xMove, yMove, xPos); //Aktualisiert das Bild entsprechend
             }
+            setCurrentImage(); //Aktualisiert das Bild entsprechend
         }
     }
 
@@ -101,13 +99,13 @@ public abstract class Movable extends Entity {
      * Ändert im Zuge der Animation das Bild der Figur.
      * Theroretisch wäre es denkbar, eine weitere Bewegungsrichtung einzufügen, für den Fall, dass die Kreatur
      * sich entlang der x- und y-Achse bewegt. Das wurde bisher vernachlässigt.
-     * @author Jakob Kleine, Cashen Adkins, (frei nach) www.quizdroid.wordpress.com 
+     * @author Jakob Kleine, Cashen Adkins, www.quizdroid.wordpress.com (abgeändert)
      * @param xMove die Bewegung in x-Richtung: -1, für links; 0 für keine; +1 für rechts
      * @param yMove die Bewegung in y-Richtung: -1, für unten; 0 für keine; +1 für oben
      * @param xPos die Position der Füße u.Ä.: Bei der Animation werden nacheinander die Beine der Figuren bewegt
      * @since 0.02 (13.05.2019)
      */
-    private void setCurrentImage(int xMove, int yMove, int xPos) {
+    private void setCurrentImage() {
         if(yMove == -1)         //Bewegung nach oben
             prevDirection = 3;
         else if(yMove == 1)     //Bewegung nach unten
@@ -116,7 +114,7 @@ public abstract class Movable extends Entity {
             prevDirection = 1;
         else if(xMove == 1)     //Bewegung nach rechts
             prevDirection = 2;
-        else //Die Figur hat sich nicht bewegt. Es soll das Bild im Stillstand der vorherigen Richtung angezeigt werden -> Prevdirection bleibt gleich, xPos = 1 -> keine Bewegung
+        else //Die Figur hat sich nicht bewegt. Es soll das Bild im Stillstand der vorherigen Richtung angezeigt werden -> Prevdirection bleibt gleich, xPos = 1 -> neutrale Pose
             xPos = 1;
             
         setEntityImage(spriteSheet.getSpriteElement(xPos, prevDirection)); //Ändert das tatsächlich angezeigte Bild

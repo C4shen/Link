@@ -60,7 +60,7 @@ public class SideEffect extends Enemy
                 int zusatzX = (int) Math.round(knockback.getDirectionX() * knockback.getStrength()), zusatzY = (int) Math.round(knockback.getDirectionY() * knockback.getStrength());
                 entityX += zusatzX;
                 entityY += zusatzY;
-                knockback.reduceAmountLeft(Math.max(Math.abs(zusatzX), Math.abs(zusatzY)));
+                knockback.reduceAmountLeft(Math.max(Math.abs(zusatzX), Math.abs(zusatzY))); //Das eben durchgeführte Knockback wird vom noch auszuführenden abgezogen
             }
         }
         else {
@@ -87,7 +87,7 @@ public class SideEffect extends Enemy
      * @since 22.05.2019
      */
     public Point getHandPosition(int xPos, int direction){
-        return handPosition[xPos][direction];
+        return new Point(handPosition[xPos][direction].x + (int) Math.round(entityX), handPosition[xPos][direction].y + (int) Math.round(entityY));
     }
     
     /**

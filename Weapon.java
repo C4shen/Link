@@ -16,7 +16,7 @@ public abstract class Weapon extends Movable {
      * @since 21.05.2019
      */
     protected boolean isAttacking;
-    //Eigentlich könnte Waffe auch ein Interface sein!! -> Wäre das sinnvoll?
+    //Eigentlich könnte Waffe auch ein Interface sein -> Wäre das sinnvoll?
     /**
      * Ersellt eine neue Waffe
      * @author Jakob Kleine, Janni Röbbecke
@@ -44,9 +44,7 @@ public abstract class Weapon extends Movable {
     
     /**
      * Ändert die Position der Waffe so, dass sie in der Hand des Benutzers liegt
-     * @param ownerX die x-Koordinate des Besitzers
-     * @param ownerY die y-Koordinate des Besitzers
-     * @param xPos die Pose in der Bewegung (beim Laufen)
+     * @param handPosition die Koordinaten der Hand des Besitzers
      * @param direction die Richtung, in die sich die Waffe bewegen soll. Momentan sin nur 4 Richtungen implementiert: 
      *                  <ul>
      *                      <li>0 -> Süden</li>

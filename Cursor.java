@@ -17,10 +17,10 @@ public class Cursor extends Weapon {
      * x-/y-Koordinaten des Cursors in der bestimmten Pose [2.Dimension] einer Bewegungsrichtung [1.Dimension]
      */
     protected static final Point[][] handelPositions = new Point[][]{
-        new Point[] { new Point(06, 14), new Point(06, 14), new Point(06, 14), new Point(06, 14) },
-        new Point[] { new Point(10, 13), new Point(10, 13), new Point(10, 13), new Point(0,0) },
-        new Point[] { new Point(0, 0), new Point(0,0), new Point(0,0), new Point(0,0) },
-        new Point[] { new Point(0, 0), new Point(0,0), new Point(0,0), new Point(0,0) }
+        new Point[] { new Point(06, 14), new Point(06, 14), new Point(06, 14) },
+        new Point[] { new Point(10, 13), new Point(10, 13), new Point(10, 13) },
+        new Point[] { new Point(0, 0), new Point(0,0), new Point(0,0) },
+        new Point[] { new Point(0, 0), new Point(0,0), new Point(0,0) }
     };
     
     private double startX; //Die Startposition vor dem Angriff. Der Cursor kehrt hierhin zurück
@@ -59,8 +59,8 @@ public class Cursor extends Weapon {
      */
     @Override
     public void setPositionInHand(Point handPosition) {
-        entityX = handPosition.x; // - handelPositions[0][0].x;
-        entityY = handPosition.y; // - handelPositions[0][0].y;
+        entityX = handPosition.x ;//- handelPositions[xPosPlayer][directionPlayer].x;
+        entityY = handPosition.y ;//- handelPositions[xPosPlayer][directionPlayer].y;
         
         setEntityImage(spriteSheet.getSpriteElement(xPos, prevDirection));
     }
