@@ -27,7 +27,7 @@ public abstract class Movable extends Entity {
     /**
      * Speichert ob die Figur sich gerade in x- bzw. y-Richtung bewegt
      */
-    protected int xMove, yMove;
+    protected double xMove, yMove;
     
     private int animationDelay; //Zählt die Durchläufe der Game-Loop. Die Bewegungs-Animation soll nur alle sieben Druchläufe erfolgen
     private int op; //Die Zahl, um die xPos erhöht wird
@@ -93,6 +93,11 @@ public abstract class Movable extends Entity {
     public void setMove(Point p){
         xMove = p.x;
         yMove = p.y;
+    }
+    
+    public void setMove(double xM, double yM){
+        xMove = xM;
+        yMove = yM;
     }
     
     /**

@@ -10,8 +10,8 @@ public class Knockback
 {
     private int knockbackLeft; //Das Knockback, das noch erfolgen muss
     private double knockbackStrength; //Die Stärke des Knockbacks (entspricht der speed)
-    private int directionX;
-    private int directionY;
+    private double directionX;
+    private double directionY;
     
     /**
      * Erstellt ein neues Knockback
@@ -21,7 +21,7 @@ public class Knockback
      * @author Jakob Kleine, Cashen Adkins
      * @since 23.05.2019
      */
-    public Knockback(int amount, double strength, int dirX, int dirY) {
+    public Knockback(int amount, double strength, double dirX, double dirY) {
         knockbackLeft = amount;
         knockbackStrength = strength;
         directionX = dirX;
@@ -65,7 +65,7 @@ public class Knockback
      * @author Jakob Kleine, Cashen Adkins
      * @since 23.05.2019
      */
-    public int getDirectionX() {
+    public double getDirectionX() {
         return directionX;
     }
     
@@ -75,7 +75,7 @@ public class Knockback
      * @author Jakob Kleine, Cashen Adkins
      * @since 23.05.2019
      */
-    public int getDirectionY() {
+    public double getDirectionY() {
         return directionY;
     }
 }
