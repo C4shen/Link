@@ -7,6 +7,7 @@ import java.awt.RenderingHints;
 import java.awt.Graphics2D;
 import java.util.LinkedList;
 import java.awt.Font;
+import java.util.Random;
 /**
  * Die zentrale Klasse des Programms. Hier wird die Anzeige und Funktionalität des Spiels verwaltet.
  * @author Cashen Adkins, Cepehr Bromand, Janni Röbbecke, Jakob Kleine, www.quizdroid.wordpress.com

@@ -101,30 +101,25 @@ public abstract class Movable extends Entity {
      * Ändert im Zuge der Animation das Bild der Figur.
      * Theroretisch wäre es denkbar, eine weitere Bewegungsrichtung einzufügen, für den Fall, dass die Kreatur
      * sich entlang der x- und y-Achse bewegt. Das wurde bisher vernachlässigt.
-     * @author Jakob Kleine, Cashen Adkins, www.quizdroid.wordpress.com
+     * @author Jakob Kleine, Cashen Adkins, (frei nach) www.quizdroid.wordpress.com 
      * @param xMove die Bewegung in x-Richtung: -1, für links; 0 für keine; +1 für rechts
      * @param yMove die Bewegung in y-Richtung: -1, für unten; 0 für keine; +1 für oben
      * @param xPos die Position der Füße u.Ä.: Bei der Animation werden nacheinander die Beine der Figuren bewegt
      * @since 0.02 (13.05.2019)
      */
     private void setCurrentImage(int xMove, int yMove, int xPos) {
-        BufferedImage image; //Im Tutorial ist das ein Attribut. Der Sinn erschließt sich uns nicht.
-        if(yMove == -1) { //Bewegung nach oben
-            image = spriteSheet.getSpriteElement(xPos, 3);
+        if(yMove == -1)         //Bewegung nach oben
             prevDirection = 3;
-        } else if(yMove == 1) { //Bewegung nach unten
-            image = spriteSheet.getSpriteElement(xPos, 0);
+        else if(yMove == 1)     //Bewegung nach unten
             prevDirection = 0;
-        } else if(xMove == -1) { //Bewegung nach links
-            image = spriteSheet.getSpriteElement(xPos, 1);
+        else if(xMove == -1)    //Bewegung nach links
             prevDirection = 1;
-        } else if(xMove == 1) { //Bewegung nach rechts
-            image = spriteSheet.getSpriteElement(xPos, 2);
+        else if(xMove == 1)     //Bewegung nach rechts
             prevDirection = 2;
-        } else { //Die Figur hat sich nicht bewegt. Es soll das Bild im Stillstand der vorherigen Richtung angezeigt werden
-            image = spriteSheet.getSpriteElement(1, prevDirection);
-        }
-        setEntityImage(image); //Ändert das tatsächlich angezeigte Bild
+        else //Die Figur hat sich nicht bewegt. Es soll das Bild im Stillstand der vorherigen Richtung angezeigt werden -> Prevdirection bleibt gleich, xPos = 1 -> keine Bewegung
+            xPos = 1;
+            
+        setEntityImage(spriteSheet.getSpriteElement(xPos, prevDirection)); //Ändert das tatsächlich angezeigte Bild
     }
     
     public void setEntityX(int xNeu) {
