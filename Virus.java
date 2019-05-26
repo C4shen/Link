@@ -30,7 +30,7 @@ public class Virus extends Enemy
     /**
      * Standard-Geschwindigkeit des Spielcharakters
      */
-    public static final double DEFAULT_SPEED = 1.5;
+    public static final double DEFAULT_SPEED = 1;
     
     public static final int DEFAULT_SCORE_VALUE = 200;
     /**
