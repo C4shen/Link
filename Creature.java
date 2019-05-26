@@ -41,9 +41,8 @@ public abstract class Creature extends Movable {
      * @param health die HP der Figur
      * @param speed die Geschwindigkeit der Figur
      */
-    public Creature(String name, SpriteSheet spriteSheet, int x, int y, int width, int height, int health, double speed, Weapon weapon) {
+    public Creature(String name, SpriteSheet spriteSheet, int x, int y, int width, int height, int health, double speed) {
         super(name, spriteSheet, x, y, width, height, speed);
-        this.weapon = weapon;
         this.health = health;
     }
     
@@ -56,7 +55,7 @@ public abstract class Creature extends Movable {
      * @see <a href="Weapon.html">Klasse Weapon</a>
      */
     public Weapon startAttack() {
-        if(weapon.isAttacking()) 
+        if(weapon == null || weapon.isAttacking()) 
             return null; //Kein Angriff wurde ausgeführt, es gibt keine neue Waffe
         else {
             Point weaponDirection; //Die Richtung, in die der Angriff erfolgt, entspricht der Blickrichtung der Kreatur
@@ -104,10 +103,12 @@ public abstract class Creature extends Movable {
         }
         else {
             move();
-            if(weapon.isAttacking()) //Wenn die Waffe sich bewegt, soll sie sich eigenständig updaten, sonst wird ihre Bewegung vorgegeben
-                weapon.update();
-            else
-                weapon.setPositionInHand(getHandPosition(prevDirection,xPos));
+            if(weapon != null) {
+                if(weapon.isAttacking()) //Wenn die Waffe sich bewegt, soll sie sich eigenständig updaten, sonst wird ihre Bewegung vorgegeben
+                    weapon.update();
+                else
+                    weapon.setPositionInHand(getHandPosition(prevDirection,xPos));
+            }
         }
     }
     
@@ -123,12 +124,14 @@ public abstract class Creature extends Movable {
             image = Utils.dyeImage(image, Color.RED, 20); //Es wäre Performance-technisch sicher besser, alle Bilder einmal zu färben und dann zu speichern
             
         if(weaponBehind()){
-            weapon.render(g); //Wenn die Waffe hinter der Kreatur sein soll, wird sie zuerst gemalt, die 
+            if(weapon != null) 
+                weapon.render(g); //Wenn die Waffe hinter der Kreatur sein soll, wird sie zuerst gemalt, die 
             super.render(g); //Die Kreatur malt sich dann "drüber"
         }
         else{
             super.render(g); //Sonst andersrum
-            weapon.render(g);
+            if(weapon != null) 
+                weapon.render(g);
         }
     }
     
@@ -155,7 +158,7 @@ public abstract class Creature extends Movable {
      *          </ul>
      */
     public void setMove(Point p){
-        if(!weapon.isAttacking()){
+        if(weapon == null || !weapon.isAttacking()){
             super.setMove(p);
         }
     }

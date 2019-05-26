@@ -37,9 +37,8 @@ public class Player extends Creature {
      * @since 0.01 (10.05.2019)
      */
     public Player(int x, int y, SpriteSheet playerSprite) {
-        super("Player", playerSprite, x, y, Entity.DEFAULT_WIDTH, Entity.DEFAULT_HEIGHT, Player.DEFAULT_HEALTH, Player.DEFAULT_SPEED, 
-                new Cursor(new SpriteSheet("/res/sprites/weapons/cursor.png", 3 /*moves*/, 8 /*directions*/, 16 /*width*/, 16 /*height*/), x+10, y+30, DEFAULT_SPEED, true)); 
-                //Eigentlich Waffe nicht im Konstruktor!
+        super("Player", playerSprite, x, y, Entity.DEFAULT_WIDTH, Entity.DEFAULT_HEIGHT, Player.DEFAULT_HEALTH, Player.DEFAULT_SPEED); 
+        weapon = new Cursor(new SpriteSheet("/res/sprites/weapons/cursor.png", 3 /*moves*/, 8 /*directions*/, 16 /*width*/, 16 /*height*/), x+10, y+30, DEFAULT_SPEED, true);
     }
     
     /**

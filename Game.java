@@ -292,12 +292,13 @@ public class Game implements Runnable {
             for(Enemy e : gegnerListe) {
                 if(e.isAlive()){
                     Weapon enemyWeapon = e.target(player);
-                    if(enemyWeapon!=null) attackingWeapons.add(enemyWeapon);
+                    if(enemyWeapon!=null) 
+                        attackingWeapons.add(enemyWeapon);
                     e.update();
                 }
                 else {
                     score += e.getScoreValue();
-                    if(e.weapon.isAttacking()) 
+                    if(e.weapon != null && e.weapon.isAttacking()) 
                         waffenGestorbenerGegner.add(e.weapon);
                     nichtMehrLebendeGegner.add(e);
                 }
