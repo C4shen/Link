@@ -31,7 +31,7 @@ public class TileSet
      * @param sizeX die Anzahl an Reihen der Tiles in dem Set
      * @since 0.01 (10.05.2019)
      */
-    public TileSet(String path, int sizeX, int sizeY) 
+    public TileSet(String path, int sizeX, int sizeY, int border) 
     {
         tiles = new BufferedImage[sizeX * sizeY]; //Insgesamt gibt es sizeX*sizeY Bilder, die einzeln gespeichert werden sollen
         BufferedImage tileSet = null;
@@ -48,7 +48,7 @@ public class TileSet
                 for(int x = 0; x < sizeX; x++) { //Für alle Spalten: Schneide ein Bild aus
                     //x * (TILE_WIDTH + 3) entspricht der "Koordinate" des auszuschneidenden Bilds: (die Länge eines Tiles + Abstand von 3px) * Anzahl der Tiles vor diesem Tile
                     //y * (TILE_HEIGHT+ 3) entspricht x*(...)
-                    tiles[i++] = tileSet.getSubimage(x * (TILE_WIDTH + 3), y * (TILE_HEIGHT + 3), TILE_WIDTH, TILE_HEIGHT);
+                    tiles[i++] = tileSet.getSubimage(x * (TILE_WIDTH + border), y * (TILE_HEIGHT + border), TILE_WIDTH, TILE_HEIGHT);
                 }
             }
         }
