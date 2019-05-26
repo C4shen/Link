@@ -24,7 +24,7 @@ public class Virus extends Enemy
     /**
      * Standard-Geschwindigkeit des Spielcharakters
      */
-    public static final int DEFAULT_SPEED = 1;
+    public static final double DEFAULT_SPEED = 1.5;
     
     public static final int DEFAULT_SCORE_VALUE = 200;
     /**
@@ -77,9 +77,12 @@ public class Virus extends Enemy
             return startAttack();
         }
         else {
-            double xAbstand = player.entityX - entityX;
-            double yAbstand = player.entityY - entityY;
-            setMove(xAbstand/yAbstand, yAbstand/xAbstand);
+            double xAbstand = (player.entityX - entityX);
+            double yAbstand = (player.entityY - entityY);
+            double faktor = Math.sqrt(1/((xAbstand*xAbstand)+(yAbstand*yAbstand)));
+            double xm = xAbstand*faktor;
+            double ym = yAbstand*faktor;
+            setMove(xm, ym);
             
             return null;
         }
