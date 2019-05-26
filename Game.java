@@ -168,6 +168,17 @@ public class Game implements Runnable {
         System.exit(0);
     }
 
+    private void fontFestlegen(Graphics g, Font f) {
+        Graphics2D g2d = (Graphics2D) g; //Damit RenderingHints gesetzt werden können, muss das Graphics-Objekt in ein Graphics2D-Objekt gecastet werden
+        g2d.setRenderingHint(
+            RenderingHints.KEY_TEXT_ANTIALIASING, //Text-Anti-Aliasing -> weichere Kanten
+            RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g2d.setRenderingHint(
+            RenderingHints.KEY_FRACTIONALMETRICS, //Fractional-Metrics -> konsistente Buchstabengröße
+            RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+        g2d.setFont(f);
+    }
+    
     private interface State
     {
         /**
@@ -254,14 +265,7 @@ public class Game implements Runnable {
                 for(Border b : roomBorders) 
                     hitBoxAnzeigen(b, g);
                 */
-                Graphics2D g2d = (Graphics2D) g; //Damit RenderingHints gesetzt werden können, muss das Graphics-Objekt in ein Graphics2D-Objekt gecastet werden
-                g2d.setRenderingHint(
-                    RenderingHints.KEY_TEXT_ANTIALIASING, //Text-Anti-Aliasing -> weichere Kanten
-                    RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-                g2d.setRenderingHint(
-                    RenderingHints.KEY_FRACTIONALMETRICS, //Fractional-Metrics -> konsistente Buchstabengröße
-                    RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-                g2d.setFont(new Font("American Typewriter", Font.BOLD, 40)); //Comic Sans ist nur ein Beispiel, sorry Cepehr 
+                fontFestlegen(g, new Font("American Typewriter", Font.BOLD, 40)); 
                 g.drawString("Score: "+score, 10, Game.HP_BAR_HEIGHT-40);
                 bs.show();
                 g.dispose();
@@ -282,6 +286,9 @@ public class Game implements Runnable {
                     attackingWeapons.add(attackingWeapon); //Speichert die Waffe, um Kollisionen mit Gegnern zu prüfen
             }
             player.update();
+            
+            LinkedList<Enemy> nichtMehrLebendeGegner = new LinkedList<Enemy>(); //Um eine ConcurrentModificationException zu verhindern, werden die Elemente erst nach der Iteration über die Liste entfernt
+            LinkedList<Weapon> waffenGestorbenerGegner = new LinkedList<Weapon>(); 
             for(Enemy e : gegnerListe) {
                 if(e.isAlive()){
                     Weapon enemyWeapon = e.target(player);
@@ -289,17 +296,18 @@ public class Game implements Runnable {
                     e.update();
                 }
                 else {
-                    // e.die();
                     score += e.getScoreValue();
-                    gegnerListe.remove(e);
+                    if(e.weapon.isAttacking()) 
+                        waffenGestorbenerGegner.add(e.weapon);
+                    nichtMehrLebendeGegner.add(e);
                 }
             }
+            attackingWeapons.removeAll(waffenGestorbenerGegner);
+            gegnerListe.removeAll(nichtMehrLebendeGegner);
             
             collisionDet.update();
-            
             //Wenn Escape gedrückt wird, ändert sich die State in die MenuState
-            if(keyManager.escapeEinmal())
-            {
+            if(!player.isAlive() || keyManager.escapeEinmal()) {
                 currentState = mainMenuState;
             }
         }
@@ -318,9 +326,10 @@ public class Game implements Runnable {
              * diese Kollision auswertet
              */
             public void update() {
+                LinkedList<Weapon> nichtMehrAttackierendeWaffen = new LinkedList<Weapon>(); //Um eine ConcurrentModificationException zu verhindern, werden die Elemente erst nach der Iteration über die Liste entfernt
                 for(Weapon w : attackingWeapons) {
                     if(!w.isAttacking())
-                        attackingWeapons.remove(w);
+                        nichtMehrAttackierendeWaffen.add(w);
                     else {//Auf Kollision prüfen
                         if(w.isFriendly()){
                             LinkedList<Entity> getroffeneGegner = collidesWith(w, gegnerListe);
@@ -337,6 +346,7 @@ public class Game implements Runnable {
                         }
                     }
                 }
+                attackingWeapons.removeAll(nichtMehrAttackierendeWaffen);
                 
                 //Jetzt muss sichergestellt werden, dass kein Element aus dem Spielfeld geworfen wurde.
                 keepInside(player);
@@ -426,20 +436,17 @@ public class Game implements Runnable {
         public MainMenuState() 
         {
             menuItem = 0; //Zu Beginn des Menüs ist der ausgewählte Knopf der erste.
-            try 
-            {
+            try {
                  menuItemFrame = ImageIO.read(Utils.absoluteFileOf("/res/tilesets/menuitemframe.png")); //Der Rahmen wird gelesen und als BufferedImage gespeichert.
             } 
-            catch (IOException e) 
-            {
+            catch (IOException e) {
                 e.printStackTrace();
             }
             font = new Font("Futura", Font.BOLD, 40);
         }
         
         @Override
-        public void render(Graphics g)  
-        {
+        public void render(Graphics g) {
             Color color = new Color(255,255,255); //Eine Farbe wird festgelegt
             screen.getCanvas().setBackground(color); //Farbe wird als Hintergrundfarbe dargestellt
             BufferStrategy bs = screen.getCanvas().getBufferStrategy(); 
@@ -450,7 +457,7 @@ public class Game implements Runnable {
                 g = bs.getDrawGraphics();
                 //Clear Screen
                 g.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-                g.setFont(font);
+                fontFestlegen(g,font);
                 color = new Color(127, 101, 73);
                 g.setColor(color);
                 g.drawString("Spielen", SCREEN_WIDTH/2-120, 200);
