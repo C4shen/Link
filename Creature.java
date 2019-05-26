@@ -93,9 +93,8 @@ public abstract class Creature extends Movable {
     @Override
     public void update() {
         if(knockback != null) {
-            if(knockback.getAmountLeft() <= 0) {
-                knockback = null;
-            }
+            if(knockback.getAmountLeft() <= 0) 
+                resetKnockback();
             else {
                 int zusatzX = (int) Math.round(knockback.getDirectionX() * knockback.getStrength()), zusatzY = (int) Math.round(knockback.getDirectionY() * knockback.getStrength());
                 entityX += zusatzX;
@@ -186,4 +185,8 @@ public abstract class Creature extends Movable {
      * @return einen Punkt (x|y), dessen Koordinaten denen der Hand der Kreatur entsprechen
      */
     public abstract Point getHandPosition(int xPos, int direction);
+    
+    public void resetKnockback() {
+        knockback = null;
+    }
 }

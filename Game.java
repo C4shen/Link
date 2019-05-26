@@ -144,6 +144,7 @@ public class Game implements Runnable {
             xMove = -1;
         if(keyManager.right())
             xMove += 1; //+=, sodass keine Bewegung erfolgt, wenn beide Pfeile in gegensätzlicher Richtung gedrückt werden
+        
         return new Point(xMove, yMove);
     }
     
@@ -352,15 +353,27 @@ public class Game implements Runnable {
              * @param e die bewegbare Entität, für die sichergestellt werden soll, dass sie nicht mit den Mauern am Rand kollidiert
              */
             private void keepInside(Movable e) {
+                int xNeu = -1;
+                int yNeu = -1;
                 if(collision(e, roomBorders[0])) //Border Oben
-                    e.setEntityY(Game.HP_BAR_HEIGHT + Border.BORDER_WIDTH);
+                    yNeu = Game.HP_BAR_HEIGHT + Border.BORDER_WIDTH;
                 else if(collision(e, roomBorders[1])) //Border Unten
-                    e.setEntityY(Game.SCREEN_HEIGHT - (int) e.getHitbox().getHeight() - Border.BORDER_WIDTH); //Idee für Glitch -> -Borderwidth weglassen
+                    yNeu = Game.SCREEN_HEIGHT - (int) e.getHitbox().getHeight() - Border.BORDER_WIDTH;
                 //Kein else hier, weil auch 2 Borders getroffen werden können
                 if(collision(e, roomBorders[2])) //Border Links
-                    e.setEntityX(Border.BORDER_WIDTH);
+                    xNeu = Border.BORDER_WIDTH;
                 else if(collision(e, roomBorders[3])) //Border Rechts
-                    e.setEntityX(Game.SCREEN_WIDTH - (int) e.getHitbox().getWidth() - Border.BORDER_WIDTH);
+                    xNeu = Game.SCREEN_WIDTH - (int) e.getHitbox().getWidth() - Border.BORDER_WIDTH;
+                    
+                if(xNeu != -1) //Wenn die Position geändert werden soll
+                    e.setEntityX(xNeu);
+                if(yNeu != -1) 
+                    e.setEntityY(yNeu);
+                    
+                if(xNeu != -1 || yNeu != -1) { //wenn mind. eine Position geändert wurde, soll das (wenn vorhanden) Knockback zurückgesetzt werden, weil sonst die Kreatur immer wieder gegen die Wand geworfen wird
+                    if(e instanceof Creature) //Nur Kreaturen haben Knockback
+                        ((Creature) e).resetKnockback();
+                }
             }
         
             /*
@@ -443,7 +456,8 @@ public class Game implements Runnable {
                 g.drawString("Spielen", SCREEN_WIDTH/2-120, 200);
                 g.drawString("Anleitung", SCREEN_WIDTH/2-120, 280);
                 g.drawString("Optionen", SCREEN_WIDTH/2-120, 360);
-                g.drawString("Beenden", SCREEN_WIDTH/2-120, 440);
+                g.drawString("Bestenliste", SCREEN_WIDTH/2-120, 440);
+                g.drawString("Beenden", SCREEN_WIDTH/2-120, 520);
                 g.drawImage(menuItemFrame, SCREEN_WIDTH/2-190, 140 + menuItem * 80, 384, 96, null);
                 bs.show();
                 g.dispose();
@@ -454,7 +468,7 @@ public class Game implements Runnable {
         public void update() 
         {
             if(keyManager.downEinmal()) {
-                if(menuItem < 3) 
+                if(menuItem < 4) 
                     menuItem++;
                 else
                     menuItem = 0;
@@ -463,7 +477,7 @@ public class Game implements Runnable {
                 if(menuItem > 0) 
                     menuItem--;
                 else
-                    menuItem = 3;
+                    menuItem = 4;
             }
             else if(keyManager.attackEinmal()) {
                 switch(menuItem) {
@@ -476,7 +490,10 @@ public class Game implements Runnable {
                     case 2: 
                     
                     break;
-                    case 3:  //Später eher default (wenn Anleitung und Optionen implementiert)
+                    case 3:
+                    
+                    break;
+                    case 4: //Später eher default (wenn Anleitung und Optionen implementiert)
                         stop();
                 }
             }
@@ -485,4 +502,5 @@ public class Game implements Runnable {
                 currentState = gameState;
         }
     }
+    
 }

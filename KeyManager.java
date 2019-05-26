@@ -8,8 +8,8 @@ import java.awt.event.KeyListener;
  */
 public class KeyManager implements KeyListener {
     private boolean[] keys; //Speichert für alle Tasten, ob sie gedrückt werden
-    private boolean up, down, left, right, attack, escape; //Speichert, ob die Tasten für eine Bewegung nach oben, unten usw. gedrückt werden
-    private boolean letzterStatusUp, letzterStatusDown, letzterStatusLeft, letzterStatusRight, letzterStatusAttack, letzterStatusEscape; //Speichert den letzten Status der Up-/Down-/Left-/Right-/Escape-Taste sodass die Taste nicht mehrmals pro Loop "gedrückt" wird, obwohl man sie nur einmal drücken will.
+    private boolean[] relevantKeys; //Speichert, ob die relevanten Tasten für das Spiel gedrückt werden: w, s, a, d, space, escape (in dieser Reihenfolge; w a s d meint auch pfeile in entsprechender Richtung)
+    private boolean[] lastStateRelevantKeys; //Speichert den letzten Status der relevanten Tasten, sodass die Taste nicht mehrmals pro Loop "gedrückt" wird, obwohl man sie nur einmal drücken will.
     /**
      * Erstellt einen neuen KeyManager.
      * @author Janni Röbbecke, Ares Zühlke, Jakob Kleine, www.quizdroid.wordpress.com
@@ -17,12 +17,8 @@ public class KeyManager implements KeyListener {
      */
     public KeyManager(){
         keys = new boolean[256];
-        letzterStatusUp = false;
-        letzterStatusDown = false;
-        letzterStatusLeft = false;
-        letzterStatusRight = false;
-        letzterStatusAttack = false;
-        letzterStatusEscape = false;
+        relevantKeys = new boolean[6];
+        lastStateRelevantKeys = new boolean[6];
     }
     
     /**
@@ -31,12 +27,12 @@ public class KeyManager implements KeyListener {
      * @since 0.01 (11.05.2019)
      */
     public void update(){
-        up = keys[KeyEvent.VK_W] || keys[KeyEvent.VK_UP];
-        down = keys[KeyEvent.VK_S] || keys[KeyEvent.VK_DOWN];
-        left = keys[KeyEvent.VK_A] || keys[KeyEvent.VK_LEFT];
-        right = keys[KeyEvent.VK_D] || keys[KeyEvent.VK_RIGHT];
-        attack = keys[KeyEvent.VK_SPACE];
-        escape = keys[KeyEvent.VK_ESCAPE];
+        relevantKeys[0] = keys[KeyEvent.VK_W] || keys[KeyEvent.VK_UP];
+        relevantKeys[1] = keys[KeyEvent.VK_S] || keys[KeyEvent.VK_DOWN];
+        relevantKeys[2] = keys[KeyEvent.VK_A] || keys[KeyEvent.VK_LEFT];
+        relevantKeys[3] = keys[KeyEvent.VK_D] || keys[KeyEvent.VK_RIGHT];
+        relevantKeys[4] = keys[KeyEvent.VK_SPACE];
+        relevantKeys[5] = keys[KeyEvent.VK_ESCAPE];
     }
     
     /**
@@ -73,13 +69,32 @@ public class KeyManager implements KeyListener {
     }
     
     /**
+     * Ermittelt, ob eine Taste nur einmal gedrückt wurde. 
+     * Dadurch kann verhindert werden, dass Tasten (wie zum Beispiel escape) mehrmals als gedrückt gewertet werden, wenn sie gedrückt gehalten werden.
+     * @author Cashen Adkins, Jakob Kleine 
+     * @since 24.05.2019 (Überarbeitet: 26.05.2019)
+     * @param der Index der Taste im <code>relevantKeys</code>-Array
+     * @return true, wenn die gewählte Taste gerade gedrückt wird, und bei der vorherigen Abfrage nicht gedrückt worden ist
+     */
+    private boolean keyPressedOnce(int keyIndex) {
+        if(relevantKeys[keyIndex] && !lastStateRelevantKeys[keyIndex]) { //Nur wenn grade gedrückt && vorher nicht gedrückt
+            lastStateRelevantKeys[keyIndex] = relevantKeys[keyIndex];
+            return true;
+        }
+        else {
+            lastStateRelevantKeys[keyIndex] = relevantKeys[keyIndex];
+            return false;
+        }
+    }
+    
+    /**
      * Ermittelt, ob die Taste nach oben momentan gedrückt wird
      * @author Jakob Kleine, Janni Röbbecke
      * @return ein boolean, der angibt, ob die Taste für eine Bewegung nach oben gedrückt wird
      * @since 0.02 (12.05.2019)
      */
     public boolean up() {
-        return up;
+        return relevantKeys[0];
     }
     
     /**
@@ -89,16 +104,7 @@ public class KeyManager implements KeyListener {
      * @since 0.02 (24.05.2019)
      */
     public boolean upEinmal() {
-        if(up && !letzterStatusUp)
-        {
-            letzterStatusUp = up;
-            return true;
-        }
-        else
-        {
-            letzterStatusUp = up;
-            return false;
-        }
+        return keyPressedOnce(0);
     }
     
     /**
@@ -108,7 +114,7 @@ public class KeyManager implements KeyListener {
      * @since 0.02 (12.05.2019)
      */
     public boolean down() {
-        return down;
+        return relevantKeys[1];
     }
     
      /**
@@ -118,16 +124,7 @@ public class KeyManager implements KeyListener {
      * @since 0.02 (24.05.2019)
      */
     public boolean downEinmal() {
-        if(down && !letzterStatusDown)
-        {
-            letzterStatusDown = down;
-            return true;
-        }
-        else
-        {
-            letzterStatusDown = down;
-            return false;
-        }
+        return keyPressedOnce(1);
     }
     
     /**
@@ -137,7 +134,7 @@ public class KeyManager implements KeyListener {
      * @since 0.02 (12.05.2019)
      */
     public boolean left() {
-        return left;
+        return relevantKeys[2];
     }
     
     /**
@@ -147,7 +144,7 @@ public class KeyManager implements KeyListener {
      * @since 0.02 (12.05.2019)
      */
     public boolean right() {
-        return right;
+        return relevantKeys[3];
     }
     
     /**
@@ -157,16 +154,7 @@ public class KeyManager implements KeyListener {
      * @since 0.02 (24.05.2019)
      */
     public boolean rightEinmal() {
-        if(right && !letzterStatusRight)
-        {
-            letzterStatusRight = right;
-            return true;
-        }
-        else
-        {
-            letzterStatusRight = right;
-            return false;
-        }
+        return keyPressedOnce(3);
     }
     
     /**
@@ -176,7 +164,7 @@ public class KeyManager implements KeyListener {
      * @since 0.02 (12.05.2019)
      */
     public boolean attack() {
-        return attack;
+        return relevantKeys[4];
     }
     
     /**
@@ -186,16 +174,7 @@ public class KeyManager implements KeyListener {
      * @since 0.02 (26.05.2019)
      */
     public boolean attackEinmal() {
-        if(attack && !letzterStatusAttack)
-        {
-            letzterStatusAttack = attack;
-            return true;
-        }
-        else
-        {
-            letzterStatusAttack = attack;
-            return false;
-        }
+        return keyPressedOnce(4);
     }
     
     /**
@@ -205,15 +184,6 @@ public class KeyManager implements KeyListener {
      * @since 0.02 (22.05.2019)
      */
     public boolean escapeEinmal() {
-        if(escape && !letzterStatusEscape)
-        {
-            letzterStatusEscape = escape;
-            return true;
-        }
-        else
-        {
-            letzterStatusEscape = escape;
-            return false;
-        }
+        return keyPressedOnce(5);
     }
 }
