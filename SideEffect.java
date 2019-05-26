@@ -17,10 +17,17 @@ public class SideEffect extends Enemy
         new Point[]{ new Point(32, 18), new Point(37, 26), new Point(34, 22) }
     };
     
+    /*
+     * Das Standart-Spritesheet-Objekt, auf das alle Objekte dieser Klasse als ihr SpriteSheet referenzieren. 
+     * Dadurch, dass es ein Standard-Bild gibt, müssen die gleichen Bilder nicht mehrmals geladen werden.
+     */
+    private static final SpriteSheet DEFAULT_SPRITE_SHEET = new SpriteSheet("/res/sprites/creatures/sideEffect.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
+    
     /**
      * Standard-Lebenspunkte, die der Spielcharakter zu Beginn des Spiels hat
      */
     public static final int DEFAULT_HEALTH = 20;
+    
     /**
      * Standard-Geschwindigkeit des Spielcharakters
      */
@@ -35,10 +42,9 @@ public class SideEffect extends Enemy
      * @param enemySprite das SpriteSheet des Nebeneffekts
      * @since 15.05.2019
      */
-    public SideEffect(int x, int y, SpriteSheet enemySprite) 
+    public SideEffect(int x, int y) 
     {
-        super(x, y, "Krebs", enemySprite, DEFAULT_HEALTH, DEFAULT_SPEED, 
-                new Cursor(new SpriteSheet("/res/sprites/weapons/cursor.png", 3 /*moves*/, 8 /*directions*/, 16 /*width*/, 16 /*height*/), x+10, y+30, DEFAULT_SPEED, false));
+        super(x, y, "Krebs", DEFAULT_SPRITE_SHEET, DEFAULT_HEALTH, DEFAULT_SPEED, new Cursor(x+10, y+30, DEFAULT_SPEED, false));
         setMove(new Point(-1, 0)); //Zu Beginn bewegt sich der Side-Effect immer nach links
         health = SideEffect.DEFAULT_HEALTH;
     }
@@ -88,5 +94,13 @@ public class SideEffect extends Enemy
                 setMove(new Point(-1, 0));
             return null;
         }
+    }
+    
+    /**
+     * @author Jakob Kleine, Janni Röbbecke
+     * @since 26.05.2019
+     */
+    public double getDefaultSpeed() {
+        return DEFAULT_SPEED;
     }
 }

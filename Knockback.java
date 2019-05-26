@@ -1,4 +1,5 @@
 import java.awt.Point;
+
 /**
  * Knockback definiert, wie weit und wie schnell eine Kreatur, die von einer Waffe getroffen wird,
  * zurückgestoßen wird.
@@ -22,6 +23,10 @@ public class Knockback
      * @since 23.05.2019
      */
     public Knockback(int amount, double strength, double dirX, double dirY) {
+        if(dirX == 0 && dirY == 0) {
+            System.err.println("Es wurde ein Knockback ohne Richtung erstellt. Das ist nicht vorgesehen, weshalb eine zufällige Richtung (nach rechts) bestimmt wird.");
+            dirX = 1;
+        }
         knockbackLeft = amount;
         knockbackStrength = strength;
         directionX = dirX;

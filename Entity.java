@@ -37,6 +37,21 @@ public abstract class Entity {
      * Höhe der Figur
      */
     protected int height;
+    
+    /**
+     * Sprite-Sheet, das alle Bilder für jede Postion in jede Richtung enthält
+     */
+    protected SpriteSheet spriteSheet;
+    
+    /**
+     * Zählt die Durchläufe der Game-Loop. Die Bewegungs-Animation soll nur in einem bestimmten Intervall erfolgen
+     */
+    protected int animationDelay;
+    
+    /**
+     * Die Pose der Entität. Sie ändert sich i.d.R. in jedem Animationsdurchlauf
+     */
+    protected int xPos; 
     /**
      * Bild das die Entität für die Identität gerendert wird
      */

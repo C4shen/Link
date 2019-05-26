@@ -33,7 +33,7 @@ public abstract class Creature extends Movable {
      * Erzeugt eine Kreatur (bzw. im Deutschen schöner Figur)
      * @author Ares Zühlke, Janni Röbbecke, www.quizdroid.wordpress.com
      * @param name der Name der Figur
-     * @param spriteSheet ein Spritesheet, das das Aussehen der Figur beschreibt (stimmt das?)
+     * @param spriteSheet ein Spritesheet, das das Aussehen der Figur beschreibt
      * @param x die x-Position aus der die Entität gespawnt werden soll
      * @param y die y-Position aus der die Entität gespawnt werden soll
      * @param width die Breite der Figur
@@ -44,6 +44,11 @@ public abstract class Creature extends Movable {
     public Creature(String name, SpriteSheet spriteSheet, int x, int y, int width, int height, int health, double speed) {
         super(name, spriteSheet, x, y, width, height, speed);
         this.health = health;
+    }
+    
+    public void setWeapon(Weapon w) {
+        weapon = w; 
+        weapon.setPositionInHand(new Point((int) Math.round(entityX), (int) Math.round(entityY)));
     }
     
     /**
@@ -72,16 +77,26 @@ public abstract class Creature extends Movable {
     }
     
     /**
-     * Teilt der Kreatur mit, dass sie angegriffen wurde, sodass sie Knockback und Schaden erleidet
+     * Ruft die Methode <code>startBeingAttacked(int damage, Knockback k)</code> mit dem Schaden und Knockback der Waffe auf
      * @param attackingWeapon die Waffe, mit der die Kreatur angegriffen wurde
      * @author Jakob Kleine, Janni Röbbecke
      * @since 23.05.2019
      */
     public void startBeingAttacked(Weapon w) {
+        startBeingAttacked(w.getDamage(), w.getKnockback());
+    }
+    
+    /**
+     * Teilt der Kreatur mit, dass sie angegriffen wurde, sodass sie Knockback und Schaden erleidet
+     * @param attackingWeapon die Waffe, mit der die Kreatur angegriffen wurde
+     * @author Jakob Kleine, Janni Röbbecke
+     * @since 23.05.2019
+     */
+    public void startBeingAttacked(int damage, Knockback k) {
         if(knockback == null) { //Wenn gerade die Kreatur nicht angegriffen wird, erleidet sie Schaden
-            health -= w.getDamage();
+            health -= damage;
         }
-        knockback = w.getKnockback();
+        knockback = k;
     }
     
     /**
@@ -188,6 +203,10 @@ public abstract class Creature extends Movable {
      * @return einen Punkt (x|y), dessen Koordinaten denen der Hand der Kreatur entsprechen
      */
     public abstract Point getHandPosition(int xPos, int direction);
+    
+    public void changeSpeedBy(double by) {
+        speed += by;
+    }
     
     public void resetKnockback() {
         knockback = null;

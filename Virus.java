@@ -16,6 +16,12 @@ public class Virus extends Enemy
         new Point[]{ new Point(27, 19), new Point(32, 22), new Point(43, 11) },
         new Point[]{ new Point(32, 18), new Point(37, 26), new Point(34, 22) }
     };
+
+    /*
+     * Das Standart-Spritesheet-Objekt, auf das alle Objekte dieser Klasse als ihr SpriteSheet referenzieren. 
+     * Dadurch, dass es ein Standard-Bild gibt, müssen die gleichen Bilder nicht mehrmals geladen werden.
+     */
+    private static final SpriteSheet DEFAULT_SPRITE_SHEET = new SpriteSheet("/res/sprites/creatures/virus.png", 3 /*moves*/, 4 /*directions*/, 25 /*width*/, 48 /*height*/);
     
     /**
      * Standard-Lebenspunkte, die der Spielcharakter zu Beginn des Spiels hat
@@ -35,10 +41,9 @@ public class Virus extends Enemy
      * @param enemySprite das SpriteSheet des Nebeneffekts
      * @since 15.05.2019
      */
-    public Virus(int x, int y, SpriteSheet enemySprite) 
+    public Virus(int x, int y) 
     {
-        super(x, y, "Virus", enemySprite, DEFAULT_HEALTH, DEFAULT_SPEED, 
-                new Cursor(new SpriteSheet("/res/sprites/weapons/cursor.png", 3 /*moves*/, 8 /*directions*/, 16 /*width*/, 16 /*height*/), x+10, y+30, DEFAULT_SPEED, false));
+        super(x, y, "Virus", DEFAULT_SPRITE_SHEET, DEFAULT_HEALTH, DEFAULT_SPEED, new Cursor(x+10, y+30, DEFAULT_SPEED, false));
         health = SideEffect.DEFAULT_HEALTH;
     }
    
@@ -86,5 +91,13 @@ public class Virus extends Enemy
             
             return null;
         }
+    }
+    
+    /**
+     * @author Jakob Kleine, Janni Röbbecke
+     * @since 26.05.2019
+     */
+    public double getDefaultSpeed() {
+        return DEFAULT_SPEED;
     }
 }

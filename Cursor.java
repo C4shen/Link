@@ -4,7 +4,12 @@ import java.awt.Rectangle;
  * Der Cursor ist eine Art von Waffe, die der Spieler einsammeln kann, um Gegner zu bekämpfen.
  * Beim Angriff wird der Cursor geworfen, und trifft eventuell dabei einen Gegner.
  */
-public class Cursor extends Weapon {
+public class Cursor extends Weapon { 
+    /*
+     * Das Standart-Spritesheet-Objekt, auf das alle Objekte dieser Klasse als ihr SpriteSheet referenzieren. 
+     * Dadurch, dass es ein Standard-Bild gibt, müssen die gleichen Bilder nicht mehrmals geladen werden.
+     */
+    private static final SpriteSheet DEFAULT_SPRITE_SHEET = new SpriteSheet("/res/sprites/weapons/cursor.png", 3 /*moves*/, 8 /*directions*/, 16 /*width*/, 16 /*height*/);
     private static final int DEFAULT_WIDTH = 16, DEFAULT_HEIGHT = 16; //Die Standard-Größe eines Cursors
     private static final double DEFAULT_ATTACK_SPEED = 4; //Die Standard-Geschwindigkeit eines Cursors, die er zu Beginn seines Angriffs besitzt
     private static final int KB_AMOUNT = 50; //Die Standard-Weite des Knockbacks
@@ -33,8 +38,8 @@ public class Cursor extends Weapon {
      * @param x die x-Position des Cursors
      * @param y die y-Position des Cursors
      */
-    public Cursor(SpriteSheet spriteSheet, int x, int y, double ownerSpeed, boolean isFriendly) {
-        super("Cursor", spriteSheet, x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, ownerSpeed);
+    public Cursor(int x, int y, double ownerSpeed, boolean isFriendly) {
+        super("Cursor", DEFAULT_SPRITE_SHEET, x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, ownerSpeed);
         this.isFriendly = isFriendly;
     }
     
@@ -136,5 +141,13 @@ public class Cursor extends Weapon {
     
     public boolean isFriendly(){
         return isFriendly;
+    }
+    
+    /**
+     * @author Jakob Kleine, Janni Röbbecke
+     * @since 26.05.2019
+     */
+    public double getDefaultSpeed() {
+        return DEFAULT_ATTACK_SPEED;
     }
 }    

@@ -21,7 +21,7 @@ public abstract class Enemy extends Creature
     public Enemy(int x, int y, String name, SpriteSheet enemySprite, int health, double speed, Weapon weapon) 
     {
         super(name, enemySprite, x, y, Entity.DEFAULT_WIDTH, Entity.DEFAULT_HEIGHT, health, speed);
-        this.weapon = weapon; 
+        setWeapon(weapon);
     }
     
     public abstract int getScoreValue();

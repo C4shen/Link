@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.awt.image.BufferedImage;
 import java.awt.Color;
+import java.util.Random;
 /**
  * Eine Klasse mit nützlichen öfters benutzen Methoden, die nicht unbedingt einer bestimmten Klasse zugeordnet werden können 
  * 
@@ -12,6 +13,7 @@ import java.awt.Color;
  */
 public class Utils 
 {
+    private static Random rGenerator = new Random();
     /**
      * Wandelt eine Zeichenkette in eine Zahl um
      * @author Jakob Kleine, Cashen Adkins
@@ -117,5 +119,16 @@ public class Utils
             sc.close();
         }
         return builder.toString();
+    }
+    
+    /**
+     * Erzeugt eine zufällige Zahl zwischen <code>grenze1</code> und <code>grenze2</code>
+     * @author Janni Röbbecke, Jakob Kleine
+     * @param grenze1 die untere Grenze (inklusiv)
+     * @param grenze2 die obere Grenze (inklusiv)
+     * @return eine zufällige Zahl zwischen grenze1 und grenze2
+     */
+    public static int random(int grenze1, int grenze2) {
+        return rGenerator.nextInt(grenze2 - grenze1 +1) + grenze1;
     }
 }

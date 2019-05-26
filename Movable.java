@@ -9,10 +9,6 @@ import java.awt.Point;
  * @since 17.05.2019
  */
 public abstract class Movable extends Entity {
-    /**
-     * Standard-Geschwindigkeit einer Figur
-     */
-    protected static final double DEFAULT_SPEED = 3;
     
     /**
      * Spritesheet mit Bildern für die Bewegung der Figur
@@ -29,9 +25,8 @@ public abstract class Movable extends Entity {
      */
     protected double xMove, yMove;
     
-    private int animationDelay; //Zählt die Durchläufe der Game-Loop. Die Bewegungs-Animation soll nur alle sieben Druchläufe erfolgen
+    private boolean sollVerzoegern;
     private int op; //Die Zahl, um die xPos erhöht wird
-    protected int xPos; //Die Position der Beine usw. Sie zirkluiert folgendermaßen: 0->1->2->1->0 usw.
     protected int prevDirection; //Die Richtung, in die sich die Figur vor dem Stillstand bewegt hat
     
     /**
@@ -55,6 +50,7 @@ public abstract class Movable extends Entity {
         yMove = 0;
         
         animationDelay = 0;
+        sollVerzoegern = true;
         op = 1;
         xPos = 0;
     }
@@ -69,10 +65,11 @@ public abstract class Movable extends Entity {
         entityX += xMove * speed; //Die Figur bewegt sich mit ihrer bestimmten Geschwindigkeit in ihre Richtung (x & y)
         entityY += yMove * speed;
         
-        if(animationDelay++ >= 7) { //Wenn sieben Mal verzögert wurden, soll jetzt die Animation erfolgen
+        if(!sollVerzoegern || animationDelay++ >= Math.round(getDefaultSpeed()*10/speed)) { //Wenn sieben Mal verzögert wurden, soll jetzt die Animation erfolgen
             if(xMove == 0 && yMove == 0)  //Wenn die Figur gerade nicht bewegt wird
-                animationDelay = 7; //Die Animation soll nicht verzögert erfolgen, wenn die Figur wieder bewegt wird -> sie soll sofort loslaufen
+                sollVerzoegern = false; //Die Animation soll nicht verzögert erfolgen, wenn die Figur wieder bewegt wird, damit das neue Bild der Bewegund direkt angezeigt wird
             else {
+                sollVerzoegern = true;
                 animationDelay = 0; //Setzt die Verzögerung zurück. 
                 if(op == -1 && xPos <= 0) //Wenn xPos <=0, soll es langsam zu 2 erhöht werden
                     op = 1; //-> es soll immer 1 addiert werden
@@ -132,4 +129,6 @@ public abstract class Movable extends Entity {
     public void setEntityY(int yNeu) {
         entityY = yNeu;
     }
+    
+    public abstract double getDefaultSpeed();
 }

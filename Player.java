@@ -9,6 +9,13 @@ import java.awt.Graphics;
  * @since 0.01 (10.05.2019)
  */
 public class Player extends Creature {
+    /*
+     * Das Standart-Spritesheet-Objekt, auf das alle Objekte dieser Klasse als ihr SpriteSheet referenzieren. 
+     * Dadurch, dass es ein Standard-Bild gibt, müssen die gleichen Bilder nicht mehrmals geladen werden.
+     */
+    private static final SpriteSheet DEFAULT_SPRITE_SHEET = new SpriteSheet("/res/sprites/creatures/player.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
+    
+    
     /**
      * Standard-Lebenspunkte, die der Spielcharakter zu Beginn des Spiels hat
      */
@@ -36,9 +43,8 @@ public class Player extends Creature {
      * @param playerSprite ein Spritesheet, das das Aussehen der Spielfigur bestimmt
      * @since 0.01 (10.05.2019)
      */
-    public Player(int x, int y, SpriteSheet playerSprite) {
-        super("Player", playerSprite, x, y, Entity.DEFAULT_WIDTH, Entity.DEFAULT_HEIGHT, Player.DEFAULT_HEALTH, Player.DEFAULT_SPEED); 
-        weapon = new Cursor(new SpriteSheet("/res/sprites/weapons/cursor.png", 3 /*moves*/, 8 /*directions*/, 16 /*width*/, 16 /*height*/), x+10, y+30, DEFAULT_SPEED, true);
+    public Player(int x, int y) {
+        super("Player", DEFAULT_SPRITE_SHEET, x, y, Entity.DEFAULT_WIDTH, Entity.DEFAULT_HEIGHT, Player.DEFAULT_HEALTH, Player.DEFAULT_SPEED); 
     }
     
     /**
@@ -63,5 +69,13 @@ public class Player extends Creature {
      */
     public Rectangle getHitbox() {
         return new Rectangle((int) Math.round(entityX), (int) Math.round(entityY), 64, 64); 
+    }
+    
+    /**
+     * @author Jakob Kleine, Janni Röbbecke
+     * @since 26.05.2019
+     */
+    public double getDefaultSpeed() {
+        return DEFAULT_SPEED;
     }
 }

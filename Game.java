@@ -12,6 +12,8 @@ import java.util.Random;
 import java.io.IOException;
 import java.io.File;
 import javax.imageio.ImageIO;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 /**
  * Die zentrale Klasse des Programms. Hier wird die Anzeige und Funktionalität des Spiels verwaltet.
  * @author Cashen Adkins, Cepehr Bromand, Janni Röbbecke, Jakob Kleine, www.quizdroid.wordpress.com
@@ -209,34 +211,49 @@ public class Game implements Runnable {
         private Player player; //Die Spielfigur des Spielers
         private LinkedList<Enemy> gegnerListe; //Eine Liste mit allen Gegnern im Spiel
         private LinkedList<Weapon> attackingWeapons; //Die Waffen, die sich gerade im Angriff befinden
+        private LinkedList<Item> spawnedItems; //Die Items, die gespawnt aber noch nicht eingesammelt wurden
         private Border[] roomBorders; //Die Wände des Raums
         private Room room; //Der Raum, der gerade gespielt wird
         private CollisionDetector collisionDet;
+        
+        private Constructor[] enemyConstructors;
+        private int enemySpawnDelay;
+        
+        private Constructor[] itemConstructors;
+        private int itemSpawnDelay;
         public GameState()
         {
-            SpriteSheet playerSprite = new SpriteSheet("/res/sprites/creatures/player.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
-            player = new Player(320, 320, playerSprite);
+            player = new Player(320, 320);
             gegnerListe = new LinkedList<Enemy>();
             attackingWeapons = new LinkedList<Weapon>();
+            spawnedItems = new LinkedList<Item>();
+            
             TileSet tileSet = new TileSet("/res/tilesets/standard-raum-ts.png", 3 /*Anzahl Tiles x*/, 3/*Anzahl Tiles y*/, 3/*Abstand zwischen Tiles*/);
             room = new Room("/res/rooms/standard-raum.txt", tileSet);
-            //SpriteSheet krebsSprite = new SpriteSheet("/res/sprites/creatures/sideEffect.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
-            //gegnerListe.add(new SideEffect(new java.util.Random().nextInt(400)+200, new java.util.Random().nextInt(400)+200, krebsSprite));
-            SpriteSheet virusSprite = new SpriteSheet("/res/sprites/creatures/virus.png", 3 /*moves*/, 4 /*directions*/, 25 /*width*/, 48 /*height*/);
-            gegnerListe.add(new Virus(new java.util.Random().nextInt(400)+200, new java.util.Random().nextInt(400)+200, virusSprite));
-            
-            SpriteSheet nebenEffektSprite = new SpriteSheet("/res/sprites/creatures/sideEffect.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
-            gegnerListe.add(new SideEffect(new java.util.Random().nextInt(400)+200, new java.util.Random().nextInt(400)+200, nebenEffektSprite));
-            
+                        
             roomBorders = new Border[] {
-                new Border(                    0,    HP_BAR_HEIGHT,   SCREEN_WIDTH, Border.BORDER_WIDTH), //links oben -> rechts oben
-                new Border(                    0,    SCREEN_HEIGHT-10,   SCREEN_WIDTH, Border.BORDER_WIDTH), //links unten -> rechts unten
-                new Border(                    0,    HP_BAR_HEIGHT, Border.BORDER_WIDTH,   SCREEN_WIDTH), //links oben -> links unten
-                new Border( SCREEN_WIDTH-10,    HP_BAR_HEIGHT, Border.BORDER_WIDTH,  SCREEN_WIDTH) //rechts oben -> rechts unten
+                new Border(               0,    HP_BAR_HEIGHT,        SCREEN_WIDTH, Border.BORDER_WIDTH), //links oben -> rechts oben
+                new Border(               0, SCREEN_HEIGHT-10,        SCREEN_WIDTH, Border.BORDER_WIDTH), //links unten -> rechts unten
+                new Border(               0,    HP_BAR_HEIGHT, Border.BORDER_WIDTH,        SCREEN_WIDTH), //links oben -> links unten
+                new Border( SCREEN_WIDTH-10,    HP_BAR_HEIGHT, Border.BORDER_WIDTH,        SCREEN_WIDTH) //rechts oben -> rechts unten
             };
             
             collisionDet = new CollisionDetector();
-        }
+            
+            enemyConstructors = new Constructor[2];
+            itemConstructors = new Constructor[2];
+            try{
+                enemyConstructors[0] = Class.forName("Virus").getConstructor(int.class, int.class);
+                enemyConstructors[1] = Class.forName("SideEffect").getConstructor(int.class, int.class);
+
+                itemConstructors[0] = Class.forName("Kaffee").getConstructor(int.class, int.class);
+                itemConstructors[1] = Class.forName("CursorItem").getConstructor(int.class, int.class);
+            } 
+            catch(ClassNotFoundException e) { e.printStackTrace(); }
+            catch(NoSuchMethodException e) { e.printStackTrace(); }
+            
+            spawnedItems.add(new CursorItem(Utils.random(10, 550), Utils.random(110, 650)));
+        }   
         
         @Override
         public void render(Graphics g) 
@@ -256,24 +273,15 @@ public class Game implements Runnable {
                 player.render(g); // ... und darauf die Spielfigur
                 for(Enemy e :  gegnerListe)
                     e.render(g);
-                /*
-                hitBoxAnzeigen(player, g);
-                for(Enemy e :  gegnerListe)
-                    hitBoxAnzeigen(e, g);
-                for(Weapon w : attackingWeapons) 
-                    hitBoxAnzeigen(w, g);
-                for(Border b : roomBorders) 
-                    hitBoxAnzeigen(b, g);
-                */
+                    
+                for(Item i : spawnedItems) 
+                    i.render(g);
+                    
                 fontFestlegen(g, new Font("American Typewriter", Font.BOLD, 40)); 
                 g.drawString("Score: "+score, 10, Game.HP_BAR_HEIGHT-40);
                 bs.show();
                 g.dispose();
             }
-        }
-          
-        private void hitBoxAnzeigen(Entity e, Graphics g) {
-            g.drawRect(e.getHitbox().x, e.getHitbox().y, e.getHitbox().width, e.getHitbox().height); //Nur temporär, um die Hitbox anzuzeigen
         }
         
         @Override
@@ -306,11 +314,45 @@ public class Game implements Runnable {
             attackingWeapons.removeAll(waffenGestorbenerGegner);
             gegnerListe.removeAll(nichtMehrLebendeGegner);
             
+            for(Item i : spawnedItems) 
+                i.update();
+            
             collisionDet.update();
+            
+            if(enemySpawnDelay-- <= 0) {
+                spawnRandomEnemy(); 
+                enemySpawnDelay = Utils.random(100, 1000);
+            }
+            
+            if(itemSpawnDelay-- <= 0) {
+                spawnRandomItem(); 
+                itemSpawnDelay = Utils.random(100, 1000);
+            }
+            
             //Wenn Escape gedrückt wird, ändert sich die State in die MenuState
             if(!player.isAlive() || keyManager.escapeEinmal()) {
                 currentState = mainMenuState;
             }
+        }
+        
+        private void spawnRandomEnemy() {
+            try {
+                gegnerListe.add((Enemy) enemyConstructors[Utils.random(0,1)].newInstance(Utils.random(10, 550), Utils.random(110, 650)));
+            }
+            catch(InstantiationException e) { e.printStackTrace(); }
+            catch(IllegalAccessException e) { e.printStackTrace(); }
+            catch(IllegalArgumentException e) { e.printStackTrace(); }
+            catch(InvocationTargetException e) { e.printStackTrace(); }
+        }
+        
+        private void spawnRandomItem() {
+            try {
+                spawnedItems.add((Item) itemConstructors[Utils.random(0,1)].newInstance(Utils.random(10, 550), Utils.random(110, 650)));
+            }
+            catch(InstantiationException e) { e.printStackTrace(); }
+            catch(IllegalAccessException e) { e.printStackTrace(); }
+            catch(IllegalArgumentException e) { e.printStackTrace(); }
+            catch(InvocationTargetException e) { e.printStackTrace(); }
         }
         
         /*
@@ -348,6 +390,16 @@ public class Game implements Runnable {
                     }
                 }
                 attackingWeapons.removeAll(nichtMehrAttackierendeWaffen);
+                
+                
+                LinkedList<Item> eingesammelteItems = new LinkedList<Item>(); //Um eine ConcurrentModificationException zu verhindern, werden die Elemente erst nach der Iteration über die Liste entfernt
+                for(Item i : spawnedItems) {
+                    if(collision(i, player)){
+                        i.affect(player);
+                        eingesammelteItems.add(i);
+                    }
+                }
+                spawnedItems.removeAll(eingesammelteItems);
                 
                 //Jetzt muss sichergestellt werden, dass kein Element aus dem Spielfeld geworfen wurde.
                 keepInside(player);

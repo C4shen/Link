@@ -47,6 +47,10 @@ public class SpriteSheet {
         }
     }
     
+    public int getPoseAmount() {
+        return sprite.length;
+    }
+    
     /**
      * Gibt das Bild des Charakters in der entsprechenden Pose an 
      * @author Janni Röbbecke, Ares Zühlke, www.quizdroid.wordpress.com
