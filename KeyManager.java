@@ -9,12 +9,7 @@ import java.awt.event.KeyListener;
 public class KeyManager implements KeyListener {
     private boolean[] keys; //Speichert für alle Tasten, ob sie gedrückt werden
     private boolean up, down, left, right, attack, escape; //Speichert, ob die Tasten für eine Bewegung nach oben, unten usw. gedrückt werden
-    private boolean letzterStatusUp; //Speichert den letzten Status der Up-Taste sodass die Taste nicht mehrmals pro Loop "gedrückt" wird, obwohl man sie nur einmal drücken will.
-    private boolean letzterStatusDown; //Speichert den letzten Status der Down-Taste sodass die Taste nicht mehrmals pro Loop "gedrückt" wird, obwohl man sie nur einmal drücken will.
-    private boolean letzterStatusLeft; //Speichert den letzten Status der Left-Taste sodass die Taste nicht mehrmals pro Loop "gedrückt" wird, obwohl man sie nur einmal drücken will.
-    private boolean letzterStatusRight; //Speichert den letzten Status der Right-Taste sodass die Taste nicht mehrmals pro Loop "gedrückt" wird, obwohl man sie nur einmal drücken will.
-    private boolean letzterStatusEscape; //Speichert den letzten Status der Escape-Taste sodass die Taste nicht mehrmals pro Loop "gedrückt" wird, obwohl man sie nur einmal drücken will.
-    
+    private boolean letzterStatusUp, letzterStatusDown, letzterStatusLeft, letzterStatusRight, letzterStatusAttack, letzterStatusEscape; //Speichert den letzten Status der Up-/Down-/Left-/Right-/Escape-Taste sodass die Taste nicht mehrmals pro Loop "gedrückt" wird, obwohl man sie nur einmal drücken will.
     /**
      * Erstellt einen neuen KeyManager.
      * @author Janni Röbbecke, Ares Zühlke, Jakob Kleine, www.quizdroid.wordpress.com
@@ -26,6 +21,7 @@ public class KeyManager implements KeyListener {
         letzterStatusDown = false;
         letzterStatusLeft = false;
         letzterStatusRight = false;
+        letzterStatusAttack = false;
         letzterStatusEscape = false;
     }
     
@@ -181,6 +177,25 @@ public class KeyManager implements KeyListener {
      */
     public boolean attack() {
         return attack;
+    }
+    
+    /**
+     * Ermittelt, ob die Attack-Taste ihren Status geändert hat, sodass egal wie lange man die Taste drückt, nur bei der ersten Abfrage true zurückgegeben wird.
+     * @author Cashen Adkins, Janni Röbbecke
+     * @return ein boolean, der angibt, ob die Taste escape mit einer Statusveränderung gedrückt wird
+     * @since 0.02 (26.05.2019)
+     */
+    public boolean attackEinmal() {
+        if(attack && !letzterStatusAttack)
+        {
+            letzterStatusAttack = attack;
+            return true;
+        }
+        else
+        {
+            letzterStatusAttack = attack;
+            return false;
+        }
     }
     
     /**

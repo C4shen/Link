@@ -5,9 +5,13 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.RenderingHints;
 import java.awt.Graphics2D;
+import java.awt.Color;
 import java.util.LinkedList;
 import java.awt.Font;
 import java.util.Random;
+import java.io.IOException;
+import java.io.File;
+import javax.imageio.ImageIO;
 /**
  * Die zentrale Klasse des Programms. Hier wird die Anzeige und Funktionalität des Spiels verwaltet.
  * @author Cashen Adkins, Cepehr Bromand, Janni Röbbecke, Jakob Kleine, www.quizdroid.wordpress.com
@@ -43,7 +47,7 @@ public class Game implements Runnable {
     private Graphics g; //Die Graphics, mit denen die Figuren gemalt werden.
     private State currentState;
     private State gameState;
-    private State menuState;
+    private State breakMenuState;
     
     /**
      * Startet ein neues Spiel
@@ -76,8 +80,8 @@ public class Game implements Runnable {
         keyManager = new KeyManager();
         screen.getFrame().addKeyListener(keyManager);
         gameState = new GameState();
-        menuState = new BreakMenuState();
-        currentState = gameState;
+        breakMenuState = new BreakMenuState();
+        currentState = breakMenuState;
         //Solange das Spiel läuft wird die Gameloop wiederholt/ausgeführt. 
         while(running) 
         {
@@ -118,13 +122,6 @@ public class Game implements Runnable {
     private void update() 
     {
         keyManager.update();
-        //Überprüft ob gerade Escape gedrückt wird und ändert die State entweder von gameState zu menuState oder von menuState zu gameState.
-        if(keyManager.escapeEinmal()) {
-            if(currentState == gameState)
-                currentState = menuState;
-            else if(currentState == menuState)
-                currentState = gameState;
-        }
         //Nur wenn das Spiel in einer State ist, wird die State-spezifische Methode aufgerufen
         if(currentState != null)
             currentState.update();
@@ -158,6 +155,16 @@ public class Game implements Runnable {
     private void render() 
     {
         currentState.render(g);
+    }
+    
+    /**
+     * Beendet das Spiel
+     * @author Cashen Adkins, Jakob Kleine, www.quizdroid.wordpress.com
+     * @since 0.01 (26.05.2019)
+     */
+    private void stop()
+    {
+        System.exit(0);
     }
 
     private interface State
@@ -199,18 +206,21 @@ public class Game implements Runnable {
             player = new Player(320, 320, playerSprite);
             gegnerListe = new LinkedList<Enemy>();
             attackingWeapons = new LinkedList<Weapon>();
-            TileSet tileSet = new TileSet("/res/tilesets/standard-raum-ts.png", 3, 3);
+            TileSet tileSet = new TileSet("/res/tilesets/standard-raum-ts.png", 3 /*Anzahl Tiles x*/, 3/*Anzahl Tiles y*/, 3/*Abstand zwischen Tiles*/);
             room = new Room("/res/rooms/standard-raum.txt", tileSet);
             //SpriteSheet krebsSprite = new SpriteSheet("/res/sprites/creatures/sideEffect.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
             //gegnerListe.add(new SideEffect(new java.util.Random().nextInt(400)+200, new java.util.Random().nextInt(400)+200, krebsSprite));
             SpriteSheet virusSprite = new SpriteSheet("/res/sprites/creatures/virus.png", 3 /*moves*/, 4 /*directions*/, 25 /*width*/, 48 /*height*/);
             gegnerListe.add(new Virus(new java.util.Random().nextInt(400)+200, new java.util.Random().nextInt(400)+200, virusSprite));
             
+            SpriteSheet nebenEffektSprite = new SpriteSheet("/res/sprites/creatures/sideEffect.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
+            gegnerListe.add(new SideEffect(new java.util.Random().nextInt(400)+200, new java.util.Random().nextInt(400)+200, nebenEffektSprite));
+            
             roomBorders = new Border[] {
-                new Border(                    0,    Game.HP_BAR_HEIGHT,   Game.SCREEN_WIDTH, Border.BORDER_WIDTH), //links oben -> rechts oben
-                new Border(                    0, Game.SCREEN_HEIGHT-10,   Game.SCREEN_WIDTH, Border.BORDER_WIDTH), //links unten -> rechts unten
-                new Border(                    0,    Game.HP_BAR_HEIGHT, Border.BORDER_WIDTH,   Game.SCREEN_WIDTH), //links oben -> links unten
-                new Border( Game.SCREEN_WIDTH-10,    Game.HP_BAR_HEIGHT, Border.BORDER_WIDTH,   Game.SCREEN_WIDTH) //rechts oben -> rechts unten
+                new Border(                    0,    HP_BAR_HEIGHT,   SCREEN_WIDTH, Border.BORDER_WIDTH), //links oben -> rechts oben
+                new Border(                    0,    SCREEN_HEIGHT-10,   SCREEN_WIDTH, Border.BORDER_WIDTH), //links unten -> rechts unten
+                new Border(                    0,    HP_BAR_HEIGHT, Border.BORDER_WIDTH,   SCREEN_WIDTH), //links oben -> links unten
+                new Border( SCREEN_WIDTH-10,    HP_BAR_HEIGHT, Border.BORDER_WIDTH,  SCREEN_WIDTH) //rechts oben -> rechts unten
             };
             
             collisionDet = new CollisionDetector();
@@ -225,6 +235,8 @@ public class Game implements Runnable {
             if(bs == null)
                 c.createBufferStrategy(3);
             else{
+                Color color = new Color(255,255,255); //Eine Farbe wird festgelegt
+                c.setBackground(color); //Farbe wird als Hintergrundfarbe dargestellt
                 g = bs.getDrawGraphics();
                 //Clear Screen
                 g.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -248,7 +260,7 @@ public class Game implements Runnable {
                 g2d.setRenderingHint(
                     RenderingHints.KEY_FRACTIONALMETRICS, //Fractional-Metrics -> konsistente Buchstabengröße
                     RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-                g2d.setFont(new Font("Comic Sans MS", Font.BOLD, 40)); //Comic Sans ist nur ein Beispiel, sorry Cepehr 
+                g2d.setFont(new Font("American Typewriter", Font.BOLD, 40)); //Comic Sans ist nur ein Beispiel, sorry Cepehr 
                 g.drawString("Score: "+score, 10, Game.HP_BAR_HEIGHT-40);
                 bs.show();
                 g.dispose();
@@ -263,7 +275,7 @@ public class Game implements Runnable {
         public void update() 
         {
             player.setMove(getInput()); //Bewegt den Spieler entsprechend der Eingabe über die Tasten
-            if(keyManager.attack()) { //Wenn die Taste zum Angriff gedrückt wurde, greift der Spieler an
+            if(keyManager.attackEinmal()) { //Wenn die Taste zum Angriff gedrückt wurde, greift der Spieler an
                 Weapon attackingWeapon = player.startAttack();
                 if(attackingWeapon != null) //Wenn ein neuer Angriff ausgeführt wurde
                     attackingWeapons.add(attackingWeapon); //Speichert die Waffe, um Kollisionen mit Gegnern zu prüfen
@@ -283,6 +295,12 @@ public class Game implements Runnable {
             }
             
             collisionDet.update();
+            
+            //Wenn Escape gedrückt wird, ändert sich die State in die MenuState
+            if(keyManager.escapeEinmal())
+            {
+                currentState = breakMenuState;
+            }
         }
         
         /*
@@ -384,24 +402,85 @@ public class Game implements Runnable {
     /**
      * Der Break-Menu-State ist der State, in dem sich das Spiel befindet, wenn eine Pause gemacht wird
      * @author Cashen Adkins, Janni Röbbecke, www.quizdroid.wordpress.com
-     * @version 0.02 (22.05.2019)
+     * @version 0.03 (26.05.2019)
      * @since 0.01 (22.05.2019
      */
     public class BreakMenuState implements State 
     {
-        public BreakMenuState() {
-            
+        int menuItem; //Variable, die speichert, bei welchem Menüpunkt sich der Spieler gerade befindet.
+        BufferedImage menuItemFrame; //Der Rahmen, der sich um den ausgewählten Menüpunkt befindet.
+        Font font; //Das Font, welches für den Text in den Buttons benutzt wird.
+        public BreakMenuState() 
+        {
+            menuItem = 0; //Zu Beginn des Menüs ist der ausgewählte Knopf der erste.
+            try 
+            {
+                 menuItemFrame = ImageIO.read(Utils.absoluteFileOf("/res/tilesets/menuitemframe.png")); //Der Rahmen wird gelesen und als BufferedImage gespeichert.
+            } 
+            catch (IOException e) 
+            {
+                e.printStackTrace();
+            }
+            font = new Font("Futura", Font.BOLD, 40);
         }
         
         @Override
-        public void render(Graphics g)  {
-            
+        public void render(Graphics g)  
+        {
+            Color color = new Color(255,255,255); //Eine Farbe wird festgelegt
+            screen.getCanvas().setBackground(color); //Farbe wird als Hintergrundfarbe dargestellt
+            BufferStrategy bs = screen.getCanvas().getBufferStrategy(); 
+            if(bs == null)
+                screen.getCanvas().createBufferStrategy(3);
+            else
+            {
+                g = bs.getDrawGraphics();
+                //Clear Screen
+                g.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+                g.setFont(font);
+                color = new Color(127, 101, 73);
+                g.setColor(color);
+                g.drawString("Spielen", SCREEN_WIDTH/2-120, 200);
+                g.drawString("Anleitung", SCREEN_WIDTH/2-120, 280);
+                g.drawString("Optionen", SCREEN_WIDTH/2-120, 360);
+                g.drawString("Beenden", SCREEN_WIDTH/2-120, 440);
+                g.drawImage(menuItemFrame, SCREEN_WIDTH/2-190, 140 + menuItem * 80, 384, 96, null);
+                bs.show();
+                g.dispose();
+            }
         }
-        
+           
         @Override
-        public void update() {
+        public void update() 
+        {
+            if(keyManager.downEinmal())
+            {
+                if(menuItem < 3) menuItem++;
+            }
+            else if(keyManager.upEinmal())
+            {
+                if(menuItem > 0) menuItem--;
+            }
+            else if(keyManager.attackEinmal())
+            {
+                if(menuItem == 0) 
+                {
+                    currentState = gameState;
+                }
+                else if(menuItem == 1) 
+                {
+                    currentState = gameState;
+                }
+                else 
+                {
+                    stop();
+                }
+            }
             
+            if(keyManager.escapeEinmal())
+            {
+                currentState = gameState;
+            }
         }
     }
-
 }
