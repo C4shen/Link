@@ -27,7 +27,7 @@ public class KeyManager implements KeyListener {
      * @since 0.01 (11.05.2019)
      */
     public void update(){
-        relevantKeys[0] = keys[KeyEvent.VK_W] || keys[KeyEvent.VK_UP];
+        relevantKeys[0] = keys[KeyEvent.VK_W] || keys[KeyEvent.VK_UP]; //Bei der Steuerung der Richtung sollen auch die Pfeiltasten gültig sein
         relevantKeys[1] = keys[KeyEvent.VK_S] || keys[KeyEvent.VK_DOWN];
         relevantKeys[2] = keys[KeyEvent.VK_A] || keys[KeyEvent.VK_LEFT];
         relevantKeys[3] = keys[KeyEvent.VK_D] || keys[KeyEvent.VK_RIGHT];
@@ -78,11 +78,11 @@ public class KeyManager implements KeyListener {
      */
     private boolean keyPressedOnce(int keyIndex) {
         if(relevantKeys[keyIndex] && !lastStateRelevantKeys[keyIndex]) { //Nur wenn grade gedrückt && vorher nicht gedrückt
-            lastStateRelevantKeys[keyIndex] = relevantKeys[keyIndex];
+            lastStateRelevantKeys[keyIndex] = relevantKeys[keyIndex]; //Speichert den nun letzten Status des gewählten Keys
             return true;
         }
         else {
-            lastStateRelevantKeys[keyIndex] = relevantKeys[keyIndex];
+            lastStateRelevantKeys[keyIndex] = relevantKeys[keyIndex]; //Speichert den nun letzten Status des gewählten Keys
             return false;
         }
     }
@@ -117,7 +117,7 @@ public class KeyManager implements KeyListener {
         return relevantKeys[1];
     }
     
-     /**
+    /**
      * Ermittelt, ob die Down-Taste ihren Status geändert hat, sodass egal wie lange man die Taste drückt, nur bei der ersten Abfrage true zurückgegeben wird.
      * @author Cashen Adkins, Janni Röbbecke
      * @return ein boolean, der angibt, ob die Taste für eine Bewegung nach unten mit einer Statusveränderung gedrückt wird.

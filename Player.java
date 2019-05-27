@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 import java.awt.Graphics;
 /**
  * Der Player ist die Spielfigur, die vom Spieler gesteuert wird.
- * @author Janni Rübbecke, Ares Zühlke, www.quizdroid.wordpress.com
+ * @author Janni Rübbecke, Ares Zühlke, Jakob Kleine, (zu geringen Teilen) www.quizdroid.wordpress.com
  * @version 0.01 (10.05.2019)
  * @since 0.01 (10.05.2019)
  */
@@ -19,7 +19,8 @@ public class Player extends Creature {
     /**
      * Standard-Lebenspunkte, die der Spielcharakter zu Beginn des Spiels hat
      */
-    public static final int DEFAULT_HEALTH = 100;
+    public static final int DEFAULT_HEALTH = 50;
+    
     /**
      * Standard-Geschwindigkeit des Spielcharakters
      */
@@ -36,7 +37,7 @@ public class Player extends Creature {
     };
     
     /**
-     * Erzeugt eine Spielfigur
+     * Erzeugt die Spielfigur
      * @author Ares Zühlke, Janni Röbbecke, www.qizdroid.wordpress.com
      * @param x die x-Position der Spielfigur
      * @param y die y-Position der Spielfigur

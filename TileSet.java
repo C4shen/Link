@@ -29,6 +29,7 @@ public class TileSet
      * @param path der relative Pfad zur Datei des Tile-Sets, aus dem die Kacheln ausgelesen werden sollen
      * @param sizeX die Anzahl der Tiles in einer Reihe
      * @param sizeX die Anzahl an Reihen der Tiles in dem Set
+     * @param border der Abstand (in px) zwischen den Tiles
      * @since 0.01 (10.05.2019)
      */
     public TileSet(String path, int sizeX, int sizeY, int border) 
@@ -46,7 +47,7 @@ public class TileSet
             int i = 0; //Der Index des Sub-Bilds im tiles-Array
             for(int y = 0; y < sizeY; y++) { //Für alle Reihen: 
                 for(int x = 0; x < sizeX; x++) { //Für alle Spalten: Schneide ein Bild aus
-                    //x * (TILE_WIDTH + 3) entspricht der "Koordinate" des auszuschneidenden Bilds: (die Länge eines Tiles + Abstand von 3px) * Anzahl der Tiles vor diesem Tile
+                    //x * (TILE_WIDTH + 3) entspricht der "Koordinate" des auszuschneidenden Bilds: (die Länge eines Tiles + Abstand) * Anzahl der Tiles vor diesem Tile
                     //y * (TILE_HEIGHT+ 3) entspricht x*(...)
                     tiles[i++] = tileSet.getSubimage(x * (TILE_WIDTH + border), y * (TILE_HEIGHT + border), TILE_WIDTH, TILE_HEIGHT);
                 }
@@ -59,12 +60,11 @@ public class TileSet
      * @author Jakob Kleine, Cashen Adkins, www.quizdroid.wordpress.com
      * @param g die Graphics, mit denen die Kachel gemalt wird
      * @param tileNum die Nummer (Index) der Kachel
-     * @param x die x-Koordinate der Kachel (linke obere Ecke??)
+     * @param x die x-Koordinate der Kachel
      * @param y die y-Koordinate der Kachel 
      * @since 0.01 (10.05.2019)
      */
     public void renderTile(Graphics g, int tileNum, int x, int y) {
         g.drawImage(tiles[tileNum], x, y, TILE_WIDTH, TILE_HEIGHT, null);
     }
-    //Gideon war hier (:
 }

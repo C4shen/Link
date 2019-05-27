@@ -1,12 +1,13 @@
 import java.awt.Canvas;
 import java.awt.Dimension;
-import javax.swing.JFrame;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import javax.swing.JFrame;
+import javax.swing.ImageIcon;
 /**
- * Mit dem Screen wird ein Spiel visualisiert. 
+ * Mit dem Screen wird ein Spiel visualisiert. Der Screen entspricht damit dem View des MVC-Konzepts.
  * Er besitzt eine Leinwand (Canvas), auf der der Hintergrund und Entities etc. gemalt werden.
- * und eienen 
+ * und eienen Frame, in den die Leinwand verpackt wird.
  * @author Cashen Adkins, Jakob Kleine, quizdroid.wordpress.com
  * @version 0.01 09.05.2019
  */
@@ -24,7 +25,8 @@ public class Screen
      * @param title der Titel des Spiels
      * @param width die Breite des Screens
      * @param height die Höhe des Screens
-     * @since 0.01 (10.05.2019)
+     * @param listener ein WindowListener, der das Schließen des Fensters verwalten soll und damit ein geplantes Beenden des Spiels ermöglicht
+     * @since 10.05.2019 (WindowListener seit 27.05)
      */
     public Screen(String title, int width, int height, WindowListener listener)
     {
@@ -34,12 +36,11 @@ public class Screen
 
         frame = new JFrame(title);
         frame.setSize(width, height);
-        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); //Damit die Virtuelle Maschine beim Schließen des Frames beendet wird
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); //Beim Drücken des x oben Rechts soll nichts passieren. Das schließen verwaltet der WindowListener
         frame.addWindowListener(listener);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null); //Positioniert den Frame in der Mitte des Bildschirms
-        frame.setVisible(true);
-        frame.setIconImage(new javax.swing.ImageIcon(Utils.absoluteFileOf("/res/icon.png").toString()).getImage());
+        frame.setIconImage(new ImageIcon(Utils.absoluteFileOf("/res/icon.png").toString()).getImage());
         
         canvas = new Canvas();
         //Das Canvas soll genauso groß sein, wie der JFrame
@@ -50,6 +51,7 @@ public class Screen
 
         frame.add(canvas);
         frame.pack();
+        frame.setVisible(true);
     }
 
     /**

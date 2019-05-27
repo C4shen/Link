@@ -8,15 +8,10 @@ import javax.imageio.ImageIO;
  * @version 0.01 (10.05.2019)
  * @since 0.01 (10.05.2019)
  */
-public class SpriteSheet {
-    /*
-     * Datei mit dem gesamten Sprite-Sheet
-     */
-    private BufferedImage sheet;
-    
+public class SpriteSheet {    
     /*
      * Array mit den versiedenen Ansichten der Figur: 
-     * Für jede Bewegung (1. Dimension) ein Bild für jede Richtung (2.Dimension) 
+     * Für jede Position (1. Dimension) ein Bild für jede Richtung (2.Dimension) 
      */
     private BufferedImage[][] sprite;
     
@@ -34,25 +29,34 @@ public class SpriteSheet {
      */
     public SpriteSheet(String path, int moves, int directions, int width, int height){
         sprite = new BufferedImage[moves][directions];
+        BufferedImage sheet = null; //Gesamtes Bild mit allen Ansichten und Positionen 
         try {
             sheet = ImageIO.read(Utils.absoluteFileOf(path));
         } catch (IOException e) {
             e.printStackTrace();
             return;
         }
-        for(int horiz = 0; horiz < moves; ++horiz) {
-            for(int vert = 0; vert < directions; ++vert) {
-                sprite[horiz][vert] = sheet.getSubimage(horiz * width, vert * height, width, height); //Kopiert das einzelne Bild aus dem Tile-Set
+        if(sheet != null) { //Wenn das Sheet gefunden wurde
+            for(int horiz = 0; horiz < moves; ++horiz) {
+                for(int vert = 0; vert < directions; ++vert) {
+                    sprite[horiz][vert] = sheet.getSubimage(horiz * width, vert * height, width, height); //Kopiert das einzelne Bild aus dem Tile-Set
+                }
             }
         }
     }
     
+    /**
+     * Gibt die Anazhl aller möglichen Positionen an, die in dem SpriteSheet gespeichert wurden
+     * @return die Anzahl aller möglichen Positionen 
+     * @author Janni Röbbecke, Jakob Kleine
+     * @since 24.05.2019
+     */
     public int getPoseAmount() {
         return sprite.length;
     }
     
     /**
-     * Gibt das Bild des Charakters in der entsprechenden Pose an 
+     * Gibt das Bild des Charakters in der entsprechenden Pose und Richtung an 
      * @author Janni Röbbecke, Ares Zühlke, www.quizdroid.wordpress.com
      * @param x die Bewegung des Charakters
      * @param y die Richtung der Bewegung

@@ -8,24 +8,46 @@ import java.util.Date;
 import java.awt.Graphics;
 
 /**
- * Eine Klasse mit nützlichen öfters benutzen Methoden, die nicht unbedingt einer bestimmten Klasse zugeordnet werden können 
+ * Eine Klasse mit nützlichen öfters benutzen Methoden, die nicht unbedingt einer bestimmten Klasse zugeordnet werden können.
  * 
- * @author Jakob Kleine, Cashen Adkins, Cepehr Bromand, quizdroid.wordpress.com
+ * @author Jakob Kleine, Cashen Adkins, Cepehr Bromand, Janni Röbbecke, quizdroid.wordpress.com
  * @since 0.01 (10.05.2019)
  * @version 0.02 (12.05.2019)
  */
 public class Utils 
 {
-    private static Random rGenerator = new Random();
+    private static Random rGenerator = new Random(); //Ein Generator für zufällige Zahlen
     
+    /**
+     * Zeichnet einen Text zentriert in der angegebenen Breite
+     * @author Jakob Kleine, Cepehr Bromand
+     * @since 27.05.2019
+     * @param g die Graphics, mit denen der Text gemalt werden soll
+     * @param text der Text der gemalt werden soll
+     * @param width die Breite, innerhalb der der Text zentiert werden soll
+     * @param yPosition die y-Koordinate, bei der der Text stehen soll
+     */
     public static void centerText(Graphics g, String text, int width, int yPosition) {
+        //width/2 -> Text würde in Mitte starten; also width/2 - textBreite/2 -> passend verschoben; dann ausgeklammert -> (width-textBreite)/2
         g.drawString(text, (width - textBreite(g, text))/2, yPosition);
     }
     
+    /**
+     * Berechnet die theoretische Breite eines Textes, wenn er mit den angegebenen Graphics gemalt werden würde
+     * @author Jakob Kleine, Cepehr Bromand
+     * @since 27.05.2019
+     * [@param und @return wegen Redundanz weggelassen]
+     */
     private static int textBreite(Graphics g, String text) {
         return g.getFontMetrics().stringWidth(text);
     }
     
+    /**
+     * Wandelt ein <code>java.util.Date</code> in einen String nach dem Schema { [D]D.[M]M.YY } um
+     * @param datum das Datum das formatiert werden soll
+     * @return ein String, der das angegebene Datum wiedergibt
+     * @author Janni Röbbecke, Cashen Adkins
+     */
     public static String parseDate(Date datum) { 
         return Integer.toString(datum.getDate()) + "."+ Integer.toString(1 + datum.getMonth()) + "." + Integer.toString(1900 + datum.getYear());
     }
@@ -47,12 +69,12 @@ public class Utils
     }
     
     /**
-     * Färbt ein Bild ein der angegebenen Farbe mit der angegeben Transparenz ein
+     * Färbt ein Bild in der angegebenen Farbe mit der angegeben Transparenz ein
      * @author Jakob Kleine, Janni Röbbecke
-     * since 24.05.2019
+     * @since 24.05.2019
      * @param i das Bild das eingefärbt werden soll
      * @param dye die Farbe, die über das Bild gelegt werden soll
-     * @param alpha die Transparent (0-255; inklusiv) mit der die Farbe über das Bild gelegt werden soll
+     * @param alpha die Transparenz (0-255; inklusiv) mit der die Farbe über das Bild gelegt werden soll
      * @return ein Bild das entsprechend eingefärbt wurde
      */
     public static BufferedImage dyeImage(BufferedImage i, Color dye, int alpha) {
@@ -67,7 +89,7 @@ public class Utils
                 }
                 else {//Sonst werden die beiden Farben gemischt
                     //Wenn der vorherige Pixel transparent ist || (Wenn y noch nicht am Ende ist && der nächste Pixel transparent ist)
-                    //  dann wird der Pixel eingefärbt aber nicht mit der angegebenen Transparenz, sondern völlig opak
+                    //  dann wird der Pixel eingefärbt aber nicht mit der angegebenen Transparenz, sondern völlig opak -> opaker Rahmen
                     if(vorherTransparent || (y+1 < i.getHeight() && new Color(i.getRGB(x, y+1), true).getAlpha() == 0)) 
                         gefaerbtesBild.setRGB(x, y, dye.getRGB());
                     else
@@ -82,7 +104,7 @@ public class Utils
     /**
      * Vermischt zwei Farben mit der angegebenen Tranzparenz so, dass die zweite Farbe quais über die ertse gelegt wird
      * @author Jakob Kleine, Janni Röbbecke, https://stackoverflow.com/questions/8409827/combining-2-rgb-colors-with-alpha
-     * since 24.05.2019
+     * @since 24.05.2019
      * @param color1 die "untere" Farbe
      * @param color2 die "obere" Farbe
      * @param alpha die Transparenz, mit der color2 über color1 gelegt werden soll; von 0-255, inklusive
@@ -91,6 +113,7 @@ public class Utils
     private static Color mixColorsWithAlpha(Color color1, Color color2, int alpha)
     {
         float factor = alpha / 255f;
+        //Es wird immer von der unteren Farbe der Farbwert (jeweils R,G,B) in der Transparenz abgezogen und von dem Farbwert der oberen Farbe ersetzt
         int red = (int) (color1.getRed() * (1 - factor) + color2.getRed() * factor);
         int green = (int) (color1.getGreen() * (1 - factor) + color2.getGreen() * factor);
         int blue = (int) (color1.getBlue() * (1 - factor) + color2.getBlue() * factor);
@@ -110,10 +133,10 @@ public class Utils
     }
     
     /**
-     * Lädt eine Text-Datei (z.B. eine, die einen Room beschreibt) als String. 
+     * Lädt eine Text-Datei (z.B. eine, die einen Room beschreibt oder die Bestenliste) als String. 
      * Im Tutorial wurden die Klassen File- und BufferedReader verwendet. 
      * Die Klasse java.util.Scanner ist allerdings kompakter und übersichtlicher.
-     * @author Jakob Kleine, Cepehr Bromand
+     * @author Jakob Kleine, Cepehr Bromand, nach www.quizdroid.wordpress.com
      * @param path der relative Pfad der Textdatei
      * @return ein String der mit der Textdatei übereinstimmt
      * @since 0.01 (10.05.2019)
@@ -142,9 +165,17 @@ public class Utils
      * @author Janni Röbbecke, Jakob Kleine
      * @param grenze1 die untere Grenze (inklusiv)
      * @param grenze2 die obere Grenze (inklusiv)
-     * @return eine zufällige Zahl zwischen grenze1 und grenze2
+     * @return eine zufällige Zahl zwischen grenze1 und grenze2 (inklusiv)
      */
     public static int random(int grenze1, int grenze2) {
+        /* Random.nextInt(x) gibt eine zufällige Zahl zw. 0 (inklusiv) und x (exklusiv) zurück. 
+         * Die untere Grenze muss also mit +grenze1 nach oben verschoben werden.
+         * Random.nextInt(x)+y gäbe eine zufällige Zahl zw. y (inklusiv) und x+y (exklusiv) 
+         * Also muss die obere Grenze noch nach unten verschoben werden.
+         * -> Random.nextInt(x-y)+y gibt eine zufällige Zahl zw. y (inklusiv) und x (exklusiv) 
+         * Also muss die obere Grenze um 1 erhöht werden, damit sie x (inklusiv) ist.
+         * -> return Random.nextInt(x-y+1)+y
+         */
         return rGenerator.nextInt(grenze2 - grenze1 +1) + grenze1;
     }
 }

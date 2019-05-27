@@ -12,24 +12,21 @@ Man kann das gleiche Item mehrmals aufheben, wodurch sich die Effekte stapeln.
 
 VERSION or DATE: 13.05.2019
 
-AUTHORS: Cashen Adkins, Jakob Kleine, Cepehr Lorenzo Bromand, Ares Zühlke, Janni Marlene Röbbecke
+AUTHORS: Cashen Adkins, Jakob Kleine, Janni Marlene Röbbecke, Cepehr Lorenzo Bromand, Ares Zühlke
 --------------------------------------------------------------------------------------------------------------------------
 
 BEDIENUNG: 
 Um ein neues Spiel zu starten, muss die main()-Methode der Klasse Game aufgerufen werden.
-Die Steuerung der Spielfigur erfolgt über die Tasten w (oben), s (unten), a (links) und d (rechts).
+Die Steuerung der Spielfigur erfolgt über die Tasten w (oben), s (unten), a (links) und d (rechts) [alternativ könenn auch die Pfeil-Tasten in
+die entsprechende Richtung verwendet werden].
+Der Angriff erfolgt mit der Leertaste.
+Um eine Pause während dem Spielen einzulegen, kann die escape-Taste gedrückt werden. Dadurch gelangt man in das Menü, das auch beim Starten des
+Spiels erscheint. Durch das Menü kann man sich mithilfe der selben Tasten wie für die Bewegund des Spielers navigieren 
+(w/Pfeil -> nach oben und s/Pfeil -> nach unten). Um das ausgewählte Menüitem zu öffnen, wird die Leertaste benutzt.
+Um von den einzelnen Untermenüs (Anleitung, Optionen, Bestenliste usw.) wieder zum Hauptmenü zu gelangen, kann die escape-Taste gedrückt werden.
+Ein erneutes Drücken der escape-Taste setzt das Spiel fort.
 
-STAND DES PROJEKTS (Prototyp 1, 13.05.2019): 
-Wir hatten uns vorgenommen, als ersten Prototypen ein Spiel programmiert zu haben, in dem der Spieler eine Figur animiert
-mit Tastensteuerung durch ein Spielfeld lenken kann, dessen Hintergrund dem Hintergrund entspricht, den wir im Entwurf geplant hatten.
-Außerdem war geplant, dass der Spieler nicht aus dem Spielfeld laufen kann, also mit den Wänden kollidiert, und dass es Gegner gibt, 
-die sich zwar noch nicht bewegen können, die aber auf dem Spielfeld stehen und dem Spieler bei Kollision HP abziehen.
+STAND DES PROJEKTS (Prototyp 2, Abgabe am 27.05.2019)
 
-Ersteres haben wir geschafft, zu implementieren, den zweiten Punkt (also v.A. Kollision) haben wir aus Zeitgründen leider nicht geschafft.
-
-Diese Punkte werden aber im Folgenden in Angriff genommen, wobei der (über)nächste Schritt außerdem ist, die Gegner sich auf den Spieler 
-zubewegen zu lassen.
 
 PROBLEME / BUGS:
-Es gibt ein kleineres Problem, das durch einen leichten Denkfehler entstanden ist: Wenn der Spieler sich in zwei Richtungen bewegt, also 
-entlang der x- und y-Achse, ist er doppelt so schnell. Dieses Problem muss noch behoben werden.

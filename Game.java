@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.awt.RenderingHints;
 import java.awt.Graphics2D;
 import java.awt.Color;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
@@ -56,7 +57,7 @@ public class Game implements Runnable {
     private State mainMenuState;
     private State highscoresState;
     private HighScoreManager scoreManager;
-    
+    private String playerName;
     /**
      * Startet ein neues Spiel
      * 
@@ -90,13 +91,14 @@ public class Game implements Runnable {
                 stop();
             }
         };
+        playerName = "John_Doe";
         screen = new Screen("LINK - Legend of INformatik Kurs", SCREEN_WIDTH, SCREEN_HEIGHT, screenListener);
         keyManager = new KeyManager();
         screen.getFrame().addKeyListener(keyManager);
         gameState = new GameState();
         mainMenuState = new MainMenuState();
         highscoresState = new HighscoresState();
-        scoreManager = new HighScoreManager("/res/high.scores");
+        scoreManager = new HighScoreManager();
         currentState = mainMenuState;
         //Solange das Spiel läuft wird die Gameloop wiederholt/ausgeführt. 
         while(running) 
@@ -221,12 +223,15 @@ public class Game implements Runnable {
      */
     public class GameState implements State 
     {
+        private static final int BORDER_WIDTH = 10;
+        
+        private BufferedImage hpBarBackground;
         private int score;
         private Player player; //Die Spielfigur des Spielers
         private LinkedList<Enemy> gegnerListe; //Eine Liste mit allen Gegnern im Spiel
         private LinkedList<Weapon> attackingWeapons; //Die Waffen, die sich gerade im Angriff befinden
         private LinkedList<Item> spawnedItems; //Die Items, die gespawnt aber noch nicht eingesammelt wurden
-        private Border[] roomBorders; //Die Wände des Raums
+        private Rectangle[] roomBorders; //Die Wände des Raums
         private Room room; //Der Raum, der gerade gespielt wird
         private CollisionDetector collisionDet;
         
@@ -245,12 +250,16 @@ public class Game implements Runnable {
             TileSet tileSet = new TileSet("/res/tilesets/standard-raum-ts.png", 3 /*Anzahl Tiles x*/, 3/*Anzahl Tiles y*/, 3/*Abstand zwischen Tiles*/);
             room = new Room("/res/rooms/standard-raum.txt", tileSet);
                         
-            roomBorders = new Border[] {
-                new Border(               0,    HP_BAR_HEIGHT,        SCREEN_WIDTH, Border.BORDER_WIDTH), //links oben -> rechts oben
-                new Border(               0, SCREEN_HEIGHT-10,        SCREEN_WIDTH, Border.BORDER_WIDTH), //links unten -> rechts unten
-                new Border(               0,    HP_BAR_HEIGHT, Border.BORDER_WIDTH,        SCREEN_WIDTH), //links oben -> links unten
-                new Border( SCREEN_WIDTH-10,    HP_BAR_HEIGHT, Border.BORDER_WIDTH,        SCREEN_WIDTH) //rechts oben -> rechts unten
+            roomBorders = new Rectangle[] {
+                new Rectangle(               0,    HP_BAR_HEIGHT, SCREEN_WIDTH, BORDER_WIDTH), //links oben -> rechts oben
+                new Rectangle(               0, SCREEN_HEIGHT-10, SCREEN_WIDTH, BORDER_WIDTH), //links unten -> rechts unten
+                new Rectangle(               0,    HP_BAR_HEIGHT, BORDER_WIDTH, SCREEN_WIDTH), //links oben -> links unten
+                new Rectangle( SCREEN_WIDTH-10,    HP_BAR_HEIGHT, BORDER_WIDTH, SCREEN_WIDTH)  //rechts oben -> rechts unten
             };
+            try{
+                hpBarBackground = ImageIO.read(Utils.absoluteFileOf("/res/tilesets/hpbarBackground.png"));
+            }
+            catch(IOException e) { e.printStackTrace(); }
             
             collisionDet = new CollisionDetector();
             
@@ -283,6 +292,7 @@ public class Game implements Runnable {
                 g = bs.getDrawGraphics();
                 //Clear Screen
                 g.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+                g.drawImage(hpBarBackground, 0, 0, null);
                 room.renderMap(g); // Erst die Spielfläche ...
                 player.render(g); // ... und darauf die Spielfigur
                 for(Enemy e :  gegnerListe)
@@ -290,9 +300,12 @@ public class Game implements Runnable {
                     
                 for(Item i : spawnedItems) 
                     i.render(g);
-                    
+                
                 fontFestlegen(g, new Font("American Typewriter", Font.BOLD, 40)); 
-                g.drawString("Score: "+score, 10, Game.HP_BAR_HEIGHT-40);
+                g.setColor(new Color(215, 7, 7));
+                g.drawString("HP: "+player.health, 10, (HP_BAR_HEIGHT+40)/2);
+                g.setColor(new Color(204, 146, 12));
+                g.drawString(""+score, 500, (HP_BAR_HEIGHT+40)/2);
                 bs.show();
                 g.dispose();
             }
@@ -302,7 +315,7 @@ public class Game implements Runnable {
         public void update() 
         {
             player.setMove(getInput()); //Bewegt den Spieler entsprechend der Eingabe über die Tasten
-            if(keyManager.attackEinmal()) { //Wenn die Taste zum Angriff gedrückt wurde, greift der Spieler an
+            if(keyManager.attack()) { //Wenn die Taste zum Angriff gedrückt wurde, greift der Spieler an
                 Weapon attackingWeapon = player.startAttack();
                 if(attackingWeapon != null) //Wenn ein neuer Angriff ausgeführt wurde
                     attackingWeapons.add(attackingWeapon); //Speichert die Waffe, um Kollisionen mit Gegnern zu prüfen
@@ -345,7 +358,7 @@ public class Game implements Runnable {
             
             //Wenn Escape gedrückt wird, ändert sich die State in die MenuState
             if(!player.isAlive() || keyManager.escapeEinmal()) {
-                scoreManager.addScore(new Score(score,"[unbekannt]"));
+                scoreManager.addScore(new Score(score,playerName));
                 currentState = mainMenuState;
             }
         }
@@ -434,14 +447,14 @@ public class Game implements Runnable {
                 int xNeu = -1;
                 int yNeu = -1;
                 if(collision(e, roomBorders[0])) //Border Oben
-                    yNeu = Game.HP_BAR_HEIGHT + Border.BORDER_WIDTH;
+                    yNeu = Game.HP_BAR_HEIGHT + BORDER_WIDTH;
                 else if(collision(e, roomBorders[1])) //Border Unten
-                    yNeu = Game.SCREEN_HEIGHT - (int) e.getHitbox().getHeight() - Border.BORDER_WIDTH;
+                    yNeu = Game.SCREEN_HEIGHT - (int) e.getHitbox().getHeight() - BORDER_WIDTH;
                 //Kein else hier, weil auch 2 Borders getroffen werden können
                 if(collision(e, roomBorders[2])) //Border Links
-                    xNeu = Border.BORDER_WIDTH;
+                    xNeu = BORDER_WIDTH;
                 else if(collision(e, roomBorders[3])) //Border Rechts
-                    xNeu = Game.SCREEN_WIDTH - (int) e.getHitbox().getWidth() - Border.BORDER_WIDTH;
+                    xNeu = Game.SCREEN_WIDTH - (int) e.getHitbox().getWidth() - BORDER_WIDTH;
                     
                 if(xNeu != -1) //Wenn die Position geändert werden soll
                     e.setEntityX(xNeu);
@@ -464,6 +477,18 @@ public class Game implements Runnable {
              */
             private boolean collision(Entity e1, Entity e2) {
                 return e1.getHitbox().intersects(e2.getHitbox());
+            }
+        
+            /*
+             * Überprüft, ob zwei Elemente miteinander kollidieren
+             * @author Jakob Kleine, Janni Röbbecke, Cepehr Bromand, Ares Zühlke
+             * @since 24.05.2019
+             * @param e1 die eine zu überprüfende Entität
+             * @param e2 die Hitbox eines Elements auf dem Spielfeld (z.B. Entity oder Border)
+             * @return true, wenn sich die Hitbox von e1 mit e2 schneidet, sonst false
+             */
+            private boolean collision(Entity e1, Rectangle hitboxE2) {
+                return e1.getHitbox().intersects(hitboxE2);
             }
             
             /*

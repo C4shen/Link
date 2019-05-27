@@ -21,7 +21,7 @@ public class SideEffect extends Enemy
      * Das Standart-Spritesheet-Objekt, auf das alle Objekte dieser Klasse als ihr SpriteSheet referenzieren. 
      * Dadurch, dass es ein Standard-Bild gibt, müssen die gleichen Bilder nicht mehrmals geladen werden.
      */
-    private static final SpriteSheet DEFAULT_SPRITE_SHEET = new SpriteSheet("/res/sprites/creatures/sideEffect.png", 3 /*moves*/, 4 /*directions*/, 64 /*width*/, 64 /*height*/);
+    private static final SpriteSheet DEFAULT_SPRITE_SHEET = new SpriteSheet("/res/sprites/creatures/sideEffectOhneSchere.png", 3 /*moves*/, 4 /*directions*/, 80 /*width*/, 50 /*height*/);
     
     /**
      * Standard-Lebenspunkte, die der Spielcharakter zu Beginn des Spiels hat
