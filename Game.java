@@ -171,7 +171,7 @@ public class Game implements Runnable {
     
     /** 
      * Beendet das Spiel
-     * @author Cashen Adkins, Jakob Kleine, www.quizdroid.wordpress.com
+     * @author Cashen Adkins, Jakob Kleine
      * @since 0.01 (26.05.2019)
      */
     private void stop() {

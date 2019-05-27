@@ -10,4 +10,12 @@ public class HighScoreManager
     public void addScore(int score) {
         
     }
+    
+    public void saveScores() {
+        
+    }
+    
+    private void sortScores() {
+        
+    }
 }
