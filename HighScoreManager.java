@@ -1,12 +1,19 @@
 import java.util.ArrayList;
+import java.io.PrintWriter;
+import java.io.FileNotFoundException;
 public class HighScoreManager 
 {
-    private static final int MAX_SCORE_NUMBER = 5;
+    private static final int MAX_SCORE_NUMBER = 10;
     String path;
     ArrayList<Score> scores;
     public HighScoreManager(String scoresPath) {
         path = scoresPath;
-        //String scoreDatei = loadFileAsString("");
+        String[] scoreDaten = Utils.loadFileAsString(scoresPath).split("\\s+");
+        scores = new ArrayList<Score>(scoreDaten.length/3);
+        for(int i=0; i<scoreDaten.length-2; i++) {
+            Score scoreElement = new Score(Utils.parseInt(scoreDaten[i++]), scoreDaten[i++], scoreDaten[i]);
+            scores.add(scoreElement);
+        }
     }
     
     public void addScore(Score newScore) {
@@ -17,7 +24,17 @@ public class HighScoreManager
     }
     
     public void saveScores() {
-        
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter(Utils.absoluteFileOf(path));
+        } 
+        catch(FileNotFoundException e) { e.printStackTrace(); }
+        if(writer != null) {
+            for(Score s : scores) {
+                writer.print(s.capsleData()+"\n");
+            }
+            writer.close();
+        }
     }
     
     /**
@@ -30,13 +47,16 @@ public class HighScoreManager
         {
             Score value = scores.get(i);
             int hole=i;
-            while(hole>0 && scores.get(hole-1).isGreaterThan(value))
+            while(hole>0 && scores.get(hole-1).isLessThan(value))
             {
                 scores.set(hole, scores.get(hole-1));
                 hole--;
             }
             scores.set(hole, value);
         }
-
+    }
+    
+    public ArrayList<Score> getScores() {
+        return scores;
     }
 }

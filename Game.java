@@ -6,9 +6,10 @@ import java.awt.image.BufferedImage;
 import java.awt.RenderingHints;
 import java.awt.Graphics2D;
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.LinkedList;
-import java.awt.Font;
 import java.util.Random;
+import java.awt.Font;
 import java.io.IOException;
 import java.io.File;
 import javax.imageio.ImageIO;
@@ -45,7 +46,7 @@ public class Game implements Runnable {
     /**
      * Die Höhe des Spielfensters in Pixel
      */
-    public static final int SCREEN_HEIGHT = 10*TileSet.TILE_HEIGHT + HP_BAR_HEIGHT; //Das Spiel hat erstmal eine Höhe von 10 Tiles und einem Platz für u.a. Leben und Punktzahl (10*64px + 100px = 740px).
+    public static final int SCREEN_HEIGHT = 10*TileSet.TILE_HEIGHT + HP_BAR_HEIGHT; //Das Spiel hat ersteine Höhe von 10 Tiles und Platz für die HP-Bar (10*64px + 100px = 740px).
     private Screen screen; //Der Screen, auf dem das Spiel visualisiert wird
     private boolean running = true; //Gibt an, ob das Spiel momentan läuft (beendet ggf. die Game-Loop)
     private KeyManager keyManager; //Der KeyManager, der die Eingaben über die Tastatur verwaltet.
@@ -53,6 +54,8 @@ public class Game implements Runnable {
     private State currentState;
     private State gameState;
     private State mainMenuState;
+    private State highscoresState;
+    private HighScoreManager scoreManager;
     
     /**
      * Startet ein neues Spiel
@@ -92,6 +95,8 @@ public class Game implements Runnable {
         screen.getFrame().addKeyListener(keyManager);
         gameState = new GameState();
         mainMenuState = new MainMenuState();
+        highscoresState = new HighscoresState();
+        scoreManager = new HighScoreManager("/res/high.scores");
         currentState = mainMenuState;
         //Solange das Spiel läuft wird die Gameloop wiederholt/ausgeführt. 
         while(running) 
@@ -175,6 +180,7 @@ public class Game implements Runnable {
      * @since 0.01 (26.05.2019)
      */
     private void stop() {
+        scoreManager.saveScores();
         System.exit(0);
     }
 
@@ -339,6 +345,7 @@ public class Game implements Runnable {
             
             //Wenn Escape gedrückt wird, ändert sich die State in die MenuState
             if(!player.isAlive() || keyManager.escapeEinmal()) {
+                scoreManager.addScore(new Score(score,"[unbekannt]"));
                 currentState = mainMenuState;
             }
         }
@@ -508,8 +515,7 @@ public class Game implements Runnable {
         
         @Override
         public void render(Graphics g) {
-            Color color = new Color(255,255,255); //Eine Farbe wird festgelegt
-            screen.getCanvas().setBackground(color); //Farbe wird als Hintergrundfarbe dargestellt
+            screen.getCanvas().setBackground(Color.white); //Weiß wird als Hintergrundfarbe dargestellt
             BufferStrategy bs = screen.getCanvas().getBufferStrategy(); 
             if(bs == null)
                 screen.getCanvas().createBufferStrategy(3);
@@ -519,8 +525,7 @@ public class Game implements Runnable {
                 //Clear Screen
                 g.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
                 fontFestlegen(g,font);
-                color = new Color(127, 101, 73);
-                g.setColor(color);
+                g.setColor(new Color(127, 101, 73));
                 g.drawString("Spielen", SCREEN_WIDTH/2-120, 200);
                 g.drawString("Anleitung", SCREEN_WIDTH/2-120, 280);
                 g.drawString("Optionen", SCREEN_WIDTH/2-120, 360);
@@ -555,11 +560,11 @@ public class Game implements Runnable {
                     case 1: 
                         
                     break; 
-                    case 2: 
+                    case 2:
                     
                     break;
-                    case 3:
-                    
+                    case 3: 
+                        currentState = highscoresState;
                     break;
                     case 4: //Später eher default (wenn Anleitung und Optionen implementiert)
                         stop();
@@ -568,6 +573,47 @@ public class Game implements Runnable {
             
             if(keyManager.escapeEinmal())
                 currentState = gameState;
+        }
+    }
+    
+    private class HighscoresState implements State {
+        private Font font;
+        public HighscoresState() {
+            font = new Font("Futura", Font.BOLD, 40);
+        }
+        
+        public void update() {
+            if(keyManager.escapeEinmal())
+                currentState = mainMenuState;
+        }
+        
+        public void render(Graphics g) {
+            screen.getCanvas().setBackground(Color.white); //Weiß wird als Hintergrundfarbe festgelegt
+            BufferStrategy bs = screen.getCanvas().getBufferStrategy(); 
+            if(bs == null)
+                screen.getCanvas().createBufferStrategy(3);
+            else
+            {
+                g = bs.getDrawGraphics();
+                //Clear Screen
+                g.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+                fontFestlegen(g,font.deriveFont(Font.BOLD));
+                g.setColor(new Color(127, 101, 73));
+                
+                Utils.centerText(g, "BESTENLISTE", SCREEN_WIDTH, 100);
+                
+                g.setFont(font.deriveFont(Font.PLAIN, 30));
+                ArrayList<Score> scores = scoreManager.getScores();
+                for(int i=0; i<scores.size(); i++) {
+                    g.drawString((i<9?"0":"")+(i+1)+": "+scores.get(i), 30, 175+55*i);
+                }
+               
+                g.setFont(font.deriveFont(Font.ITALIC, 15)); 
+                String hinweis = "Um zum Hauptmenü zurückzukehren bitte ESCAPE drücken.";
+                Utils.centerText(g, "Um zum Hauptmenü zurückzukehren bitte ESCAPE drücken.", SCREEN_WIDTH, SCREEN_HEIGHT-15);
+                bs.show();
+                g.dispose();
+            }
         }
     }
     

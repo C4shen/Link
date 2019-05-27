@@ -10,26 +10,30 @@ public class Score
 {
     private int score;
     private String name;
-    private Date datum;
-
-    /**
-     * Konstruktor für Objekte der Klasse Score
-     */
-    public Score(int score, String name)
-    {
+    private String date;
+    public Score(int score, String name, String datum) {
         this.score = score;
         this.name = name;
-        datum = new Date();
+        date = datum;
     }
     
-    public String toString()
-    {
-        return getName() + " " + getScore() + " " + getDate();
+    public Score(int score, String name) {
+        this(score, name, Utils.parseDate(new Date()));
     }
     
-
-    public int getScore() {return score;}
-    public String getName() {return name;}
-    public String getDate() { return Integer.toString(datum.getDate()) + "."+ Integer.toString(1 + datum.getMonth()) + "." + Integer.toString(1900 + datum.getYear());}
-    public boolean isGreaterThan(Score s) {  return score > s.score; }
+    @Override
+    public String toString() {
+        return score + " - " + name + " ("+date+")";
+    }
+    
+    public String capsleData() {
+        return score + " " + name + " "+date;
+    }
+    
+    public boolean isLessThan(Score s) {  
+        if(score == s.score) 
+            return name.compareTo(s.name) < 0;
+        else
+            return score < s.score; 
+    }
 }

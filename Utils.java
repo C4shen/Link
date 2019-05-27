@@ -4,6 +4,9 @@ import java.util.Scanner;
 import java.awt.image.BufferedImage;
 import java.awt.Color;
 import java.util.Random;
+import java.util.Date;
+import java.awt.Graphics;
+
 /**
  * Eine Klasse mit nützlichen öfters benutzen Methoden, die nicht unbedingt einer bestimmten Klasse zugeordnet werden können 
  * 
@@ -14,6 +17,19 @@ import java.util.Random;
 public class Utils 
 {
     private static Random rGenerator = new Random();
+    
+    public static void centerText(Graphics g, String text, int width, int yPosition) {
+        g.drawString(text, (width - textBreite(g, text))/2, yPosition);
+    }
+    
+    private static int textBreite(Graphics g, String text) {
+        return g.getFontMetrics().stringWidth(text);
+    }
+    
+    public static String parseDate(Date datum) { 
+        return Integer.toString(datum.getDate()) + "."+ Integer.toString(1 + datum.getMonth()) + "." + Integer.toString(1900 + datum.getYear());
+    }
+    
     /**
      * Wandelt eine Zeichenkette in eine Zahl um
      * @author Jakob Kleine, Cashen Adkins
