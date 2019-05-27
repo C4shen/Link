@@ -31,5 +31,5 @@ public class Score
     public int getScore() {return score;}
     public String getName() {return name;}
     public String getDate() { return Integer.toString(datum.getDate()) + "."+ Integer.toString(1 + datum.getMonth()) + "." + Integer.toString(1900 + datum.getYear());}
-
+    public boolean isGreaterThan(Score s) {  return score > s.score; }
 }
