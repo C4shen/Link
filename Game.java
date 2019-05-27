@@ -14,6 +14,9 @@ import java.io.File;
 import javax.imageio.ImageIO;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.awt.event.WindowAdapter;
 /**
  * Die zentrale Klasse des Programms. Hier wird die Anzeige und Funktionalität des Spiels verwaltet.
  * @author Cashen Adkins, Cepehr Bromand, Janni Röbbecke, Jakob Kleine, www.quizdroid.wordpress.com
@@ -78,7 +81,13 @@ public class Game implements Runnable {
         long timestamp;
         long oldTimestamp;
         //Es wird ein neues Fenster ertsellt mit dem Namen des Spiels als Titel und der Höhe und Breite der vorher angegebenen Attribute.
-        screen = new Screen("LINK - Legend of INformatik Kurs", SCREEN_WIDTH, SCREEN_HEIGHT);
+        WindowListener screenListener = new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                stop();
+            }
+        };
+        screen = new Screen("LINK - Legend of INformatik Kurs", SCREEN_WIDTH, SCREEN_HEIGHT, screenListener);
         keyManager = new KeyManager();
         screen.getFrame().addKeyListener(keyManager);
         gameState = new GameState();
@@ -160,13 +169,12 @@ public class Game implements Runnable {
         currentState.render(g);
     }
     
-    /**
+    /** 
      * Beendet das Spiel
      * @author Cashen Adkins, Jakob Kleine, www.quizdroid.wordpress.com
      * @since 0.01 (26.05.2019)
      */
-    private void stop()
-    {
+    private void stop() {
         System.exit(0);
     }
 

@@ -1,7 +1,8 @@
 import java.awt.Canvas;
 import java.awt.Dimension;
 import javax.swing.JFrame;
-
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 /**
  * Mit dem Screen wird ein Spiel visualisiert. 
  * Er besitzt eine Leinwand (Canvas), auf der der Hintergrund und Entities etc. gemalt werden.
@@ -25,7 +26,7 @@ public class Screen
      * @param height die Höhe des Screens
      * @since 0.01 (10.05.2019)
      */
-    public Screen(String title, int width, int height)
+    public Screen(String title, int width, int height, WindowListener listener)
     {
         this.title = title;
         this.width = width;
@@ -33,7 +34,8 @@ public class Screen
 
         frame = new JFrame(title);
         frame.setSize(width, height);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Damit die Virtuelle Maschine beim Schließen des Frames beendet wird
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); //Damit die Virtuelle Maschine beim Schließen des Frames beendet wird
+        frame.addWindowListener(listener);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null); //Positioniert den Frame in der Mitte des Bildschirms
         frame.setVisible(true);
