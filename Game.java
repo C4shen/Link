@@ -644,17 +644,23 @@ public class Game implements Runnable {
      */
     public class TutorialState implements State
     {
-        Font überschrift;
-        Font standardSchrift;
-        Font unterüberschrift;
-        public void render(Graphics g)
-        {
+        private static final int ANZAHL_PAGES = 2;
+        private Font überschrift;
+        private Font standardSchrift;
+        private Font unterüberschrift;
+        private Color schriftFarbe;
+        private int pageNr;
+        public TutorialState() {
             überschrift = new Font("Futura", Font.BOLD, 40);
             standardSchrift = new Font("Futura", Font.PLAIN, 18);
             unterüberschrift = new Font("Futura", Font.BOLD, 25);
-            
-            Color color = new Color(255,255,255); //Eine Farbe wird festgelegt
-            screen.getCanvas().setBackground(color); //Farbe wird als Hintergrundfarbe dargestellt
+            schriftFarbe = new Color(65, 41, 31);
+            pageNr = 0;
+        }
+        
+        public void render(Graphics g)
+        {
+            screen.getCanvas().setBackground(Color.white); //Weiß wird als Hintergrundfarbe dargestellt
             BufferStrategy bs = screen.getCanvas().getBufferStrategy(); 
             if(bs == null)
                 screen.getCanvas().createBufferStrategy(3);
@@ -663,43 +669,84 @@ public class Game implements Runnable {
                 g = bs.getDrawGraphics();
                 //Clear Screen
                 g.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+                g.drawImage(menuBackground, 0, 0, null);
                 fontFestlegen(g,überschrift);
-                color = new Color(127, 101, 73);
-                g.setColor(color);
-                g.drawString("Anleitung", SCREEN_WIDTH/2-90,50);
-                fontFestlegen(g,standardSchrift);
-                g.drawString("In dem Spiel geht es darum ein möglichst großen Highscore zu erzielen,", 10, 100);
-                g.drawString("indem man die Gegner besiegt, die nach einer Zeit auf dem Spielfeld", 10, 120);
-                g.drawString("erscheinen.", 10, 140);
-                fontFestlegen(g,unterüberschrift);
-                g.drawString("Steuerung", SCREEN_WIDTH/2-65, 180);
-                fontFestlegen(g,standardSchrift);
-                g.drawString("Die Spielfigur wird mit den Tasten W, A, S, D in die entsprechende Richtung", 10, 220);
-                g.drawString("bewegt. Zum Angreifen wird die Leertaste benutzt. Ein Angriff erfolgt immer ", 10, 240);
-                g.drawString("in Blickrichtung der Spielfigur.", 10, 260);
-                fontFestlegen(g,unterüberschrift);
-                g.drawString("Gegner", SCREEN_WIDTH/2-52, 300);
-                fontFestlegen(g,standardSchrift);
-                g.drawString("Krebs: Der Krebs ist ein ausschließlich seitlich laufender Gegner, der der", 10, 340);
-                g.drawString("Spielfigur bei Berührung Schaden zufügt.", 10, 360);
-                g.drawString("Virus: Der Virus ist ein Gegner der die Spielfigur verfolgt. Er fügt ihr", 10, 400);
-                g.drawString("bei Berührung oder durch einen Angriff, der nur nach unten erfolgt, Schaden", 10, 420);
-                g.drawString("zu.", 10, 440);
-                fontFestlegen(g,unterüberschrift);
-                g.drawString("Items", SCREEN_WIDTH/2-45, 480);
-                fontFestlegen(g,standardSchrift);
-                g.drawString("Cursor: Der Cursor ist eine Waffe die von der Spielfigur eingesammelt werden", 10, 520);
-                g.drawString("kann, indem die sie über ihn läuft. Er kann vom Spieler zum Angreifen", 10, 540);
-                g.drawString("genutzt werden.", 10, 560);
-                g.drawString("Kaffeetasse: Die Kaffeetasse kann ebenfalls von der Spielfigur eingesammelt", 10, 600);
-                g.drawString("werden. Sie erhöt die Bewegungsgeschwindigkeit der Figur aber veringert", 10, 620);
-                g.drawString("im Gegenzug die Lebenspunkte der Spielfigur.", 10, 640);
+                g.setColor(schriftFarbe.darker().darker());
+                int zeilenHoehe = 100;
+                Utils.centerText(g, "ANLEITUNG", SCREEN_WIDTH, zeilenHoehe);
+                switch(pageNr) {
+                    case 0: 
+                            g.setFont(unterüberschrift);
+                            Utils.centerText(g, "Ziel des Spiels", SCREEN_WIDTH, zeilenHoehe+=40);
+                            g.setFont(standardSchrift); //Font-Festlegen muss nur einmal aufgerufen werden; dann sind die RenderingHints für Text bereits gesetzt
+                            g.drawString("In diesem Informatik-orientiertem Spiel geht es darum einen möglichst", 40, zeilenHoehe+=35);
+                            g.drawString("großen Score zu erzielen, indem man Gegner besiegt, die auf dem ", 40, zeilenHoehe+=20);
+                            g.drawString("Spielfeld erscheinen und Items einsammelt, die einem dabei.", 40, zeilenHoehe+=20);
+                            g.drawString("helfen.", 40, zeilenHoehe+=20);
+                            g.setFont(unterüberschrift);
+                            Utils.centerText(g, "Steuerung", SCREEN_WIDTH, zeilenHoehe+=40);
+                            g.setFont(standardSchrift);
+                            g.drawString("Die Spielfigur wird mit den Tasten W (oben), A (links), S (unten)", 40, zeilenHoehe+=40);
+                            g.drawString("und D  (rechts) oder den Pfeiltasten in die entsprechende Richtung", 40, zeilenHoehe+=20);
+                            g.drawString("bewegt.", 40, zeilenHoehe+=20);
+                            g.drawString("Ein Angriff wird mit Leertaste oder Backspace (Löschen) gestartet", 40, zeilenHoehe+=20);
+                            g.drawString("und erfolgt immer in Blickrichtung der Spielfigur. Während dem", 40, zeilenHoehe+=20);
+                            g.drawString("Angreifen kann sich die Spielfigur nicht bewegen.", 40, zeilenHoehe+=20);
+                            g.setFont(unterüberschrift);
+                            Utils.centerText(g, "Gegner", SCREEN_WIDTH, zeilenHoehe+=40);
+                            g.setFont(standardSchrift);
+                            g.drawString("Auf dem Spielfeld werden in zufälligen Abständen zufällige Gegner auf", 40, zeilenHoehe+=40);
+                            g.drawString("zufälligen Feldern gespawnt. Sie fügen der Spielfigur Schaden zu und", 40, zeilenHoehe+=20);
+                            g.drawString("werfen sie ein Stück zurück (geben Knockback).", 40, zeilenHoehe+=20);
+                            g.drawString("Bisher gibt es folgende Gegener:", 40, zeilenHoehe+=20);
+                            g.drawString("Seiten-Effekt: Der Seiten-Effekt (dargestellt durch einen Krebs) läuft", 40, zeilenHoehe+=30);
+                            g.drawString("ausschließlich seitlich und greift bei Berührung mit der Spielfigur mit", 40, zeilenHoehe+=20);
+                            g.drawString("seinen Scheren an.", 40, zeilenHoehe+=20);
+                            g.drawString("Virus: Der Virus ist verfolgt die Spielfigur. Er fügt ihr Schaden zu,", 40, zeilenHoehe+=30);
+                            g.drawString("indem er seine Waffe (momentan ein Cursor) auf sie wirft.", 40, zeilenHoehe+=20);
+                            g.drawString("Momentan erfolgt der Angriff des Virus nur nach oben und unten.", 40, zeilenHoehe+=20);
+                    break;
+                    case 1:
+                            g.setFont(unterüberschrift);
+                            Utils.centerText(g, "Items", SCREEN_WIDTH, zeilenHoehe+=40);
+                            g.setFont(standardSchrift);
+                            g.drawString("Items sind Gegenstände, die zufällig auf dem Spielfeld gespanwnt", 40, zeilenHoehe+=40);
+                            g.drawString("werden. Sie sind nützliche Power-Ups, die dem Spieler helfen,", 40, zeilenHoehe+=20);
+                            g.drawString("gegen die Gegner zu kämpfen.", 40, zeilenHoehe+=20);
+                            g.drawString("Wenn die Spielfigur ein Item berührt sammelt sie es ein. Momentan", 40, zeilenHoehe+=20);
+                            g.drawString("gibt es folgende Items:", 40, zeilenHoehe+=20);
+                            
+                            g.drawString("Cursor: Der Cursor ist eine Waffe, die auf Gegner geworfen werden", 40, zeilenHoehe+=30);
+                            g.drawString("kann. Nach seinem Angriff kommt er zur Spielfigur zurück.", 40, zeilenHoehe+=20);
+                            g.drawString("Kaffee: Kaffee erhöht die Geschwindigkeit der Spielfigur, aber", 40, zeilenHoehe+=30);
+                            g.drawString("fügt ihr im Gegenzug Schaden zu. Je mehr Kaffee getrunken wird,", 40, zeilenHoehe+=20);
+                            g.drawString("desto geringer ist der Geschwindigkeits-Boost, aber desto", 40, zeilenHoehe+=20);
+                            g.drawString("höher ist der zugefügte Schaden.", 40, zeilenHoehe+=20);
+                            g.drawString("Pizza: Pizza erhöht die Lebenpunkte der Spielfigur", 40, zeilenHoehe+=30);
+                    break;
+                }
+
+                g.setFont(standardSchrift.deriveFont(Font.ITALIC, 15)); 
+                String hinweis = "Seite "+(pageNr+1)+"; Blättern mit w&s / a&d oder Pfeiltasten. Zum Hauptmenü: bitte ESCAPE drücken.";
+                Utils.centerText(g, hinweis, SCREEN_WIDTH, SCREEN_HEIGHT-15);
                 bs.show();
                 g.dispose();
             }
         }
         public void update()
         {
+            if(keyManager.downEinmal() || keyManager.rightEinmal()) {
+                if(pageNr < ANZAHL_PAGES-1) 
+                    pageNr++;
+                else
+                    pageNr = 0;
+            }
+            else if(keyManager.upEinmal() || keyManager.leftEinmal()) {
+                if(pageNr > 0) 
+                    pageNr--;
+                else
+                    pageNr = ANZAHL_PAGES-1;
+            }
             if(keyManager.escapeEinmal())
                 currentState = mainMenuState;
         }
