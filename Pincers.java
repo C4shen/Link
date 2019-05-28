@@ -23,7 +23,7 @@ public class Pincers extends Weapon
      */
     private static final Point[] handelPositions = new Point[]{
         new Point(17, 21),
-        new Point(21, 00) 
+        new Point(00, 21) 
     };
     
     private int attackDelay;

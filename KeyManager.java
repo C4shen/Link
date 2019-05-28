@@ -31,7 +31,7 @@ public class KeyManager implements KeyListener {
         relevantKeys[1] = keys[KeyEvent.VK_S] || keys[KeyEvent.VK_DOWN];
         relevantKeys[2] = keys[KeyEvent.VK_A] || keys[KeyEvent.VK_LEFT];
         relevantKeys[3] = keys[KeyEvent.VK_D] || keys[KeyEvent.VK_RIGHT];
-        relevantKeys[4] = keys[KeyEvent.VK_SPACE];
+        relevantKeys[4] = keys[KeyEvent.VK_SPACE] || keys[KeyEvent.VK_ENTER]; //Bei der Enter soll auch einen Angirff starten (besonders wichtig im Hauptmenü)
         relevantKeys[5] = keys[KeyEvent.VK_ESCAPE];
     }
     

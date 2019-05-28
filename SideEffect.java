@@ -48,7 +48,7 @@ public class SideEffect extends Enemy
         health = SideEffect.DEFAULT_HEALTH;
         pincersLeft = new Pincers(x, y, true);
         pincersRight = new Pincers(x, y, false);
-        setWeapon(pincersLeft);
+        setWeapon(pincersRight);
     }
    
     @Override
