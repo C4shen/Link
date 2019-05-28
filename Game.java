@@ -33,7 +33,7 @@ public class Game implements Runnable {
     /**
      * Die maximale Zeit, die eine Berechnung der Loop dauern sollte/darf.
      */
-    public static final long maxLoopTime = 1000 / FPS;
+    private static final long maxLoopTime = 1000 / FPS;
     
     /**
      * Die Höhe des Bereichs, in dem die HP, der Score usw. angezeigt wird
@@ -51,11 +51,12 @@ public class Game implements Runnable {
      * Die Höhe des Spielfensters in Pixel
      */
     public static final int SCREEN_HEIGHT = 10*TileSet.TILE_HEIGHT + HP_BAR_HEIGHT; //Das Spiel hat ersteine Höhe von 10 Tiles und Platz für die HP-Bar (10*64px + 100px = 740px).
+    
     private Screen screen; //Der Screen, auf dem das Spiel visualisiert wird
     private boolean running = true; //Gibt an, ob das Spiel momentan läuft (beendet ggf. die Game-Loop)
     private KeyManager keyManager; //Der KeyManager, der die Eingaben über die Tastatur verwaltet.
     private Graphics g; //Die Graphics, mit denen die Figuren gemalt werden.
-    private State currentState;
+    private State currentState; 
     private GameState gameState;
     private MainMenuState mainMenuState;
     private TutorialState tutorialState;
