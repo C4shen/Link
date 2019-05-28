@@ -54,7 +54,7 @@ public class HighScoreManager
         catch(FileNotFoundException e) { e.printStackTrace(); }
         if(writer != null) {
             for(Score s : scores) {
-                writer.print(s.capsleData()+"\n"); //es wird .capsleData und nicht toString aufgerufen, weil die [Score] [Name] [Datum] nur mit Leerzeichen getrennt werden sollen
+                writer.print(s.capsuleData()+"\n"); //es wird .capsleData und nicht toString aufgerufen, weil die [Score] [Name] [Datum] nur mit Leerzeichen getrennt werden sollen
             }
             writer.close();
         }

@@ -3,7 +3,7 @@ import java.awt.Rectangle;
 /**
  * Die Scheren sind die Waffen eines Side-Effects.
  */
-public class Shears extends Weapon 
+public class Pincers extends Weapon 
 {
     /*
      * Das Standart-Spritesheet-Objekt, auf das alle Objekte dieser Klasse als ihr SpriteSheet referenzieren. 
@@ -27,7 +27,7 @@ public class Shears extends Weapon
     };
     
     private int attackDelay;
-    public Shears(int x, int y, boolean isLeft) {
+    public Pincers(int x, int y, boolean isLeft) {
         super("Schere eines Side-Effects", DEFAULT_SPRITE_SHEET, x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT);
         prevDirection = isLeft ? 0 : 1;
     }

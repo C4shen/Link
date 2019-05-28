@@ -54,4 +54,13 @@ public class Kaffee extends Item
     public Rectangle getHitbox() { 
         return new Rectangle((int) Math.round(entityX), (int) Math.round(entityY), width, height);
     }
+    
+    /**
+     * Setzt die Anzahl der bereits gesammelten Kaffees zurück
+     * @author Cashen Adkins, Jakob Kleine, Janni Röbbecke
+     * @since 28.05.2019
+     */
+    public static void resetSelectedAmount() {
+        bereitsGesammelt = 0;
+    }
 }

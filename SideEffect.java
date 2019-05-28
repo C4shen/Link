@@ -31,7 +31,8 @@ public class SideEffect extends Enemy
     
     public static final int DEFAULT_SCORE_VALUE = 50;
     
-    
+    private Pincers pincersLeft;
+    private Pincers pincersRight;
     /**
      * Ertellt einen neuen Nebeneffekt
      * @author Janni Röbbecke, Jakob Kleine, Cashen Adkins
@@ -42,8 +43,7 @@ public class SideEffect extends Enemy
      */
     public SideEffect(int x, int y) 
     {
-        super(x, y, "Krebs", DEFAULT_SPRITE_SHEET, DEFAULT_HEALTH, DEFAULT_SPEED, new Cursor(x+10, y+30, false));
-        
+        super(x, y, "Krebs", DEFAULT_SPRITE_SHEET, DEFAULT_HEALTH, DEFAULT_SPEED, null);
         setMove(new Point(-1, 0)); //Zu Beginn bewegt sich der Side-Effect immer nach links
         health = SideEffect.DEFAULT_HEALTH;
     }

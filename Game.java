@@ -177,7 +177,13 @@ public class Game implements Runnable {
     
     private void newGame() {
         gameState = new GameState();
+        Kaffee.resetSelectedAmount();
         currentState = gameState;
+    }
+    
+    private void resumeGame() {
+        if(gameState != null) 
+            currentState = gameState;
     }
     
     /** 
@@ -359,10 +365,14 @@ public class Game implements Runnable {
                 spawnRandomItem(); 
                 itemSpawnDelay = Utils.random(100, 1000);
             }
-            
-            //Wenn Escape gedrückt wird, ändert sich die State in die MenuState
-            if(!player.isAlive() || keyManager.escapeEinmal()) {
+
+            if(!player.isAlive()) {
                 scoreManager.addScore(new Score(score,playerName));
+                gameState = null;
+                currentState = mainMenuState;
+            }
+            //Wenn Escape gedrückt wird, ändert sich die State in die MenuState
+            if(keyManager.escapeEinmal()) {
                 currentState = mainMenuState;
             }
         }
@@ -537,7 +547,7 @@ public class Game implements Runnable {
             menuItem = 0; //Zu Beginn des Menüs ist der ausgewählte Knopf der erste.
             try {
                  menuItemFrame = ImageIO.read(Utils.absoluteFileOf("/res/tilesets/menuitemframe.png")); //Der Rahmen wird gelesen und als BufferedImage gespeichert.
-                 menuBackground = ImageIO.read(Utils.absoluteFileOf("/res/tilesets/menuBackground.png")); //Der Rahmen wird gelesen und als BufferedImage gespeichert.
+                 menuBackground = ImageIO.read(Utils.absoluteFileOf("/res/tilesets/menuBackground.jpg")); //Der Rahmen wird gelesen und als BufferedImage gespeichert.
             } 
             catch (IOException e) {
                 e.printStackTrace();
@@ -556,7 +566,7 @@ public class Game implements Runnable {
                 g = bs.getDrawGraphics();
                 //Clear Screen
                 g.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-                // g.drawImage(menuBackground, 0, 0, null);
+                g.drawImage(menuBackground, 0, 0, null);
                 fontFestlegen(g,font);
                 g.setColor(new Color(127, 101, 73));
                 g.drawString("Neues Spiel", SCREEN_WIDTH/2-120, 200);
@@ -592,8 +602,7 @@ public class Game implements Runnable {
                         newGame();
                     break;
                     case 1: 
-                        if(gameState != null) 
-                            currentState = gameState;
+                        resumeGame();
                     break; 
                     case 2:
                     
@@ -610,7 +619,7 @@ public class Game implements Runnable {
             }
             
             if(keyManager.escapeEinmal())
-                currentState = gameState;
+                resumeGame();
         }
     }
     

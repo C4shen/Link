@@ -54,7 +54,7 @@ public class Score
      * @author Cashen Adkins, Janni Roebbecke
      * @since 27.5.2019
      */
-    public String capsleData() {
+    public String capsuleData() {
         return score + " " + name + " "+date;
     }
     
