@@ -31,7 +31,9 @@ public class Virus extends Enemy
      * Standard-Geschwindigkeit des Spielcharakters
      */
     public static final double DEFAULT_SPEED = 1;
-    
+    /*
+     * Der Wert, um den ein Side-Effekt den Score erhöht.
+     */
     public static final int DEFAULT_SCORE_VALUE = 200;
     /**
      * Ertellt einen neuen Nebeneffekt
