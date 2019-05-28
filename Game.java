@@ -291,7 +291,7 @@ public class Game implements Runnable {
             } 
             catch(ClassNotFoundException e) { e.printStackTrace(); }
             catch(NoSuchMethodException e) { e.printStackTrace(); }
-            
+            gegnerListe.add(new SideEffect(300, 300));
             spawnedItems.add(new CursorItem(Utils.random(10, 550), Utils.random(110, 650)));
         }   
         

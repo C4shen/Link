@@ -69,12 +69,22 @@ public class SideEffect extends Enemy
     }
     
     public void update() {
-        super.update();
-        if(knockback == null) {
-            if(weapon == null || weapon == pincersLeft) 
+        if(knockback != null) {
+            if(knockback.getAmountLeft() <= 0) 
+                resetKnockback();
+            else {
+                int zusatzX = (int) Math.round(knockback.getDirectionX() * knockback.getStrength()), zusatzY = (int) Math.round(knockback.getDirectionY() * knockback.getStrength());
+                knockbackAbarbeiten(zusatzX, zusatzY);
+            }
+        }
+        else {
+            move();
+            if(weapon != null && weapon.isAttacking()) //Wenn die Waffe sich bewegt, soll sie sich eigenständig updaten, sonst wird ihre Bewegung vorgegeben
+                weapon.update();
+            else {
                 pincersRight.setPositionInHand(getHandPosition(0, 2), xPos, prevDirection);
-            if(weapon == null || weapon == pincersRight) 
                 pincersLeft.setPositionInHand(getHandPosition(0,1), xPos, prevDirection);
+            }
         }
     }
     
@@ -123,27 +133,29 @@ public class SideEffect extends Enemy
     public Weapon target(Player player){
         Rectangle hitboxPlayer = player.getHitbox();
         Rectangle hitboxEigen = getHitbox();
-        if(player.getHitbox().intersects(getHitbox())){
-            setMove(new Point(0, 0));
-            if(hitboxPlayer.getLocation().x < hitboxEigen.getLocation().x + hitboxEigen.getWidth())
-                weapon = pincersLeft;
-            else
-                weapon = pincersRight;
-            return startAttack();
-        }
-        else {
-            if(xMove == 0){
-                if(player.entityX < entityX)
-                    setMove(new Point(-1,0));
-                else 
-                    setMove(new Point(1,0));
+        if((weapon != null && !weapon.isAttacking()) || weapon == null) {
+            if(player.getHitbox().intersects(hitboxEigen)){
+                if(hitboxPlayer.getLocation().x < hitboxEigen.getLocation().x)
+                    weapon = pincersLeft;
+                else
+                    weapon = pincersRight;
+                startAttack();
+                player.startBeingAttacked(weapon);
             }
-            if(entityX<20)
-                setMove(new Point(1, 0));
-            if(entityX>550)
-                setMove(new Point(-1, 0));
-            return null;
+            else {
+                if(xMove == 0){
+                    if(player.entityX < entityX)
+                        setMove(new Point(-1,0));
+                    else 
+                        setMove(new Point(1,0));
+                }
+                if(entityX<20)
+                    setMove(new Point(1, 0));
+                if(entityX>550)
+                    setMove(new Point(-1, 0));
+            }
         }
+        return null;
     }
     
     /**
