@@ -29,17 +29,24 @@ public class SideEffect extends Enemy
      * Standard-Geschwindigkeit des Spielcharakters
      */
     public static final int DEFAULT_SPEED = 5;
-    
+    /**
+     * Standard-Score, den der Spieler für das toten dieses Gegners erhält
+     */
     public static final int DEFAULT_SCORE_VALUE = 50;
     
+    /**
+     * Die linke der beiden Scheren, die der SideEffect hat und die er als Waffe benutzen kann.
+     */
     private Pincers pincersLeft;
+    /**
+     * Die rechte der beiden Scheren, die der SideEffect hat und die er als Waffe benutzen kann.
+     */
     private Pincers pincersRight;
     /**
      * Ertellt einen neuen Nebeneffekt
      * @author Janni Röbbecke, Jakob Kleine, Cashen Adkins
      * @param x die x-Koordinate, auf der der Nebeneffekt gespawnt wird
      * @param y die y-Koordinate, auf der der Nebeneffekt gespawnt wird
-     * @param enemySprite das SpriteSheet des Nebeneffekts
      * @since 15.05.2019
      */
     public SideEffect(int x, int y) 
@@ -51,23 +58,43 @@ public class SideEffect extends Enemy
         pincersRight = new Pincers(x, y, false);
     }
    
+    /**
+     * Führt das Knockback aus, das die Figur gerade hat und reduziert es, so das es nach einigen Loops abgebaut ist
+     * @param zusatzX geschwindigkeit, in der das Knockback in x-Richtung abgebaut wird
+     * @param zusatzY geschwindigkeit, in der das Knockback in y-Richtung abgebaut wird
+     * @author Jakob Kleine, Janni Röbbecke
+     * @since 0.01 (25.05.2019)
+     */
     @Override 
     protected void knockbackAbarbeiten(int zusatzX, int zusatzY) {
         super.knockbackAbarbeiten(zusatzX, zusatzY);
-        
+        //Der SideEffect muss nicht nur sich sondern auch seine beiden Scheren versetzen, 
+        //sollte dies nicht schon in der Methode der Superklasse geschehen sein
         if(weapon == null || weapon == pincersLeft) 
             pincersRight.moveBy(zusatzX, zusatzY);
         if(weapon == null || weapon == pincersRight) 
             pincersLeft.moveBy(zusatzX, zusatzY);
     }
     
+    /**
+     * Teilt diesem SideEffect mit, dass er angegriffen wurde, sodass er Knockback und Schaden erleidet.
+     * @param attackingWeapon Waffe mit der der SideEffect angegriffen wurde
+     * @author Jakob Kleine, Janni Röbbecke
+     * @since 0.01 (25.05.2019)
+     */
     @Override
     public void startBeingAttacked(Weapon attackingWeapon) {
         super.startBeingAttacked(attackingWeapon);
+        //Der SideEffect soll nach dem angriff in die Entgegengesetzte Richtung des Angreifers, vor diesem weglaufen
         if(knockback.getDirectionX() != 0) 
             xMove = knockback.getDirectionX();
     }
     
+    /**
+     * Berechnet die neue Position des SideEffects und seiner Scheren
+     * @author Jakob Kleine, Janni Röbbecke
+     * @since 25.05.2019
+     */
     public void update() {
         if(knockback != null) {
             if(knockback.getAmountLeft() <= 0) 
@@ -88,6 +115,11 @@ public class SideEffect extends Enemy
         }
     }
     
+    /**
+     * Zeigt den SideEffect und seine beiden Scheren an
+     * @author Jakob Kleine, Ares Zülke
+     * @since 24.05.2019
+     */
     public void render(Graphics g) {
         super.render(g);
         if(weapon == null || weapon == pincersLeft) 
@@ -96,6 +128,10 @@ public class SideEffect extends Enemy
             pincersLeft.render(g);
     }
     
+    /**
+     * Die Waffen des SideEffects sollten immer vor ihm angezeigt werden. 
+     * @author 
+     */
     public boolean weaponBehind(){ 
         return false; 
     }
