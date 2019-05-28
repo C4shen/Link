@@ -53,9 +53,9 @@ public class Game implements Runnable {
     private KeyManager keyManager; //Der KeyManager, der die Eingaben über die Tastatur verwaltet.
     private Graphics g; //Die Graphics, mit denen die Figuren gemalt werden.
     private State currentState;
-    private State gameState;
-    private State mainMenuState;
-    private State highscoresState;
+    private GameState gameState;
+    private MainMenuState mainMenuState;
+    private HighscoresState highscoresState;
     private HighScoreManager scoreManager;
     private String playerName;
     /**
@@ -373,6 +373,7 @@ public class Game implements Runnable {
             }
             //Wenn Escape gedrückt wird, ändert sich die State in die MenuState
             if(keyManager.escapeEinmal()) {
+                mainMenuState.setMenuItem(1);
                 currentState = mainMenuState;
             }
         }
@@ -568,7 +569,7 @@ public class Game implements Runnable {
                 g.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
                 g.drawImage(menuBackground, 0, 0, null);
                 fontFestlegen(g,font);
-                g.setColor(new Color(127, 101, 73));
+                g.setColor(new Color(65, 41, 31));
                 g.drawString("Neues Spiel", SCREEN_WIDTH/2-120, 200);
                 g.drawString("Weiterspielen", SCREEN_WIDTH/2-120, 280);
                 g.drawString("Anleitung", SCREEN_WIDTH/2-120, 360);
@@ -620,6 +621,11 @@ public class Game implements Runnable {
             
             if(keyManager.escapeEinmal())
                 resumeGame();
+        }
+        
+        public void setMenuItem(int item) {
+            if(item >= 0 && item < ANZAHL_MENU_ITEMS)
+                menuItem = item;
         }
     }
     
