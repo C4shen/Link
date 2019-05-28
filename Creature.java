@@ -34,8 +34,8 @@ public abstract class Creature extends Movable {
      * @author Ares Zühlke, Janni Röbbecke, www.quizdroid.wordpress.com
      * @param name der Name der Figur
      * @param spriteSheet ein Spritesheet, das das Aussehen der Figur beschreibt
-     * @param x die x-Position aus der die Entität gespawnt werden soll
-     * @param y die y-Position aus der die Entität gespawnt werden soll
+     * @param x die x-Position an der die Entität gespawnt werden soll
+     * @param y die y-Position an der die Entität gespawnt werden soll
      * @param width die Breite der Figur
      * @param height die Höhe der Figur
      * @param health die HP der Figur
@@ -46,6 +46,12 @@ public abstract class Creature extends Movable {
         this.health = health;
     }
     
+    
+    /**
+     * Legt die Waffe der Figur fest.
+     * @author Janni Röbbecke, Jakob Kleine
+     * @param w die neue Waffe der Figur
+     */
     public void setWeapon(Weapon w) {
         weapon = w; 
         weapon.setPositionInHand(new Point((int) Math.round(entityX), (int) Math.round(entityY)), xPos, prevDirection);
@@ -100,7 +106,7 @@ public abstract class Creature extends Movable {
     }
     
     /**
-     * Berechnet die neue Position der Kreatur. Außerdem muss die Waffe neu Positioniert werden.
+     * Berechnet die neue Position der Kreatur und setzt die Waffe neu Positioniert werden.
      * @author Janni Röbbecke, Jakob Kleine, Ares Zühlke, www.quizdroid.wordpress.com
      * @since 0.01 (10.05.2019)
      */
@@ -125,6 +131,13 @@ public abstract class Creature extends Movable {
         }
     }
     
+    /**
+     * Führt das Knockback aus, das die Figur gerade hat und reduziert es, so das es nach einigen Loops abgebaut ist
+     * @param zusatzX geschwindigkeit, in der das Knockback in x-Richtung abgebaut wird
+     * @param zusatzY geschwindigkeit, in der das Knockback in y-Richtung abgebaut wird
+     * @author Jakob Kleine, Ares Zühlke
+     * @since 0.01 (25.05.2019)
+     */
     protected void knockbackAbarbeiten(int zusatzX, int zusatzY) {
         knockback.reduceAmountLeft(Math.max(Math.abs(zusatzX), Math.abs(zusatzY))); //Das eben durchgeführte Knockback wird vom noch auszuführenden abgezogen
         moveBy(zusatzX, zusatzY);
@@ -133,7 +146,7 @@ public abstract class Creature extends Movable {
     }
     
     /**
-     * Zeigt die Kreatur an. Außerdem wird die Waffe angezeigt.
+     * Zeigt die Kreatur mit ihrer Waffe an.
      * @param g die Graphics, mit denen die Kreatur und Waffe gemalt werden
      * @author Janni Röbbecke, Jakob Kleine, Ares Zühlke, www.quizdroid.wordpress.com
      * @since 0.01 (10.05.2019)
@@ -183,6 +196,11 @@ public abstract class Creature extends Movable {
         }
     }
     
+    /**
+     * Giebt zurück, ob die Figur noch lebt
+     * @author Janni Röbbecke, Jakob Kleine
+     * @since 22.05.2019
+     */
     public boolean isAlive() {
         return health > 0;
     }
@@ -198,9 +216,9 @@ public abstract class Creature extends Movable {
     protected abstract boolean weaponBehind();
     
     /**
-     * Ermittelt die Position der Hand der Kreatur, bzw. der Stelle, an der die Kreatur ihre Waffe hält.
+     * Ermittelt die absolute Position der Hand der Kreatur, bzw. der Stelle, an der die Kreatur ihre Waffe hält.
      * Das wird von jeder Kreatur selbst bestimmt und hängt von dem Bild der aktuellen Position 
-     * oder der Bewegungsrichtung ab.
+     * und der Bewegungsrichtung ab.
      * @author Janni Röbbecke, Jakob Kleine
      * @since 22.05.2019
      * @param xPos die Pose der aktuellen Bewegung
@@ -213,6 +231,15 @@ public abstract class Creature extends Movable {
         speed += by;
     }
     
+    public void changeHealthBy(double by) {
+        health += by;
+    }
+    
+    /**
+     * Beendet das Knockback der Figur, sollte sie gerade eines haben
+     * @author Janni Röbbecke, Jakob Kleine
+     * @since 25.05.2019
+     */
     public void resetKnockback() {
         knockback = null;
     }

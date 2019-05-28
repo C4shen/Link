@@ -19,7 +19,7 @@ public class Player extends Creature {
     /**
      * Standard-Lebenspunkte, die der Spielcharakter zu Beginn des Spiels hat
      */
-    public static final int DEFAULT_HEALTH = 50;
+    public static final int DEFAULT_HEALTH = 100;
     
     /**
      * Standard-Geschwindigkeit des Spielcharakters

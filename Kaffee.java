@@ -30,7 +30,7 @@ public class Kaffee extends Item
      * @since 26.05.2019
      */
     public Kaffee(int xKoordinate, int yKoordinate) {
-        super("Cursor-Item", DEFAULT_SPRITE_SHEET, xKoordinate, yKoordinate, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        super("Kaffee", DEFAULT_SPRITE_SHEET, xKoordinate, yKoordinate, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
     
     /**

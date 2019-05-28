@@ -58,6 +58,7 @@ public class Game implements Runnable {
     private TutorialState tutorialState;
     private HighscoresState highscoresState;
     private HighScoreManager scoreManager;
+    private BufferedImage menuBackground;
     private String playerName;
     /**
      * Startet ein neues Spiel
@@ -94,6 +95,12 @@ public class Game implements Runnable {
         };
         playerName = "Player101";
         screen = new Screen("LINK - Legend of INformatik Kurs", SCREEN_WIDTH, SCREEN_HEIGHT, screenListener);
+        try {
+             menuBackground = ImageIO.read(Utils.absoluteFileOf("/res/tilesets/menuBackground.jpg")); //Der Rahmen wird gelesen und als BufferedImage gespeichert.
+        } 
+        catch (IOException e) {
+            e.printStackTrace();
+        }
         keyManager = new KeyManager();
         screen.getFrame().addKeyListener(keyManager);
         mainMenuState = new MainMenuState();
@@ -276,17 +283,18 @@ public class Game implements Runnable {
             collisionDet = new CollisionDetector();
             
             enemyConstructors = new Constructor[2];
-            itemConstructors = new Constructor[2];
+            itemConstructors = new Constructor[3];
             try{
                 enemyConstructors[0] = Class.forName("Virus").getConstructor(int.class, int.class);
                 enemyConstructors[1] = Class.forName("SideEffect").getConstructor(int.class, int.class);
 
-                itemConstructors[0] = Class.forName("Kaffee").getConstructor(int.class, int.class);
-                itemConstructors[1] = Class.forName("CursorItem").getConstructor(int.class, int.class);
+                itemConstructors[0] = Class.forName("CursorItem").getConstructor(int.class, int.class);
+                itemConstructors[1] = Class.forName("Kaffee").getConstructor(int.class, int.class);
+                itemConstructors[2] = Class.forName("Pizza").getConstructor(int.class, int.class);
             } 
             catch(ClassNotFoundException e) { e.printStackTrace(); }
             catch(NoSuchMethodException e) { e.printStackTrace(); }
-            
+            gegnerListe.add(new SideEffect(300, 300));
             spawnedItems.add(new CursorItem(Utils.random(10, 550), Utils.random(110, 650)));
         }   
         
@@ -392,7 +400,7 @@ public class Game implements Runnable {
         
         private void spawnRandomItem() {
             try {
-                spawnedItems.add((Item) itemConstructors[Utils.random(0,1)].newInstance(Utils.random(10, 550), Utils.random(110, 650)));
+                spawnedItems.add((Item) itemConstructors[Utils.random(0,2)].newInstance(Utils.random(10, 550), Utils.random(110, 650)));
             }
             catch(InstantiationException e) { e.printStackTrace(); }
             catch(IllegalAccessException e) { e.printStackTrace(); }
@@ -544,13 +552,11 @@ public class Game implements Runnable {
         private int menuItem; //Variable, die speichert, bei welchem Menüpunkt sich der Spieler gerade befindet.
         private BufferedImage menuItemFrame; //Der Rahmen, der sich um den ausgewählten Menüpunkt befindet.
         private Font font; //Das Font, welches für den Text in den Buttons benutzt wird.
-        private BufferedImage menuBackground;
         public MainMenuState() 
         {
             menuItem = 0; //Zu Beginn des Menüs ist der ausgewählte Knopf der erste.
             try {
                  menuItemFrame = ImageIO.read(Utils.absoluteFileOf("/res/tilesets/menuitemframe.png")); //Der Rahmen wird gelesen und als BufferedImage gespeichert.
-                 menuBackground = ImageIO.read(Utils.absoluteFileOf("/res/tilesets/menuBackground.jpg")); //Der Rahmen wird gelesen und als BufferedImage gespeichert.
             } 
             catch (IOException e) {
                 e.printStackTrace();
@@ -720,15 +726,16 @@ public class Game implements Runnable {
                 g = bs.getDrawGraphics();
                 //Clear Screen
                 g.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+                g.drawImage(menuBackground, 0, 0, null);
                 fontFestlegen(g,font.deriveFont(Font.BOLD));
-                g.setColor(new Color(127, 101, 73));
+                g.setColor(new Color(65, 41, 31));
                 
                 Utils.centerText(g, "BESTENLISTE", SCREEN_WIDTH, 100);
                 
                 g.setFont(font.deriveFont(Font.PLAIN, 30));
                 ArrayList<Score> scores = scoreManager.getScores();
                 for(int i=0; i<scores.size(); i++) {
-                    g.drawString((i<9?"0":"")+(i+1)+": "+scores.get(i), 30, 175+55*i);
+                    g.drawString((i<9?"0":"")+(i+1)+": "+scores.get(i), 40, 175+55*i);
                 }
                
                 g.setFont(font.deriveFont(Font.ITALIC, 15)); 

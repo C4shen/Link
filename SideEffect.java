@@ -13,7 +13,7 @@ public class SideEffect extends Enemy
     /*
      * Die Koordinaten der Hand sind beim SideEffect immer gleich. [Erklärung der Aufgabe dieses Attributs beim gleichnamigen Attribut in der Player - Klasse]
      */
-    private static final Point handPosLeft = new Point(56, 29), handPosRight = new Point(0, 0);
+    private static final Point handPosLeft = new Point(23, 25), handPosRight = new Point(56, 29);
     /*
      * Das Standart-Spritesheet-Objekt, auf das alle Objekte dieser Klasse als ihr SpriteSheet referenzieren. 
      * Dadurch, dass es ein Standard-Bild gibt, müssen die gleichen Bilder nicht mehrmals geladen werden.
@@ -69,12 +69,22 @@ public class SideEffect extends Enemy
     }
     
     public void update() {
-        super.update();
-        if(knockback == null) {
-            if(weapon == null || weapon == pincersLeft) 
-                pincersRight.setPositionInHand(getHandPosition(prevDirection,xPos), xPos, prevDirection);
-            if(weapon == null || weapon == pincersRight) 
-                pincersLeft.setPositionInHand(getHandPosition(prevDirection,xPos), xPos, prevDirection);
+        if(knockback != null) {
+            if(knockback.getAmountLeft() <= 0) 
+                resetKnockback();
+            else {
+                int zusatzX = (int) Math.round(knockback.getDirectionX() * knockback.getStrength()), zusatzY = (int) Math.round(knockback.getDirectionY() * knockback.getStrength());
+                knockbackAbarbeiten(zusatzX, zusatzY);
+            }
+        }
+        else {
+            move();
+            if(weapon != null && weapon.isAttacking()) //Wenn die Waffe sich bewegt, soll sie sich eigenständig updaten, sonst wird ihre Bewegung vorgegeben
+                weapon.update();
+            else {
+                pincersRight.setPositionInHand(getHandPosition(0, 2), xPos, prevDirection);
+                pincersLeft.setPositionInHand(getHandPosition(0,1), xPos, prevDirection);
+            }
         }
     }
     
@@ -95,8 +105,16 @@ public class SideEffect extends Enemy
      * @since 22.05.2019
      */
     public Point getHandPosition(int xPos, int direction){
-        int handX = 0;
-        int handY = 0;
+        int handX;
+        int handY;
+        if(direction == 1) {
+            handX = handPosLeft.x;
+            handY = handPosLeft.y;
+        } 
+        else {
+            handX = handPosRight.x;
+            handY = handPosRight.y;
+        }
         return new Point((int) Math.round(entityX) + handX, (int) Math.round(entityY) + handY);
     }
     
@@ -113,22 +131,31 @@ public class SideEffect extends Enemy
     }
     
     public Weapon target(Player player){
-        if(player.getHitbox().intersects(getHitbox())){
-            return startAttack();
-        }
-        else {
-            if(xMove == 0){
-                if(player.entityX < entityX)
-                    setMove(new Point(-1,0));
-                else 
-                    setMove(new Point(1,0));
+        Rectangle hitboxPlayer = player.getHitbox();
+        Rectangle hitboxEigen = getHitbox();
+        if((weapon != null && !weapon.isAttacking()) || weapon == null) {
+            if(player.getHitbox().intersects(hitboxEigen)){
+                if(hitboxPlayer.getLocation().x < hitboxEigen.getLocation().x)
+                    weapon = pincersLeft;
+                else
+                    weapon = pincersRight;
+                startAttack();
+                player.startBeingAttacked(weapon);
             }
-            if(entityX<20)
-                setMove(new Point(1, 0));
-            if(entityX>550)
-                setMove(new Point(-1, 0));
-            return null;
+            else {
+                if(xMove == 0){
+                    if(player.entityX < entityX)
+                        setMove(new Point(-1,0));
+                    else 
+                        setMove(new Point(1,0));
+                }
+                if(entityX<20)
+                    setMove(new Point(1, 0));
+                if(entityX>550)
+                    setMove(new Point(-1, 0));
+            }
         }
+        return null;
     }
     
     /**
