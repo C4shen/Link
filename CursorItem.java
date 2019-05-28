@@ -18,7 +18,7 @@ public class CursorItem extends Item
      * @since 26.05.2019
      */
     public CursorItem(int xKoordinate, int yKoordinate) {
-        super("Cursor-Item", DEFAULT_SPRITE_SHEET, xKoordinate, yKoordinate, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        super(DEFAULT_SPRITE_SHEET, xKoordinate, yKoordinate, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
     
     /**

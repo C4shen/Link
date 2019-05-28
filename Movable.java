@@ -42,8 +42,8 @@ public abstract class Movable extends Entity {
      * @param speed die Geschwindigkeit der bewegbaren Entität
      * @since 0.01 (17.05.2019)
      */
-    public Movable(String name, SpriteSheet spriteSheet, int x, int y, int width, int height, double speed) {
-        super(name, spriteSheet.getSpriteElement(0, 1), x, y, width, height);
+    public Movable(SpriteSheet spriteSheet, int x, int y, int width, int height, double speed) {
+        super(spriteSheet.getSpriteElement(0, 1), x, y, width, height);
         this.spriteSheet = spriteSheet;
         this.speed = speed;
         xMove = 0;

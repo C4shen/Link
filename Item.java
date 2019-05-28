@@ -23,8 +23,8 @@ public abstract class Item extends Entity
      * @author Janni Röbbecke, Jakob Kleine
      * @since 26.05.2019
      */
-    public Item(String name, SpriteSheet spriteSheet, int xKoordinate, int yKoordinate, int width, int height) {
-        super(name, spriteSheet.getSpriteElement(0, 0), xKoordinate, yKoordinate, width, height);
+    public Item(SpriteSheet spriteSheet, int xKoordinate, int yKoordinate, int width, int height) {
+        super(spriteSheet.getSpriteElement(0, 0), xKoordinate, yKoordinate, width, height);
         this.spriteSheet = spriteSheet;
         this.existenceTime = DEFAULT_EXISTENCE_TIME;
     }

@@ -45,7 +45,7 @@ public class Pincers extends Weapon
      * @since 28.05.2019
      */
     public Pincers(int x, int y, boolean isLeft) {
-        super("Schere eines Side-Effects", DEFAULT_SPRITE_SHEET, x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        super(DEFAULT_SPRITE_SHEET, x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT);
         prevDirection = isLeft ? 0 : 1;
     }
     

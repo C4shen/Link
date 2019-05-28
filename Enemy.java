@@ -17,9 +17,9 @@ public abstract class Enemy extends Creature
      * @param speed die Geschwindigkeit des Gegners
      * @since 0.01 (15.05.2019)
      */
-    public Enemy(int x, int y, String name, SpriteSheet enemySprite, int health, double speed) 
+    public Enemy(int x, int y, SpriteSheet enemySprite, int health, double speed) 
     {
-        super(name, enemySprite, x, y, Entity.DEFAULT_WIDTH, Entity.DEFAULT_HEIGHT, health, speed);
+        super(enemySprite, x, y, Entity.DEFAULT_WIDTH, Entity.DEFAULT_HEIGHT, health, speed);
     }
     
     /**

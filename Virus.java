@@ -45,7 +45,7 @@ public class Virus extends Enemy
      */
     public Virus(int x, int y) 
     {
-        super(x, y, "Virus", DEFAULT_SPRITE_SHEET, DEFAULT_HEALTH, DEFAULT_SPEED);
+        super(x, y, DEFAULT_SPRITE_SHEET, DEFAULT_HEALTH, DEFAULT_SPEED);
         setWeapon(new Cursor(x+10, y+30, false));
         health = DEFAULT_HEALTH;
     }

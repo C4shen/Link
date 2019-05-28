@@ -41,8 +41,8 @@ public abstract class Creature extends Movable {
      * @param health die HP der Figur
      * @param speed die Geschwindigkeit der Figur
      */
-    public Creature(String name, SpriteSheet spriteSheet, int x, int y, int width, int height, int health, double speed) {
-        super(name, spriteSheet, x, y, width, height, speed);
+    public Creature(SpriteSheet spriteSheet, int x, int y, int width, int height, int health, double speed) {
+        super(spriteSheet, x, y, width, height, speed);
         this.health = health;
     }
     

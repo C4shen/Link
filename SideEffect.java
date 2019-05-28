@@ -49,7 +49,7 @@ public class SideEffect extends Enemy
      */
     public SideEffect(int x, int y) 
     {
-        super(x, y, "Krebs", DEFAULT_SPRITE_SHEET, DEFAULT_HEALTH, DEFAULT_SPEED);
+        super(x, y, DEFAULT_SPRITE_SHEET, DEFAULT_HEALTH, DEFAULT_SPEED);
         setMove(new Point(-1, 0)); //Zu Beginn bewegt sich der Side-Effect immer nach links
         health = DEFAULT_HEALTH;
         pincersLeft = new Pincers(x, y, true);

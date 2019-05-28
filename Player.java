@@ -49,7 +49,7 @@ public class Player extends Creature {
      * @since 0.01 (10.05.2019)
      */
     public Player(int x, int y) {
-        super("Player", DEFAULT_SPRITE_SHEET, x, y, Entity.DEFAULT_WIDTH, Entity.DEFAULT_HEIGHT, Player.DEFAULT_HEALTH, Player.DEFAULT_SPEED); 
+        super(DEFAULT_SPRITE_SHEET, x, y, Entity.DEFAULT_WIDTH, Entity.DEFAULT_HEIGHT, Player.DEFAULT_HEALTH, Player.DEFAULT_SPEED); 
     }
     
     /**
