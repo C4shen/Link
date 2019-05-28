@@ -1,5 +1,6 @@
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Graphics;
 /**
  * Ein SideEffect (Nebeneffekt) ist eine Art von Gegner. 
  * Er wird durch einen Krebs verkörpert und kann sich dementsprechend nur entlang der x-Achse bewegen.
@@ -12,7 +13,7 @@ public class SideEffect extends Enemy
     /*
      * Die Koordinaten der Hand sind beim SideEffect immer gleich. [Erklärung der Aufgabe dieses Attributs beim gleichnamigen Attribut in der Player - Klasse]
      */
-    private static final Point handPosition = new Point(56, 29);
+    private static final Point handPosLeft = new Point(56, 29), handPosRight = new Point(0, 0);
     /*
      * Das Standart-Spritesheet-Objekt, auf das alle Objekte dieser Klasse als ihr SpriteSheet referenzieren. 
      * Dadurch, dass es ein Standard-Bild gibt, müssen die gleichen Bilder nicht mehrmals geladen werden.
@@ -43,14 +44,23 @@ public class SideEffect extends Enemy
      */
     public SideEffect(int x, int y) 
     {
-        super(x, y, "Krebs", DEFAULT_SPRITE_SHEET, DEFAULT_HEALTH, DEFAULT_SPEED, new Cursor(x+10, y+30, false));
+        super(x, y, "Krebs", DEFAULT_SPRITE_SHEET, DEFAULT_HEALTH, DEFAULT_SPEED);
         setMove(new Point(-1, 0)); //Zu Beginn bewegt sich der Side-Effect immer nach links
         health = SideEffect.DEFAULT_HEALTH;
         pincersLeft = new Pincers(x, y, true);
         pincersRight = new Pincers(x, y, false);
-        setWeapon(pincersRight);
     }
    
+    @Override 
+    protected void knockbackAbarbeiten(int zusatzX, int zusatzY) {
+        super.knockbackAbarbeiten(zusatzX, zusatzY);
+        
+        if(weapon == null || weapon == pincersLeft) 
+            pincersRight.moveBy(zusatzX, zusatzY);
+        if(weapon == null || weapon == pincersRight) 
+            pincersLeft.moveBy(zusatzX, zusatzY);
+    }
+    
     @Override
     public void startBeingAttacked(Weapon attackingWeapon) {
         super.startBeingAttacked(attackingWeapon);
@@ -58,15 +68,36 @@ public class SideEffect extends Enemy
             xMove = knockback.getDirectionX();
     }
     
-    //Noch nicht bestimmt
-    public boolean weaponBehind(){ return false; }
+    public void update() {
+        super.update();
+        if(knockback == null) {
+            if(weapon == null || weapon == pincersLeft) 
+                pincersRight.setPositionInHand(getHandPosition(prevDirection,xPos), xPos, prevDirection);
+            if(weapon == null || weapon == pincersRight) 
+                pincersLeft.setPositionInHand(getHandPosition(prevDirection,xPos), xPos, prevDirection);
+        }
+    }
+    
+    public void render(Graphics g) {
+        super.render(g);
+        if(weapon == null || weapon == pincersLeft) 
+            pincersRight.render(g);
+        if(weapon == null || weapon == pincersRight) 
+            pincersLeft.render(g);
+    }
+    
+    public boolean weaponBehind(){ 
+        return false; 
+    }
     
     /**
      * @author Janni Röbbecke, Jakob Kleine
      * @since 22.05.2019
      */
     public Point getHandPosition(int xPos, int direction){
-        return new Point(handPosition.x + (int) Math.round(entityX), handPosition.y + (int) Math.round(entityY));
+        int handX = 0;
+        int handY = 0;
+        return new Point((int) Math.round(entityX) + handX, (int) Math.round(entityY) + handY);
     }
     
     /**
@@ -87,8 +118,10 @@ public class SideEffect extends Enemy
         }
         else {
             if(xMove == 0){
-                if(player.entityX < entityX)setMove(new Point(-1,0));
-                else setMove(new Point(1,0));
+                if(player.entityX < entityX)
+                    setMove(new Point(-1,0));
+                else 
+                    setMove(new Point(1,0));
             }
             if(entityX<20)
                 setMove(new Point(1, 0));

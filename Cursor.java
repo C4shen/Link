@@ -117,7 +117,14 @@ public class Cursor extends Weapon {
                 && //y.Richtung muss genauso überprüft werden
                (yMove==0 || (yMove<0 && entityY>=startY) || (yMove>0 && entityY<=startY));
     }
-
+    
+    @Override
+    public void moveBy(int byX, int byY) {
+        super.moveBy(byX, byY);
+        startX += byX;
+        startY += byY;
+    }
+    
     /**
      * @author Jakob Kleine, Cashen Adkins
      * @since 23.05.2019

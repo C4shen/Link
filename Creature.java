@@ -111,9 +111,7 @@ public abstract class Creature extends Movable {
                 resetKnockback();
             else {
                 int zusatzX = (int) Math.round(knockback.getDirectionX() * knockback.getStrength()), zusatzY = (int) Math.round(knockback.getDirectionY() * knockback.getStrength());
-                entityX += zusatzX;
-                entityY += zusatzY;
-                knockback.reduceAmountLeft(Math.max(Math.abs(zusatzX), Math.abs(zusatzY))); //Das eben durchgeführte Knockback wird vom noch auszuführenden abgezogen
+                knockbackAbarbeiten(zusatzX, zusatzY);
             }
         }
         else {
@@ -125,6 +123,13 @@ public abstract class Creature extends Movable {
                     weapon.setPositionInHand(getHandPosition(prevDirection,xPos), xPos, prevDirection);
             }
         }
+    }
+    
+    protected void knockbackAbarbeiten(int zusatzX, int zusatzY) {
+        knockback.reduceAmountLeft(Math.max(Math.abs(zusatzX), Math.abs(zusatzY))); //Das eben durchgeführte Knockback wird vom noch auszuführenden abgezogen
+        moveBy(zusatzX, zusatzY);
+        if(weapon != null)
+            weapon.moveBy(zusatzX, zusatzY);
     }
     
     /**

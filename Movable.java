@@ -131,4 +131,9 @@ public abstract class Movable extends Entity {
     }
     
     public abstract double getDefaultSpeed();
+
+    public void moveBy(int byX, int byY) {
+        entityX += byX;
+        entityY += byY;
+    }
 }
