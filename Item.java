@@ -1,10 +1,14 @@
 import java.awt.image.BufferedImage;
+import java.awt.Graphics;
 
 /**
  * Items sind Entitäten, die vom Spieler eingesammelt werden können und ihn in einer Item-spezifischen Weise beeinflussen.
  */
 public abstract class Item extends Entity
 {
+    private int existenceTime;
+    private static final int timeToExist = 2000;
+    
     /**
      * Erstellt ein neues Item
      * @param name der Name des Items
@@ -19,6 +23,7 @@ public abstract class Item extends Entity
     public Item(String name, SpriteSheet spriteSheet, int xKoordinate, int yKoordinate, int width, int height) {
         super(name, spriteSheet.getSpriteElement(0, 0), xKoordinate, yKoordinate, width, height);
         this.spriteSheet = spriteSheet;
+        this.existenceTime = timeToExist;
     }
     
     /**
@@ -30,6 +35,7 @@ public abstract class Item extends Entity
      */
     @Override
     public void update() {
+        existenceTime--;
         if(animationDelay++ >= 7) { //Die Animation soll nur alle 7 Durchläufe der Loop erfolgen
             animationDelay = 0; //Setzt das Delay zurück
             if(xPos < spriteSheet.getPoseAmount()-1) //wenn man gerade noch nicht beim letzten Bild ist, soll das nächste gewählt werden
@@ -37,6 +43,12 @@ public abstract class Item extends Entity
             else //Sonst beginnt man wieder beim ersten Bild
                 xPos = 0;
             image = spriteSheet.getSpriteElement(xPos, 0); //Das Bild der entsprechenden Pose. Items bewegen sich nicht, also gibt es nur eine Richtung (0)
+        }
+    }
+    
+    public void render(Graphics g){
+        if(existenceTime>180 || existenceTime%60<30){
+            super.render(g);
         }
     }
     
@@ -48,4 +60,8 @@ public abstract class Item extends Entity
      * @since 26.05.2019
      */
     public abstract void affect(Player p);
+    
+    public boolean exists(){
+        return existenceTime > 0;
+    }
 }

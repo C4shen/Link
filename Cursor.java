@@ -17,12 +17,13 @@ public class Cursor extends Weapon {
     private static final double KB_STRENGTH = 7; //Die Standard-Stärke des Knockbacks
     private static final int DEFAULT_DAMAGE = 5; //Der Standard-Schaden des Cursors
     
-    
+    /**
+     * Legt fest ob die Waffe vom Spieler oder von einem Gegner geworfen wurde und ob sie Gegner oder den Spieler angreift
+     */
     private boolean isFriendly;
     /**
-     * Die Waffen werden immer relativ zu ihren Besitzern positioniert. 
-     * Der Cursor ist eine Waffe des Players. Das sind also die zusätzlichen Werte für die 
-     * x-/y-Koordinaten des Cursors in der bestimmten Pose [2.Dimension] einer Bewegungsrichtung [1.Dimension]
+     * Die Waffen werden immer relativ zu ihren Besitzern positioniert.
+     * Der Cursor hat einen Griff dessen Position in diesem Array in den Verschiedenen positionen des Cursors angegeben wird.
      */
     protected static final Point[][] handelPositions = new Point[][]{
         new Point[] { new Point(06, 14), new Point(06, 14), new Point(06, 14) },
@@ -35,9 +36,10 @@ public class Cursor extends Weapon {
     private double startY;
     /**
      * Erstellt einen neuen Cursor
-     * @param spriteSheet das SpriteSheet des Cursors
      * @param x die x-Position des Cursors
      * @param y die y-Position des Cursors
+     * @param isFriendly gibt an ob dieser Cursor dem Spieler oder einem Gegner gehört
+     * @author Ares Zülke, Janni Röbbecke, Jakob Kleine
      */
     public Cursor(int x, int y, boolean isFriendly) {
         super("Cursor", DEFAULT_SPRITE_SHEET, x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -45,6 +47,7 @@ public class Cursor extends Weapon {
     }
     
     /**
+     * Berechnet die neue Position der Waffe, wenn diese gerade angreift. Sonst wird ihre Position von ihrem Besitzer festgelegt
      * @author Jakob Kleine, Janni Röbbecke
      * @since 17.05.2019
      */
@@ -63,6 +66,10 @@ public class Cursor extends Weapon {
     }
     
     /**
+     * Setzt den Cursor in die Hand seines Besitzers
+     * @param handPosition die absolute Position der Hand des Besitzers dieser Waffe
+     * @param poseOwner Pose, in der sich der Besitzer der Waffe gerade befindet
+     * @param richtung in die der Besitzer dieser Waffe gerade schaut
      * @author Janni Röbbecke, Jakob Kleine
      * @since 22.05.2019
      */
@@ -75,6 +82,7 @@ public class Cursor extends Weapon {
     }
     
     /**
+     * Benachrichtigt die Waffe, das sie getroffen hat
      * @author Jakob Kleine, Janni Röbbecke
      */
     public void notifySuccess() {
@@ -82,6 +90,8 @@ public class Cursor extends Weapon {
     }
     
     /**
+     * Lässt die Waffe einen Angriff starten 
+     * @param Richtung in die Angegriffen werden soll
      * @author Jakob Kleine, Janni Röbbecke
      * @since 17.05.2019
      */
@@ -97,7 +107,7 @@ public class Cursor extends Weapon {
     }
     
     /**
-     * Beendet den Angriff mit dem Cursor
+     * Beendet den Angriff mit diesem Cursor
      * @author Jakob Kleine, Janni Röbbecke
      * @since 17.05.2019
      */
@@ -128,6 +138,7 @@ public class Cursor extends Weapon {
     /**
      * @author Jakob Kleine, Cashen Adkins
      * @since 23.05.2019
+     * @return Knockback, mit dem ein Gegner zurückgeworfen wird, wenn er von dieser Waffe getroffen wird
      */
     public Knockback getKnockback() {
         return new Knockback(KB_AMOUNT, KB_STRENGTH, xMove, yMove);
@@ -136,6 +147,7 @@ public class Cursor extends Weapon {
     /**
      * @author Jakob Kleine, Cashen Adkins
      * @since 23.05.2019
+     * @return Schaden den diese Waffe verursacht.
      */
     public int getDamage() {
         return DEFAULT_DAMAGE;

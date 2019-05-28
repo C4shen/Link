@@ -53,6 +53,20 @@ public class Player extends Creature {
     }
     
     /**
+     * Der Spieler empfängt die Information in welche Richtungen er gerade Gesteuert wird
+     */
+    public void reciveKeyInput(Point p){
+        if(p.x!=0 && p.y!=0){
+            xMove = Math.sqrt(1/2)*p.x;
+            yMove = Math.sqrt(1/2)*p.y;
+        }
+        else {
+            xMove = p.x;
+            yMove = p.y;
+        }
+    }
+    
+    /**
      * @author Janni Röbbecke, Jakob Kleine
      * @since 22.05.2019
      */
