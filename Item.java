@@ -6,9 +6,12 @@ import java.awt.Graphics;
  */
 public abstract class Item extends Entity
 {
-    private int existenceTime;
-    private static final int timeToExist = 2000;
-    
+    /* 
+     * Die Anzahl der Durchläufe, die ein Item auf dem Spielfeld existiert. Dannach wird es nicht mehr im GameState gespeichert.
+     * Kurz bevor die Existenz-Zeit eines Items endet (3s vorher), fängt es an, zu blinken (indem es nur im 30-Durchläufe-Takt gerendert wird).
+     */
+    private static final int DEFAULT_EXISTENCE_TIME = 2000;
+    private int existenceTime; //Die tatsächliche Existenz-Zeit dieses Items
     /**
      * Erstellt ein neues Item
      * @param name der Name des Items
@@ -23,7 +26,7 @@ public abstract class Item extends Entity
     public Item(String name, SpriteSheet spriteSheet, int xKoordinate, int yKoordinate, int width, int height) {
         super(name, spriteSheet.getSpriteElement(0, 0), xKoordinate, yKoordinate, width, height);
         this.spriteSheet = spriteSheet;
-        this.existenceTime = timeToExist;
+        this.existenceTime = DEFAULT_EXISTENCE_TIME;
     }
     
     /**
@@ -46,8 +49,16 @@ public abstract class Item extends Entity
         }
     }
     
+    /**
+     * @author Janni Röbbecke, Jakob Kleine
+     * @since 28.05.2019
+     */
     public void render(Graphics g){
-        if(existenceTime>180 || existenceTime%60<30){
+        /*
+         * Wenn das Item noch länger als 180 Durchläufe (= 3 Sekunden) existieren soll, wird es auf jeden Fall gerendert.
+         * Sonst fängt es an zu blinken. Es wird also nur im 30-Durchläufe Takt abwechselnd gerendert, und dann wieder nicht gerendert.
+         */
+        if(existenceTime>180 || existenceTime%60<30){ 
             super.render(g);
         }
     }
@@ -61,6 +72,12 @@ public abstract class Item extends Entity
      */
     public abstract void affect(Player p);
     
+    /**
+     * Gibt zurück, ob das Item noch existiert. Im Game-State werden alle Items gelöscht, die nicht mehr exisitieren.
+     * @return true, wenn die Existenz-Zeit des Items noch nicht abgelaufen ist, sonst false
+     * @since 28.05.2019
+     * @author Janni Röbbecke, Jakob Kleine
+     */
     public boolean exists(){
         return existenceTime > 0;
     }

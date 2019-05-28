@@ -31,7 +31,7 @@ public class Pizza extends Item
      * @since 28.05.2019
      */
     public void affect(Player p) {
-        p.changeHealthBy(DEFAULT_HP); //
+        p.changeHealthBy(DEFAULT_HP); 
     }
     
     /**
