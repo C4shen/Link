@@ -37,7 +37,7 @@ public class SideEffect extends Enemy
      * Der Wert, um den ein Side-Effekt den Score erhöht.
      */
     private static final int DEFAULT_SCORE_VALUE = 50;
-    
+
     private Pincers pincersLeft; //Die linke Schere des Side-Effects
     private Pincers pincersRight; //Die rechte Schere des Side-Effects
     /**
@@ -57,6 +57,7 @@ public class SideEffect extends Enemy
     }
    
     /**
+<<<<<<< HEAD
      * Arbeitet das Knockback des Side-Effect wie bei allen anderen Kreaturen ab.
      * Dazu, dass die Figur selbst verschoben wird, müssen allerdings auch die beiden Pincers verschoben
      * werden. Deswegen wird die Methode knockbackAbarbeiten hier überschrieben 
@@ -65,11 +66,19 @@ public class SideEffect extends Enemy
      * @author Jakob Kleine, Janni Röbbecke
      * @since 28.05.2019
      * @see <a href="Creature.html">Klasse Creature</a>
+=======
+     * Führt das Knockback aus, das die Figur gerade hat und reduziert es, so das es nach einigen Loops abgebaut ist
+     * @param zusatzX geschwindigkeit, in der das Knockback in x-Richtung abgebaut wird
+     * @param zusatzY geschwindigkeit, in der das Knockback in y-Richtung abgebaut wird
+     * @author Jakob Kleine, Janni Röbbecke
+     * @since 0.01 (25.05.2019)
+>>>>>>> 6e8e552c60015d9c64c22edbe88da18e9f50584d
      */
     @Override 
     protected void knockbackAbarbeiten(int zusatzX, int zusatzY) {
         super.knockbackAbarbeiten(zusatzX, zusatzY);
-        
+        //Der SideEffect muss nicht nur sich sondern auch seine beiden Scheren versetzen, 
+        //sollte dies nicht schon in der Methode der Superklasse geschehen sein
         if(weapon == null || weapon == pincersLeft) 
             pincersRight.moveBy(zusatzX, zusatzY);
         if(weapon == null || weapon == pincersRight) 
@@ -77,6 +86,7 @@ public class SideEffect extends Enemy
     }
     
     /**
+<<<<<<< HEAD
      * Der Side-Effect nimmt Schaden, wie jede andere Kreatur auch. 
      * Zusätzlich stellt er aber auch - wenn das Knockback entlang der x-Achse ist - seine Richtung so ein,
      * dass er, wenn das Knockback abgearbeitet wurde, in die entgegengesetzte Richtung des Knockbacks läuft, also
@@ -84,10 +94,17 @@ public class SideEffect extends Enemy
      * @param attackingWeapon die Waffe, mit der dem Side-Effect Schaden zugefügt wurde
      * @author Janni Röbbecke, Cashen Adkins
      * @since 22.05.2019
+=======
+     * Teilt diesem SideEffect mit, dass er angegriffen wurde, sodass er Knockback und Schaden erleidet.
+     * @param attackingWeapon Waffe mit der der SideEffect angegriffen wurde
+     * @author Jakob Kleine, Janni Röbbecke
+     * @since 0.01 (25.05.2019)
+>>>>>>> 6e8e552c60015d9c64c22edbe88da18e9f50584d
      */
     @Override
     public void startBeingAttacked(Weapon attackingWeapon) {
         super.startBeingAttacked(attackingWeapon);
+        //Der SideEffect soll nach dem angriff in die Entgegengesetzte Richtung des Angreifers, vor diesem weglaufen
         if(knockback.getDirectionX() != 0) 
             xMove = knockback.getDirectionX();
     }

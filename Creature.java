@@ -26,7 +26,7 @@ public abstract class Creature extends Movable {
     protected Weapon weapon;
     
     /**
-     * Das Knockback, das die Figur erleidet. null, wenn kein Knockback erfolgen soll
+     * Das Knockback, das die Figur mommentan erleidet. null, wenn kein Knockback erfolgen soll
      */
     protected Knockback knockback;
     /**
