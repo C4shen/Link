@@ -12,9 +12,9 @@ public class Pincers extends Weapon
     private static final SpriteSheet DEFAULT_SPRITE_SHEET = new SpriteSheet("/res/sprites/weapons/shears.png", 2 /*moves*/, 2 /*directions*/, 17 /*width*/, 21 /*height*/);
     private static final int DEFAULT_WIDTH = 17, DEFAULT_HEIGHT = 21; //Die Standard-Größe
     private static final int KB_AMOUNT = 50; //Die Standard-Weite des Knockbacks
-    private static final double KB_STRENGTH = 7; //Die Standard-Stärke des Knockbacks
+    private static final double KB_STRENGTH = 10; //Die Standard-Stärke des Knockbacks
     private static final int DEFAULT_DAMAGE = 5; //Der Standard-Schaden
-    private static final int DEFAULT_ATTACK_DELAY = 30;
+    private static final int DEFAULT_ATTACK_DELAY = 22;
 
     /**
      * Die Waffen werden immer relativ zu ihren Besitzern positioniert. 
@@ -39,7 +39,7 @@ public class Pincers extends Weapon
     @Override
     public void update() {
         if(isAttacking) {
-            if(animationDelay-- <= 0) {
+            if(attackDelay-- <= 0) {
                 stopAttack();
             }
         }
@@ -72,6 +72,7 @@ public class Pincers extends Weapon
         if(!isAttacking) {
             image = spriteSheet.getSpriteElement(1, prevDirection);
             attackDelay = DEFAULT_ATTACK_DELAY;
+            isAttacking = true;
         }
     }
     
@@ -90,7 +91,7 @@ public class Pincers extends Weapon
      * @since 23.05.2019
      */
     public Knockback getKnockback() {
-        return new Knockback(KB_AMOUNT, KB_STRENGTH, xMove, yMove);
+        return new Knockback(KB_AMOUNT, KB_STRENGTH, -1+prevDirection*2, 0);
     }
     
     /**
