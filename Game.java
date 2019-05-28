@@ -220,6 +220,11 @@ public class Game implements Runnable {
         g2d.setFont(f);
     }
     
+    /**
+     * 
+     * [Hinweis: weil private innere Klassen/Interfaces mit allen ihren Methoden nicht in JavaDoc angezeigt werden, 
+     *           wird javadoc bei den folgenden Klassen zwar angedeutet, aber nicht verwendet ]
+     */
     private interface State
     {
         /**
@@ -418,33 +423,41 @@ public class Game implements Runnable {
             catch(InvocationTargetException e) { e.printStackTrace(); }
         }
         
-        /**
+        /*
          * Zuständig, um die Entitäten auf dem Spielfeld auf Kollisionen zu überprüfen, und diese zu verwalten.
          * Es wäre auch möglich, die Methoden direkt in die Klasse GameState zu schreiben, mit dieser inneren Klasse
-         * wird allerdings der Kollision-Teil separiert, um die Kohäsion und Übersichtlichkeit zu verbessern
-         * [Hinweis: weil diese innere Klasse privat ist, wird sie mit allen ihren Methoden nicht in JavaDoc angezeigt, weswegen
-         *  das hier zwar angedeutet, aber nicht verwendet wurde]
-         *  @author Jakob Kleine, Janni Röbbecke, Cepehr Bromand, Ares Zühlke
+         * wird allerdings der Kollision-Teil separiert, um die Kohäsion und Übersichtlichkeit zu verbessern.
+         * 
+         * Im CollisionDetector werden folgende Kollsionen ausgewertet:
+         *      - Kollision von angreifenden Waffen mit Gegnern (wenn freundliche Waffe) oder Spieler (wenn unfreundliche Waffe)
+         *          -> Getroffene Entität wird verletzt und Waffe wird benachrichtigt, dass sie getroffen hat.
+         *      - Kollision von Spieler mit den gespawnten Items
+         *          -> Item wird eingesammelt und benachrichtigt, dass es den Spieler beeinflussen soll
+         *      - Kollision mit angreifenden Waffen, Gegnern und dem Spieler und den Rahmen des Raums
+         *          -> Entität wird zum Rand des Raums zurückverschoben
+         * @author Jakob Kleine, Janni Röbbecke, Cepehr Bromand, Ares Zühlke; inspiriert von https://www.youtube.com/watch?v=BTDcR4smi5A
+         * @since 24.05.2019
          */
         private class CollisionDetector {
             /*
              * Aktualisiert den CollisionDetector, der daraufhin alle Entitäten auf dem Spielfeld auf Kollision überprüft und 
-             * diese Kollision auswertet
+             * diese Kollision auswertet.
+             * @author Jakob Kleine, Cepehr Bromand, Ares Zühlke, Janni Röbbecke
              */
             public void update() {
                 LinkedList<Weapon> nichtMehrAttackierendeWaffen = new LinkedList<Weapon>(); //Um eine ConcurrentModificationException zu verhindern, werden die Elemente erst nach der Iteration über die Liste entfernt
-                for(Weapon w : attackingWeapons) {
+                for(Weapon w : attackingWeapons) { //Die Waffen werden hier duchgegangen und nicht im GameState selbst, weil sie auf Kollision geprüft werden müssen.
                     if(!w.isAttacking())
                         nichtMehrAttackierendeWaffen.add(w);
                     else {//Auf Kollision prüfen
-                        if(w.isFriendly()){
+                        if(w.isFriendly()){ //Wenn die Waffe freundlich ist, muss sie nur auf Kollision mit den Gegnern geprüft werden
                             LinkedList<Entity> getroffeneGegner = collidesWith(w, gegnerListe);
                             for(Entity e : getroffeneGegner) {
-                                ((Enemy) e).startBeingAttacked(w); 
-                                w.notifySuccess();
+                                ((Enemy) e).startBeingAttacked(w); //Hier kann ohne try-catch-Block gecastet werden, weil bekannt ist, dass alle Objekte in der Liste Enemy-Objekte sind.
+                                w.notifySuccess(); //Der Waffe mitteilen, dass sie getroffen hat.
                             }
                         }
-                        else {
+                        else { //Sonst muss sie nur auf Kollision mit dem Spieler geprüft werden. Sie schadet nur ihm
                             if(collision(w, player)){
                                 player.startBeingAttacked(w); 
                                 w.notifySuccess();
@@ -472,9 +485,9 @@ public class Game implements Runnable {
                     keepInside(e);
             }
         
-            /**
-             * Hält eine bewegbare Entity, die eventuell aus dem Spielfeld gelaufen ist, innerhalb des Spielfelds
-             * @author Jakob Kleine, Janni Röbbecke, Cepehr Bromand, Ares Zühlke
+            /*
+             * Hält eine bewegbare Entittät, die eventuell aus dem Spielfeld gelaufen ist, innerhalb des Spielfelds
+             * @author Jakob Kleine, Cepehr Bromand, Ares Zühlke
              * @since 24.05.2019
              * @param e die bewegbare Entität, für die sichergestellt werden soll, dass sie nicht mit den Mauern am Rand kollidiert
              */
@@ -482,28 +495,29 @@ public class Game implements Runnable {
                 int xNeu = -1;
                 int yNeu = -1;
                 if(collision(e, roomBorders[0])) //Border Oben
-                    yNeu = Game.HP_BAR_HEIGHT + BORDER_WIDTH;
+                    yNeu = Game.HP_BAR_HEIGHT + BORDER_WIDTH; //Positioniert y am oberen Rand
                 else if(collision(e, roomBorders[1])) //Border Unten
-                    yNeu = Game.SCREEN_HEIGHT - (int) e.getHitbox().getHeight() - BORDER_WIDTH;
+                    yNeu = Game.SCREEN_HEIGHT - (int) e.getHitbox().getHeight() - BORDER_WIDTH; //Positioniert y am unteren Rand
                 //Kein else hier, weil auch 2 Borders getroffen werden können
                 if(collision(e, roomBorders[2])) //Border Links
-                    xNeu = BORDER_WIDTH;
+                    xNeu = BORDER_WIDTH; //Positioniert x am linken Rand
                 else if(collision(e, roomBorders[3])) //Border Rechts
-                    xNeu = Game.SCREEN_WIDTH - (int) e.getHitbox().getWidth() - BORDER_WIDTH;
+                    xNeu = Game.SCREEN_WIDTH - (int) e.getHitbox().getWidth() - BORDER_WIDTH; //Positioniert x am rechten Rand
                     
                 if(xNeu != -1) //Wenn die Position geändert werden soll
                     e.setEntityX(xNeu);
                 if(yNeu != -1) 
                     e.setEntityY(yNeu);
                     
-                if(xNeu != -1 || yNeu != -1) { //wenn mind. eine Position geändert wurde, soll das (wenn vorhanden) Knockback zurückgesetzt werden, weil sonst die Kreatur immer wieder gegen die Wand geworfen wird
+                //Wenn mind. eine Position geändert wurde, soll das (wenn vorhanden) Knockback zurückgesetzt werden, weil sonst die Kreatur immer wieder gegen die Wand geworfen wird
+                if(xNeu != -1 || yNeu != -1) { 
                     if(e instanceof Creature) //Nur Kreaturen haben Knockback
                         ((Creature) e).resetKnockback();
                 }
             }
         
             /*
-             * Überprüft, ob zwei Entitäten miteinander kollidieren
+             * Überprüft, ob zwei Entitäten miteinander kollidieren.
              * @author Jakob Kleine, Janni Röbbecke, Cepehr Bromand, Ares Zühlke
              * @since 24.05.2019
              * @param e1 die eine zu überprüfende Entität
@@ -511,11 +525,11 @@ public class Game implements Runnable {
              * @return true, wenn sich die Hitboxen von e1 und e2 schneiden, sonst false
              */
             private boolean collision(Entity e1, Entity e2) {
-                return e1.getHitbox().intersects(e2.getHitbox());
+                return collision(e1, e2.getHitbox());
             }
         
             /*
-             * Überprüft, ob zwei Elemente miteinander kollidieren
+             * Überprüft, ob eine Entität mit der Hitbox eines Elements auf dem Spielfeld kollidiert.
              * @author Jakob Kleine, Janni Röbbecke, Cepehr Bromand, Ares Zühlke
              * @since 24.05.2019
              * @param e1 die eine zu überprüfende Entität
@@ -537,9 +551,9 @@ public class Game implements Runnable {
                 LinkedList<Entity> collidedEntities = new LinkedList<Entity>();
                 for(Object object : es) {
                     /*
-                     * Aus einem uns nicht verständlichem Grund, ist es nicht möglich entity als Parameter
-                     * der LinkedList anzugeben, und dann z.B. eine List<Enemy> zu übergeben, also wird eine "rohe" LinkedList verwendet,
-                     * weswegen die Objekte gecastet werden müssen
+                     * Aus einem uns nicht verständlichem Grund, ist es nicht möglich Entity als Typ-Parameter
+                     * der LinkedList anzugeben, und dann z.B. eine List<Enemy> zu übergeben, weil diese nicht in eine List<Entity> convertiert werden könne,
+                     * also wird eine "rohe" LinkedList verwendet, weswegen die Objekte gecastet werden müssen
                      */
                     Entity ex = (Entity) object; 
                     if(collision(e, ex))
@@ -551,19 +565,24 @@ public class Game implements Runnable {
     }
     
     /**
-     * Der Break-Menu-State ist der State, in dem sich das Spiel befindet, wenn eine Pause gemacht wird
-     * @author Cashen Adkins, Janni Röbbecke, www.quizdroid.wordpress.com
+     * Der Break-Menu-State ist der State, in dem sich das Spiel befindet, wenn eine Pause gemacht wird, oder wenn das Spiel gestartet wird.
+     * @author Cashen Adkins, Janni Röbbecke, Jakob Kleine, www.quizdroid.wordpress.com
      * @version 0.03 (26.05.2019)
      * @since 0.01 (22.05.2019
      */
     public class MainMenuState implements State 
     {
-        private static final int ANZAHL_MENU_ITEMS = 6;
+        private static final int ANZAHL_MENU_ITEMS = 6; //Die Anzahl an Items in dem Menü
         private int menuItem; //Variable, die speichert, bei welchem Menüpunkt sich der Spieler gerade befindet.
         private BufferedImage menuItemFrame; //Der Rahmen, der sich um den ausgewählten Menüpunkt befindet.
         private Font font; //Das Font, welches für den Text in den Buttons benutzt wird.
-        public MainMenuState() 
-        {
+        private Color color; //Die Farbe, in der der Text geschrieben werden soll
+        /*
+         * Erstellt einen neuen Menu-State.
+         * @author Cahsen Adkins, Janni Röbbecke, www.quizdroid.wordpress.com
+         * @since 22.05.2019
+         */
+        public MainMenuState() {
             menuItem = 0; //Zu Beginn des Menüs ist der ausgewählte Knopf der erste.
             try {
                  menuItemFrame = ImageIO.read(Utils.absoluteFileOf("/res/tilesets/menuitemframe.png")); //Der Rahmen wird gelesen und als BufferedImage gespeichert.
@@ -572,8 +591,13 @@ public class Game implements Runnable {
                 e.printStackTrace();
             }
             font = new Font("Futura", Font.BOLD, 40);
+            color = new Color(65, 41, 31);
         }
         
+        /*
+         * @author Cashen Adkins, Jakob Kleine, Janni Röbbecke, www.quizdroid.wordpress.com
+         * @since 22.05.2019
+         */
         @Override
         public void render(Graphics g) {
             screen.getCanvas().setBackground(Color.white); //Weiß wird als Hintergrundfarbe dargestellt
@@ -587,35 +611,47 @@ public class Game implements Runnable {
                 g.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
                 g.drawImage(menuBackground, 0, 0, null);
                 fontFestlegen(g,font);
-                g.setColor(new Color(65, 41, 31));
+                g.setColor(color);
                 g.drawString("Neues Spiel", SCREEN_WIDTH/2-120, 200);
-                g.drawString("Weiterspielen", SCREEN_WIDTH/2-120, 280);
+                if(gameState == null) { //Wenn der Game-State null ist, kann gerade nicht weitergespielt werden, also wird das Menüitem dafür heller gemalt
+                    g.setColor(color.brighter());
+                    g.drawString("Weiterspielen", SCREEN_WIDTH/2-120, 280);
+                    g.setColor(color);
+                }
+                else //Sonst wird es ganz normal angezeigt
+                    g.drawString("Weiterspielen", SCREEN_WIDTH/2-120, 280);
                 g.drawString("Anleitung", SCREEN_WIDTH/2-120, 360);
+                g.setColor(color.brighter()); //Die Optionen haben wir noch nicht implementiert, also werden sie heller angezeigt
                 g.drawString("Optionen", SCREEN_WIDTH/2-120, 440);
+                g.setColor(color); //Der Rest 
                 g.drawString("Bestenliste", SCREEN_WIDTH/2-120, 520);
                 g.drawString("Beenden", SCREEN_WIDTH/2-120, 600);
-                g.drawImage(menuItemFrame, SCREEN_WIDTH/2-190, 140 + menuItem * 80, 384, 96, null);
+                g.drawImage(menuItemFrame, SCREEN_WIDTH/2-190, 140 + menuItem * 80, 384, 96, null); //Zeichnet den Rahmen um das ausgewählte Item
                 bs.show();
                 g.dispose();
             }
         }
            
+        /*
+         * @author Cashen Adkins, Jakob Kleine, Janni Röbbecke
+         * @since 27.05.2019
+         */
         @Override
         public void update() 
         {
             if(keyManager.downEinmal()) {
-                if(menuItem < ANZAHL_MENU_ITEMS-1) 
+                if(menuItem < ANZAHL_MENU_ITEMS-1) //Wenn nicht beim letzten Item -> zum nächsten
                     menuItem++;
-                else
-                    menuItem = 0;
+                else //Sonst: zum ersten
+                    menuItem = 0; 
             }
             else if(keyManager.upEinmal()) {
-                if(menuItem > 0) 
+                if(menuItem > 0) //Wenn nicht beim ersten Item -> zum vorherigen
                     menuItem--;
                 else
-                    menuItem = ANZAHL_MENU_ITEMS-1;
+                    menuItem = ANZAHL_MENU_ITEMS-1; //Sonst: zum letzten Item
             }
-            else if(keyManager.attackEinmal()) {
+            else if(keyManager.attackEinmal()) { //Enter oder Backspace -> Das ausgewählte MenüItem soll "angeclickt" werden
                 switch(menuItem) {
                     case 0:
                         newGame();
@@ -627,47 +663,62 @@ public class Game implements Runnable {
                         currentState = tutorialState;
                     break;
                     case 3: 
-                        
+                        //hier müsste zum Optionen-State gewechselt werden; so weit sind wir allerdings nicht gekommen
                     break;
                     case 4: 
-                        currentState = highscoresState;
+                        currentState = highscoresState; 
                     break;
-                    default:
+                    default: //Das letzte Item ist das Beenden-Item
                         endGame();
                 }
             }
             
-            if(keyManager.escapeEinmal())
+            if(keyManager.escapeEinmal()) //Escpae oder Backspace -> weiterspielen wenn möglich
                 resumeGame();
         }
         
+        /* 
+         * Ändert das ausgewählte Menü-Item. Aufgerufen, wenn das Spiel pausiert wird, sodass
+         * automatisch das Menü-Item "Weiterspielen" ausgewählt wird.
+         * @author Jakob Kleine, Janni Röbbecke, Cashen Adkins
+         * @since 28.05.2019
+         */
         public void setMenuItem(int item) {
             if(item >= 0 && item < ANZAHL_MENU_ITEMS)
                 menuItem = item;
         }
     }
     /**
-     * Der Tutorial-State ist der State, in dem sich das Spiel befindet, wenn die Anleitung aufgerufen wird
-     * @author Ares Zühlke, Cepehr Bromand, www.quizdroid.wordpress.com
+     * Der Tutorial-State ist der State, in dem sich das Spiel befindet, wenn die Anleitung aufgerufen wird.
+     * @author Ares Zühlke, Cepehr Bromand, Jakob Kleine
      * @version 0.03 (28.05.2019)
      * @since 0.01 (22.05.2019
      */
     public class TutorialState implements State
     {
-        private static final int ANZAHL_PAGES = 2;
-        private Font überschrift;
-        private Font standardSchrift;
-        private Font unterüberschrift;
-        private Color schriftFarbe;
-        private int pageNr;
+        private static final int ANZAHL_PAGES = 2; //Die Anzahl der Seiten in der Anleitung
+        private Font überschrift; //Ein Font für Überschriften
+        private Font unterüberschrift; //Ein Font für Unterüberschriften im Text
+        private Font standardSchrift; //Ein Font für regulären Text
+        private Color schriftFarbe; 
+        private int pageNr; //Die Seitennummer, bei der man sich gerade in der Anleitung befindet.
+        /*
+         * Erstellt einen neuen Tutrial-State
+         * @author Jakob Kleine, Cepehr Bromand, Ares Zühlke
+         * @since 22.05.2019
+         */
         public TutorialState() {
             überschrift = new Font("Futura", Font.BOLD, 40);
-            standardSchrift = new Font("Futura", Font.PLAIN, 18);
             unterüberschrift = new Font("Futura", Font.BOLD, 25);
+            standardSchrift = new Font("Futura", Font.PLAIN, 18);
             schriftFarbe = new Color(65, 41, 31);
             pageNr = 0;
         }
         
+        /*
+         * @author Jakob Kleine, Cepehr Bromand, Ares Zühlke
+         * @since 22.05.2019
+         */
         public void render(Graphics g)
         {
             screen.getCanvas().setBackground(Color.white); //Weiß wird als Hintergrundfarbe dargestellt
@@ -681,13 +732,17 @@ public class Game implements Runnable {
                 g.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
                 g.drawImage(menuBackground, 0, 0, null);
                 fontFestlegen(g,überschrift);
-                g.setColor(schriftFarbe.darker().darker());
-                int zeilenHoehe = 100;
+                g.setColor(schriftFarbe.darker().darker()); //Eine dunklere Schriftfarbe ist hier leichter zu lesen.
+                /* 
+                 * Speichert die Zeilenhöhe, sodass beim einfügen von Text die Zeilenhöhe automatisch angepasst wird, indem bei jedem Anzeigen von Text die Zeilenhöhe
+                 * um den gewünschten Abstand nach oben inkrementiert wird.
+                 */
+                int zeilenHoehe = 100; 
                 Utils.centerText(g, "ANLEITUNG", SCREEN_WIDTH, zeilenHoehe);
-                switch(pageNr) {
-                    case 0: 
+                switch(pageNr) { //Hier wird die jeweils anzuzeigende Seite gerendert. Das wird nicht genauer kommentiert, das Ergebnis ist im Spiel einzusehen
+                    case 0: //Seite 1:
                             g.setFont(unterüberschrift);
-                            Utils.centerText(g, "Ziel des Spiels", SCREEN_WIDTH, zeilenHoehe+=40);
+                            Utils.centerText(g, "Ziel des Spiels", SCREEN_WIDTH, zeilenHoehe+=40); 
                             g.setFont(standardSchrift); //Font-Festlegen muss nur einmal aufgerufen werden; dann sind die RenderingHints für Text bereits gesetzt
                             g.drawString("In diesem Informatik-orientiertem Spiel geht es darum einen möglichst", 40, zeilenHoehe+=35);
                             g.drawString("großen Score zu erzielen, indem man Gegner besiegt, die auf dem ", 40, zeilenHoehe+=20);
@@ -699,9 +754,9 @@ public class Game implements Runnable {
                             g.drawString("Die Spielfigur wird mit den Tasten W (oben), A (links), S (unten)", 40, zeilenHoehe+=40);
                             g.drawString("und D  (rechts) oder den Pfeiltasten in die entsprechende Richtung", 40, zeilenHoehe+=20);
                             g.drawString("bewegt.", 40, zeilenHoehe+=20);
-                            g.drawString("Ein Angriff wird mit Leertaste oder Backspace (Löschen) gestartet", 40, zeilenHoehe+=20);
-                            g.drawString("und erfolgt immer in Blickrichtung der Spielfigur. Während dem", 40, zeilenHoehe+=20);
-                            g.drawString("Angreifen kann sich die Spielfigur nicht bewegen.", 40, zeilenHoehe+=20);
+                            g.drawString("Ein Angriff wird mit Leertaste oder Enter gestartet und erfolgt", 40, zeilenHoehe+=20);
+                            g.drawString("immer in Blickrichtung der Spielfigur. Während dem Angreifen kann", 40, zeilenHoehe+=20);
+                            g.drawString("sich die Spielfigur nicht bewegen.", 40, zeilenHoehe+=20);
                             g.setFont(unterüberschrift);
                             Utils.centerText(g, "Gegner", SCREEN_WIDTH, zeilenHoehe+=40);
                             g.setFont(standardSchrift);
@@ -716,7 +771,7 @@ public class Game implements Runnable {
                             g.drawString("indem er seine Waffe (momentan ein Cursor) auf sie wirft.", 40, zeilenHoehe+=20);
                             g.drawString("Momentan erfolgt der Angriff des Virus nur nach oben und unten.", 40, zeilenHoehe+=20);
                     break;
-                    case 1:
+                    case 1: //Seite 2:
                             g.setFont(unterüberschrift);
                             Utils.centerText(g, "Items", SCREEN_WIDTH, zeilenHoehe+=40);
                             g.setFont(standardSchrift);
@@ -743,36 +798,52 @@ public class Game implements Runnable {
                 g.dispose();
             }
         }
+        /*
+         * @author Jakob Kleine, Cepehr Bromand, Ares Zühlke
+         * @since 28.05.2019
+         */
         public void update()
         {
-            if(keyManager.downEinmal() || keyManager.rightEinmal()) {
-                if(pageNr < ANZAHL_PAGES-1) 
+            if(keyManager.downEinmal() || keyManager.rightEinmal()) { //unten/rechts -> Scroll-Seite wird erhöht
+                if(pageNr < ANZAHL_PAGES-1)  //Wenn nicht auf letzter Seite
                     pageNr++;
-                else
+                else //Sonst zurück auf erste Seite
                     pageNr = 0;
             }
-            else if(keyManager.upEinmal() || keyManager.leftEinmal()) {
-                if(pageNr > 0) 
+            else if(keyManager.upEinmal() || keyManager.leftEinmal()) {//oben/links -> Scroll-Seite wird verringert
+                if(pageNr > 0) //Wenn nicht auf erster Seite
                     pageNr--;
-                else
+                else //Sonst auf letzte Seite
                     pageNr = ANZAHL_PAGES-1;
             }
-            if(keyManager.escapeEinmal())
+            if(keyManager.escapeEinmal()) //Escape/Backspace -> zurück ins Hauptmenü
                 currentState = mainMenuState;
         }
     }
     
+    /*
+     * Der HighscoresState ist der State, in dem sich das Spiel befindet, wenn die Highscores angezeigt werden. 
+     * Dann werden die Highscores vom HighscoreManager abgefragt und angezeigt.
+     */
     private class HighscoresState implements State {
-        private Font font;
+        private Font basisFont; 
         public HighscoresState() {
-            font = new Font("Futura", Font.BOLD, 40);
+            basisFont = new Font("Futura", Font.BOLD, 40);
         }
         
+        /*
+         * @author Jakob Kleine, Janni Röbbecke, Cashen Adkins
+         * @since 26.05.2019
+         */
         public void update() {
-            if(keyManager.escapeEinmal())
+            if(keyManager.escapeEinmal()) //Durch Drücken von ESC / BACKSPACE wird zum Hauptmenü zurückgekehrt
                 currentState = mainMenuState;
         }
         
+        /*
+         * @author Jakob Kleine, Janni Röbbecke
+         * @since 26.05.2019
+         */
         public void render(Graphics g) {
             screen.getCanvas().setBackground(Color.white); //Weiß wird als Hintergrundfarbe festgelegt
             BufferStrategy bs = screen.getCanvas().getBufferStrategy(); 
@@ -784,24 +855,28 @@ public class Game implements Runnable {
                 //Clear Screen
                 g.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
                 g.drawImage(menuBackground, 0, 0, null);
-                fontFestlegen(g,font.deriveFont(Font.BOLD));
+                fontFestlegen(g,basisFont.deriveFont(Font.BOLD));
                 g.setColor(new Color(65, 41, 31));
                 
                 Utils.centerText(g, "BESTENLISTE", SCREEN_WIDTH, 100);
                 
-                g.setFont(font.deriveFont(Font.PLAIN, 30));
+                g.setFont(basisFont.deriveFont(Font.PLAIN, 30));
                 ArrayList<Score> scores = scoreManager.getScores();
                 for(int i=0; i<scores.size(); i++) {
-                    g.drawString((i<9?"0":"")+(i+1)+": "+scores.get(i), 40, 175+55*i);
+                    /*
+                     * (i<9?"0":"") -> Wenn die Score-Nr. 9 ist wird eine 0 vorher angefügt.
+                     * (i+1)+": "+scores.get(i) -> [ScoreNr.]: [ScoreWert - ScoreName (ScoreDatum)]
+                     * (175+55*i) -> Der erste Score wird bei y=175 platziert, alle weiteren in einem Abstand von 55px
+                     */
+                    g.drawString((i<9?"0":"")+(i+1)+": "+scores.get(i), 40 /*x-Position*/, 175+55*i);
                 }
                
-                g.setFont(font.deriveFont(Font.ITALIC, 15)); 
+                g.setFont(basisFont.deriveFont(Font.ITALIC, 15)); 
                 String hinweis = "Um zum Hauptmenü zurückzukehren bitte ESCAPE drücken.";
-                Utils.centerText(g, "Um zum Hauptmenü zurückzukehren bitte ESCAPE drücken.", SCREEN_WIDTH, SCREEN_HEIGHT-15);
+                Utils.centerText(g, hinweis, SCREEN_WIDTH, SCREEN_HEIGHT-15);
                 bs.show();
                 g.dispose();
             }
         }
     }
-    
 }
