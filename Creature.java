@@ -115,13 +115,17 @@ public abstract class Creature extends Movable {
             }
         }
         else {
-            move();
-            if(weapon != null) {
-                if(weapon.isAttacking()) //Wenn die Waffe sich bewegt, soll sie sich eigenständig updaten, sonst wird ihre Bewegung vorgegeben
-                    weapon.update();
-                else
-                    weapon.setPositionInHand(getHandPosition(prevDirection,xPos), xPos, prevDirection);
-            }
+            defaultUpdate();
+        }
+    }
+    
+    protected void defaultUpdate() {
+        move();
+        if(weapon != null) {
+            if(weapon.isAttacking()) //Wenn die Waffe sich bewegt, soll sie sich eigenständig updaten, sonst wird ihre Bewegung vorgegeben
+                weapon.update();
+            else
+                weapon.setPositionInHand(getHandPosition(prevDirection,xPos), xPos, prevDirection);
         }
     }
     

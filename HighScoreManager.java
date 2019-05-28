@@ -39,7 +39,7 @@ public class HighScoreManager
     public void addScore(Score newScore) {
         scores.add(newScore);
         sortScores();
-        if(scores.size() > MAX_SCORE_NUMBER) 
+        while(scores.size() > MAX_SCORE_NUMBER) 
             scores.remove(scores.size()-1); //Wenn zu viele Scores gespeichert werden, wird der letzte gelöscht
     }
     

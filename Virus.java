@@ -45,7 +45,7 @@ public class Virus extends Enemy
     {
         super(x, y, "Virus", DEFAULT_SPRITE_SHEET, DEFAULT_HEALTH, DEFAULT_SPEED);
         setWeapon(new Cursor(x+10, y+30, false));
-        health = SideEffect.DEFAULT_HEALTH;
+        health = DEFAULT_HEALTH;
     }
    
     @Override

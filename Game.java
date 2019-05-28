@@ -39,7 +39,10 @@ public class Game implements Runnable {
      * Die Höhe des Bereichs, in dem die HP, der Score usw. angezeigt wird
      */
     public static final int HP_BAR_HEIGHT = 100;
-    
+    /**
+     * Die Standard-Dicke der Wand (Border) des Spiel-Raums 
+     */
+    public static final int BORDER_WIDTH = 10;
     /**
      * Die Breite des Spielfensters in Pixel
      */
@@ -238,10 +241,8 @@ public class Game implements Runnable {
      * @version 0.02 (22.05.2019)
      * @since 0.01 (22.05.2019
      */
-    public class GameState implements State 
+    private class GameState implements State 
     {
-        private static final int BORDER_WIDTH = 10;
-        
         private BufferedImage hpBarBackground;
         private int score;
         private Player player; //Die Spielfigur des Spielers
@@ -292,7 +293,6 @@ public class Game implements Runnable {
             } 
             catch(ClassNotFoundException e) { e.printStackTrace(); }
             catch(NoSuchMethodException e) { e.printStackTrace(); }
-            gegnerListe.add(new SideEffect(300, 300));
             spawnedItems.add(new CursorItem(Utils.random(10, 550), Utils.random(110, 650)));
         }   
         
