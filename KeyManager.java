@@ -32,7 +32,7 @@ public class KeyManager implements KeyListener {
         relevantKeys[2] = keys[KeyEvent.VK_A] || keys[KeyEvent.VK_LEFT];
         relevantKeys[3] = keys[KeyEvent.VK_D] || keys[KeyEvent.VK_RIGHT];
         relevantKeys[4] = keys[KeyEvent.VK_SPACE] || keys[KeyEvent.VK_ENTER]; //Bei der Enter soll auch einen Angirff starten (besonders wichtig im Hauptmenü)
-        relevantKeys[5] = keys[KeyEvent.VK_ESCAPE];
+        relevantKeys[5] = keys[KeyEvent.VK_ESCAPE] || keys[KeyEvent.VK_BACK_SPACE]; //Zum Beenden/Zurückkehren soll auch Backspace erlaubt sein
     }
     
     /**
@@ -135,6 +135,16 @@ public class KeyManager implements KeyListener {
      */
     public boolean left() {
         return relevantKeys[2];
+    }
+    
+    /**
+     * Ermittelt, ob die Left-Taste ihren Status geändert hat, sodass egal wie lange man die Taste drückt, nur bei der ersten Abfrage true zurückgegeben wird.
+     * @author Cashen Adkins, Jakob Kleine
+     * @return ein boolean, der angibt, ob die Taste für eine Bewegung nach linkks mit einer Statusveränderung gedrückt wird.
+     * @since 0.02 (24.05.2019)
+     */
+    public boolean leftEinmal() {
+        return keyPressedOnce(2);
     }
     
     /**

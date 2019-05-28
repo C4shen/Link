@@ -27,6 +27,8 @@ public class HighScoreManager
             Score scoreElement = new Score(Utils.parseInt(scoreDaten[i++]), scoreDaten[i++], scoreDaten[i]);
             scores.add(scoreElement);
         }
+        sortScores(); //Sortiert sicherheitshalber die Scores nach größe
+        sortOutScores(); //Sortiert sicherheitshalber die überschüssigen Scores aus
     }
     
     /**
@@ -39,8 +41,7 @@ public class HighScoreManager
     public void addScore(Score newScore) {
         scores.add(newScore);
         sortScores();
-        while(scores.size() > MAX_SCORE_NUMBER) 
-            scores.remove(scores.size()-1); //Wenn zu viele Scores gespeichert werden, wird der letzte gelöscht
+        sortOutScores();
     }
     
     /**
@@ -54,10 +55,21 @@ public class HighScoreManager
         catch(FileNotFoundException e) { e.printStackTrace(); }
         if(writer != null) {
             for(Score s : scores) {
-                writer.print(s.capsuleData()+"\n"); //es wird .capsleData und nicht toString aufgerufen, weil die [Score] [Name] [Datum] nur mit Leerzeichen getrennt werden sollen
+                writer.print(s.capsuleData()+"\n"); //es wird .capsuleData und nicht toString aufgerufen, weil die [Score] [Name] [Datum] nur mit Leerzeichen getrennt werden sollen
             }
             writer.close();
         }
+    }
+    
+    /**
+     * Sortiert solange die schlechtesten Scores aus der Score-Liste, bis nur noch die 
+     * maximale Anzahl an zu speichernden Socres [<code>MAX_SCORE_NUMBER</code>] in der Liste ist.
+     * @author Jakob Kleine, Cashen Adkins
+     * @since 27.05.2019
+     */
+    private void sortOutScores() {
+        while(scores.size() > MAX_SCORE_NUMBER) 
+            scores.remove(scores.size()-1); //Wenn zu viele Scores gespeichert werden, wird der letzte gelöscht
     }
     
     /**
@@ -67,8 +79,7 @@ public class HighScoreManager
      * @author Jakob Kleine, Cashen Adkins [nach Shium Rahman und Clemens Zander]
      * @since 27.05.2019
      */
-    private void sortScores()
-    {
+    private void sortScores() {
         int laenge = scores.size();
         for(int i=1;i<laenge;i++)
         {
