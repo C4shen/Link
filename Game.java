@@ -195,7 +195,7 @@ public class Game implements Runnable {
      */
     private void newGame() {
         gameState = new GameState();
-        Coffee.resetSelectedAmount();
+        Coffee.resetSelectedAmount(); //Die Effekte des Kaffes verändern sich, je mehr Kaffee eingesammelt wurde. Das muss jetzt zurückgesetzt werden
         currentState = gameState;
     }
     
