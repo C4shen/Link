@@ -188,12 +188,22 @@ public class Game implements Runnable {
         currentState.render(g);
     }
     
+    /**
+     * Erzeugt einen neuen GameState und setzt alle Werte für die nächste Runde des Spiels zurück.
+     * @author Jakob Kleine, Cashen Adkins, Janni Röbbecke
+     * @since 25.05.2019
+     */
     private void newGame() {
         gameState = new GameState();
         Kaffee.resetSelectedAmount();
         currentState = gameState;
     }
     
+    /**
+     * Setzt das Spiel nach einer Pause fort
+     * @author Cashen Adkins, Janni Röbbecke
+     * @since 25.05.2019
+     */
     private void resumeGame() {
         if(gameState != null) 
             currentState = gameState;
@@ -209,6 +219,12 @@ public class Game implements Runnable {
         System.exit(0);
     }
     
+    /**
+     * Stelllt die gewünschte Schriftart ein und sorg dafür, das die Schrift schöner gerendert wird
+     * (muss nur einmalvor dem Rendern aufgerufen werden, danach kann setFond benutzt werden)
+     * @author Jakob Kleine, Cashen Adkins
+     * @param f gewünschte Schriftart
+     */
     private void fontFestlegen(Graphics g, Font f) {
         Graphics2D g2d = (Graphics2D) g; //Damit RenderingHints gesetzt werden können, muss das Graphics-Objekt in ein Graphics2D-Objekt gecastet werden
         g2d.setRenderingHint(
@@ -221,9 +237,21 @@ public class Game implements Runnable {
     }
     
     /**
+<<<<<<< HEAD
+<<<<<<< HEAD
+     * Ein State ist ein Zustand in dem sich das Programm befinden kann. 
+     * @author Jakob Kleine, Janni Röbbecke, Cashen Adkins
+     * @since 25.05.2019
+=======
      * 
      * [Hinweis: weil private innere Klassen/Interfaces mit allen ihren Methoden nicht in JavaDoc angezeigt werden, 
      *           wird javadoc bei den folgenden Klassen zwar angedeutet, aber nicht verwendet ]
+>>>>>>> 53668c1c2380c96f708eda6dd2489921fd7f5623
+=======
+     * 
+     * [Hinweis: weil private innere Klassen/Interfaces mit allen ihren Methoden nicht in JavaDoc angezeigt werden, 
+     *           wird javadoc bei den folgenden Klassen zwar angedeutet, aber nicht verwendet ]
+>>>>>>> 53668c1c2380c96f708eda6dd2489921fd7f5623
      */
     private interface State
     {
@@ -245,14 +273,14 @@ public class Game implements Runnable {
     
     /**
      * Der GameState ist der State, in dem sich das Spiel während dem Spielen befindet. Hier werden die Figuen aktualisiert und neu gerendert
-     * @author Cashen Adkins,Janni Röbbecke, Jakob Kleine, www.quizdroid.wordpress.com
-     * @version 0.02 (22.05.2019)
-     * @since 0.01 (22.05.2019
+     * @author Cashen Adkins, Janni Röbbecke, Jakob Kleine, www.quizdroid.wordpress.com
+     * @version 0.02 (28.05.2019)
+     * @since 0.01 (22.05.2019)
      */
     private class GameState implements State 
     {
         private BufferedImage hpBarBackground;
-        private int score;
+        private int score; //Punkte (score) des Spielers
         private Player player; //Die Spielfigur des Spielers
         private LinkedList<Enemy> gegnerListe; //Eine Liste mit allen Gegnern im Spiel
         private LinkedList<Weapon> attackingWeapons; //Die Waffen, die sich gerade im Angriff befinden
@@ -261,21 +289,29 @@ public class Game implements Runnable {
         private Room room; //Der Raum, der gerade gespielt wird
         private CollisionDetector collisionDet;
         
-        private Constructor[] enemyConstructors;
-        private int enemySpawnDelay;
+        private Constructor[] enemyConstructors; //Feld mit allen Konstruktoren für die verschiedenen Gegnertypen
+        private int enemySpawnDelay; //Anzahl der Loosp die durchlaufen werden, bis der nächste Gegner gespawnt wird
         
-        private Constructor[] itemConstructors;
-        private int itemSpawnDelay;
+        private Constructor[] itemConstructors; //Feld mit allen Konstruktoren für die verschiedenen Items
+        private int itemSpawnDelay; //Anzahl der Loosp die durchlaufen werden, bis das nächste Item gespawnt wird
+        /**
+         * Ein neuer Gamestate wird erzeugt, in dem ein neues Spiel begonnen werden kann
+         * @author Janni Röbbecke, Jakob Kleine, Cashen Adkins, www.quizdroid.wordpress.com
+         * @since 22.05.2019
+         */
         public GameState()
         {
             player = new Player(320, 320);
             gegnerListe = new LinkedList<Enemy>();
             attackingWeapons = new LinkedList<Weapon>();
             spawnedItems = new LinkedList<Item>();
+            spawnedItems.add(new CursorItem(Utils.random(10, 550), Utils.random(110, 650))); //Ein Cursor wird gespawnt, damit der Spieler von anfang an kämpfen kann
             
+            //Das TileSet wird eingelesen und es wird ein Raum erzeugt, der aus diesem Tileset den Hintergrund des Spiels zusammensetzt
             TileSet tileSet = new TileSet("/res/tilesets/standard-raum-ts.png", 3 /*Anzahl Tiles x*/, 3/*Anzahl Tiles y*/, 3/*Abstand zwischen Tiles*/);
             room = new Room("/res/rooms/standard-raum.txt", tileSet);
                         
+            //Grenzen, an denen der Raum Ended werden festgelegt
             roomBorders = new Rectangle[] {
                 new Rectangle(               0,    HP_BAR_HEIGHT, SCREEN_WIDTH, BORDER_WIDTH), //links oben -> rechts oben
                 new Rectangle(               0, SCREEN_HEIGHT-10, SCREEN_WIDTH, BORDER_WIDTH), //links unten -> rechts unten
@@ -289,6 +325,7 @@ public class Game implements Runnable {
             
             collisionDet = new CollisionDetector();
             
+            //Die Konstruktoren der Gegner und Items werden gespeichert
             enemyConstructors = new Constructor[2];
             itemConstructors = new Constructor[3];
             try{
@@ -301,9 +338,13 @@ public class Game implements Runnable {
             } 
             catch(ClassNotFoundException e) { e.printStackTrace(); }
             catch(NoSuchMethodException e) { e.printStackTrace(); }
-            spawnedItems.add(new CursorItem(Utils.random(10, 550), Utils.random(110, 650)));
         }   
         
+        /**
+         * Zeichnet das Spielfeld und alle Figuren und Gegenstände darauf
+         * @author Jakob Kleine, Janni Röbbecke, Ares Zülke, Cepehr Bromand
+         * @since 10.05.2019
+         */
         @Override
         public void render(Graphics g) 
         {
@@ -311,32 +352,38 @@ public class Game implements Runnable {
             //c.setBackground(Color.blue);
             BufferStrategy bs = c.getBufferStrategy();
             if(bs == null)
+                //sollte die Canves noch keine BufferStrategy haben wird auf ihr eine Erzeugt, die im nächsten Loop benutzt der den kann.
                 c.createBufferStrategy(3);
             else{
                 Color color = new Color(255,255,255); //Eine Farbe wird festgelegt
                 c.setBackground(color); //Farbe wird als Hintergrundfarbe dargestellt
                 g = bs.getDrawGraphics();
-                //Clear Screen
+                //Der gesamte Screen wird geleert
                 g.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
                 g.drawImage(hpBarBackground, 0, 0, null);
                 room.renderMap(g); // Erst die Spielfläche ...
                 player.render(g); // ... und darauf die Spielfigur
                 for(Enemy e :  gegnerListe)
                     e.render(g);
-                    
                 for(Item i : spawnedItems) 
                     i.render(g);
                 
+                //Am oberen Bildrand werden die Lebenspunkte und der Score des Spielers angezeigt
                 fontFestlegen(g, new Font("American Typewriter", Font.BOLD, 40)); 
                 g.setColor(new Color(215, 7, 7));
                 g.drawString("HP: "+player.health, 10, (HP_BAR_HEIGHT+40)/2);
                 g.setColor(new Color(204, 146, 12));
                 g.drawString(""+score, 500, (HP_BAR_HEIGHT+40)/2);
+                
+                //Nun wird das neue Bild angezeigt
                 bs.show();
                 g.dispose();
             }
         }
         
+        /**
+         * Berechnet die neuen Positionen und Werte aller Figuren und Gegenstände auf dem Spielfeld
+         */
         @Override
         public void update() 
         {
@@ -352,50 +399,61 @@ public class Game implements Runnable {
             LinkedList<Weapon> waffenGestorbenerGegner = new LinkedList<Weapon>(); 
             for(Enemy e : gegnerListe) {
                 if(e.isAlive()){
+                    //Sollten die Gegner noch leben, werden sie upgedatet. Wenn sie in diesem Loop einen Angriff starten, wird die Waffe gespeichert, mit der sie dies tun
                     Weapon enemyWeapon = e.target(player);
                     if(enemyWeapon!=null) 
                         attackingWeapons.add(enemyWeapon);
                     e.update();
                 }
                 else {
+                    //Sollten die Gegner im letzten Loop gestorben sein werden sie und hiehre Waffen aus den entsprechenden Listen gelöscht
                     score += e.getScoreValue();
                     if(e.weapon != null && e.weapon.isAttacking()) 
                         waffenGestorbenerGegner.add(e.weapon);
                     nichtMehrLebendeGegner.add(e);
                 }
             }
+            //Die Gegener und Waffen, die "zu löschende Gegner bzw. Waffen" gespeichert wurden werden nun aus den Listen gelöscht 
             attackingWeapons.removeAll(waffenGestorbenerGegner);
             gegnerListe.removeAll(nichtMehrLebendeGegner);
             
+            //Auf die gleiche weise werden alle Items auf dem Spielfeld durchgegangen 
             LinkedList<Item> verfalleneItems = new LinkedList<Item>(); 
             for(Item i : spawnedItems) {
                 if(i.exists()){
+                    //Sollte das Item noch existieren wird es upgedatet.
                     i.update();
                 }
                 else {
+                    //Sonst wird es in der Liste mit den "zu löschenden Items gespeichert"
                     verfalleneItems.add(i);
                 }
             }
+            //Alle Items, die als verfallene Items gespeichert wurden, werden aus der Liste gelöscht
             spawnedItems.removeAll(verfalleneItems);
                 
                 
             collisionDet.update();
             
             if(enemySpawnDelay-- <= 0) {
+                //Sollte das enemySpawnDelay abgelaufen sein wird ein neuer Gegner auf dem Fels geswnt und ein neues SpawnDelay wird Zufällig festgelegt
                 spawnRandomEnemy(); 
                 enemySpawnDelay = Utils.random(100, 1000);
             }
             
             if(itemSpawnDelay-- <= 0) {
+                //Sollte das itemSpawnDelay abgelaufen sein wird ein neues Item auf dem Fels geswnt und ein neues SpawnDelay wird Zufällig festgelegt
                 spawnRandomItem(); 
                 itemSpawnDelay = Utils.random(100, 1000);
             }
-
+            
             if(!player.isAlive()) {
+                //Sollte der Spieler keine Lebenspunkte mehr haben wird sein Socre im scoreManeger festgehalten und es wird zum Hauprmenü gewechselt
                 scoreManager.addScore(new Score(score,playerName));
                 gameState = null;
                 currentState = mainMenuState;
             }
+            
             //Wenn Escape gedrückt wird, ändert sich die State in die MenuState
             if(keyManager.escapeEinmal()) {
                 mainMenuState.setMenuItem(1);
@@ -403,6 +461,11 @@ public class Game implements Runnable {
             }
         }
         
+        /**
+         * Spawnt einen zufälligen Gegener an einer zufälligen Stelle auf dem Spielfleld
+         * @author Jakob Kleine, Janni Röbbecke 
+         * @since 27.05.2019
+         */
         private void spawnRandomEnemy() {
             try {
                 gegnerListe.add((Enemy) enemyConstructors[Utils.random(0,1)].newInstance(Utils.random(10, 550), Utils.random(110, 650)));
@@ -413,6 +476,11 @@ public class Game implements Runnable {
             catch(InvocationTargetException e) { e.printStackTrace(); }
         }
         
+        /**
+         * Spawnt einen zufälligen Gegener an einer zufälligen Stelle auf dem Spielfleld
+         * @author Jakob Kleine, Janni Röbbecke 
+         * @since 27.05.2019
+         */
         private void spawnRandomItem() {
             try {
                 spawnedItems.add((Item) itemConstructors[Utils.random(0,2)].newInstance(Utils.random(10, 550), Utils.random(110, 650)));
