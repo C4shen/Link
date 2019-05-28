@@ -335,7 +335,7 @@ public class Game implements Runnable {
         @Override
         public void update() 
         {
-            player.setMove(getInput()); //Bewegt den Spieler entsprechend der Eingabe über die Tasten
+            player.reciveKeyInput(getInput()); //Bewegt den Spieler entsprechend der Eingabe über die Tasten
             if(keyManager.attack()) { //Wenn die Taste zum Angriff gedrückt wurde, greift der Spieler an
                 Weapon attackingWeapon = player.startAttack();
                 if(attackingWeapon != null) //Wenn ein neuer Angriff ausgeführt wurde

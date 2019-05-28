@@ -54,11 +54,16 @@ public class Player extends Creature {
     
     /**
      * Der Spieler empfängt die Information in welche Richtungen er gerade Gesteuert wird
+     * @param p Punkt, der die Richtungen angiebt in die die Spielfigur gerade gesteuert wird
+     * @author Janni Röbbecke, Jakob Kleine
+     * @since 28.05.2019
      */
     public void reciveKeyInput(Point p){
         if(p.x!=0 && p.y!=0){
-            xMove = Math.sqrt(1/2)*p.x;
-            yMove = Math.sqrt(1/2)*p.y;
+            //sollte der Spieler sich in zwei Richtungen geleichzeitig bewegen wird seine Bewegung reduziert, 
+            //damit er insgesmt genausoschnell läuft wie er in eine Richtung laufen würde
+            xMove = 0.7071067811865475 *p.getX();
+            yMove = 0.7071067811865475 *p.getY();
         }
         else {
             xMove = p.x;

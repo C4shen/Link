@@ -115,13 +115,13 @@ public abstract class Movable extends Entity {
      * @since 0.02 (13.05.2019)
      */
     private void setCurrentImage() {
-        if(yMove == -1)         //Bewegung nach oben
+        if(yMove < 0)          //Bewegung nach oben
             prevDirection = 3;
-        else if(yMove == 1)     //Bewegung nach unten
+        else if(yMove > 0)     //Bewegung nach unten
             prevDirection = 0;
-        else if(xMove == -1)    //Bewegung nach links
+        else if(xMove < 0)     //Bewegung nach links
             prevDirection = 1;
-        else if(xMove == 1)     //Bewegung nach rechts
+        else if(xMove > 0)     //Bewegung nach rechts
             prevDirection = 2;
         else //Die Figur hat sich nicht bewegt. Es soll das Bild im Stillstand der vorherigen Richtung angezeigt werden -> Prevdirection bleibt gleich, xPos = 1 -> neutrale Pose
             xPos = 1;
