@@ -21,7 +21,7 @@ import java.awt.event.WindowListener;
 import java.awt.event.WindowAdapter;
 /**
  * Die zentrale Klasse des Programms. Hier wird die Anzeige und Funktionalität des Spiels verwaltet.
- * @author Cashen Adkins, Cepehr Bromand, Janni Röbbecke, Jakob Kleine, www.quizdroid.wordpress.com
+ * @author Cashen Adkins, Cepehr Bromand, Janni Röbbecke, Jakob Kleine, Ares Zühlke www.quizdroid.wordpress.com
  * @version 0.02 (12.05.2019)
  * @since 0.01 (09.05.2019)
  */
@@ -55,6 +55,7 @@ public class Game implements Runnable {
     private State currentState;
     private GameState gameState;
     private MainMenuState mainMenuState;
+    private TutorialState tutorialState;
     private HighscoresState highscoresState;
     private HighScoreManager scoreManager;
     private String playerName;
@@ -96,6 +97,7 @@ public class Game implements Runnable {
         keyManager = new KeyManager();
         screen.getFrame().addKeyListener(keyManager);
         mainMenuState = new MainMenuState();
+        tutorialState = new TutorialState();
         highscoresState = new HighscoresState();
         scoreManager = new HighScoreManager();
         currentState = mainMenuState;
@@ -398,9 +400,9 @@ public class Game implements Runnable {
             catch(InvocationTargetException e) { e.printStackTrace(); }
         }
         
-        /*
+        /**
          * Zuständig, um die Entitäten auf dem Spielfeld auf Kollisionen zu überprüfen, und diese zu verwalten.
-         * Es wäreauch möglich, die Methoden direkt in die Klasse GameState zu schreiben, mit dieser inneren Klasse
+         * Es wäre auch möglich, die Methoden direkt in die Klasse GameState zu schreiben, mit dieser inneren Klasse
          * wird allerdings der Kollision-Teil separiert, um die Kohäsion und Übersichtlichkeit zu verbessern
          * [Hinweis: weil diese innere Klasse privat ist, wird sie mit allen ihren Methoden nicht in JavaDoc angezeigt, weswegen
          *  das hier zwar angedeutet, aber nicht verwendet wurde]
@@ -452,7 +454,7 @@ public class Game implements Runnable {
                     keepInside(e);
             }
         
-            /*
+            /**
              * Hält eine bewegbare Entity, die eventuell aus dem Spielfeld gelaufen ist, innerhalb des Spielfelds
              * @author Jakob Kleine, Janni Röbbecke, Cepehr Bromand, Ares Zühlke
              * @since 24.05.2019
@@ -606,7 +608,7 @@ public class Game implements Runnable {
                         resumeGame();
                     break; 
                     case 2:
-                    
+                        currentState = tutorialState;
                     break;
                     case 3: 
                         
@@ -626,6 +628,74 @@ public class Game implements Runnable {
         public void setMenuItem(int item) {
             if(item >= 0 && item < ANZAHL_MENU_ITEMS)
                 menuItem = item;
+        }
+    }
+    /**
+     * Der Tutorial-State ist der State, in dem sich das Spiel befindet, wenn die Anleitung aufgerufen wird
+     * @author Ares Zühlke, Cepehr Bromand, www.quizdroid.wordpress.com
+     * @version 0.03 (28.05.2019)
+     * @since 0.01 (22.05.2019
+     */
+    public class TutorialState implements State
+    {
+        Font überschrift;
+        Font standardSchrift;
+        Font unterüberschrift;
+        public void render(Graphics g)
+        {
+            überschrift = new Font("Futura", Font.BOLD, 40);
+            standardSchrift = new Font("Futura", Font.PLAIN, 18);
+            unterüberschrift = new Font("Futura", Font.BOLD, 25);
+            
+            Color color = new Color(255,255,255); //Eine Farbe wird festgelegt
+            screen.getCanvas().setBackground(color); //Farbe wird als Hintergrundfarbe dargestellt
+            BufferStrategy bs = screen.getCanvas().getBufferStrategy(); 
+            if(bs == null)
+                screen.getCanvas().createBufferStrategy(3);
+            else
+            {
+                g = bs.getDrawGraphics();
+                //Clear Screen
+                g.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+                fontFestlegen(g,überschrift);
+                color = new Color(127, 101, 73);
+                g.setColor(color);
+                g.drawString("Anleitung", SCREEN_WIDTH/2-90,50);
+                fontFestlegen(g,standardSchrift);
+                g.drawString("In dem Spiel geht es darum ein möglichst großen Highscore zu erzielen,", 10, 100);
+                g.drawString("indem man die Gegner besiegt, die nach einer Zeit auf dem Spielfeld", 10, 120);
+                g.drawString("erscheinen.", 10, 140);
+                fontFestlegen(g,unterüberschrift);
+                g.drawString("Steuerung", SCREEN_WIDTH/2-65, 180);
+                fontFestlegen(g,standardSchrift);
+                g.drawString("Die Spielfigur wird mit den Tasten W, A, S, D in die entsprechende Richtung", 10, 220);
+                g.drawString("bewegt. Zum Angreifen wird die Leertaste benutzt. Ein Angriff erfolgt immer ", 10, 240);
+                g.drawString("in Blickrichtung der Spielfigur.", 10, 260);
+                fontFestlegen(g,unterüberschrift);
+                g.drawString("Gegner", SCREEN_WIDTH/2-52, 300);
+                fontFestlegen(g,standardSchrift);
+                g.drawString("Krebs: Der Krebs ist ein ausschließlich seitlich laufender Gegner, der der", 10, 340);
+                g.drawString("Spielfigur bei Berührung Schaden zufügt.", 10, 360);
+                g.drawString("Virus: Der Virus ist ein Gegner der die Spielfigur verfolgt. Er fügt ihr", 10, 400);
+                g.drawString("bei Berührung oder durch einen Angriff, der nur nach unten erfolgt, Schaden", 10, 420);
+                g.drawString("zu.", 10, 440);
+                fontFestlegen(g,unterüberschrift);
+                g.drawString("Items", SCREEN_WIDTH/2-45, 480);
+                fontFestlegen(g,standardSchrift);
+                g.drawString("Cursor: Der Cursor ist eine Waffe die von der Spielfigur eingesammelt werden", 10, 520);
+                g.drawString("kann, indem die sie über ihn läuft. Er kann vom Spieler zum Angreifen", 10, 540);
+                g.drawString("genutzt werden.", 10, 560);
+                g.drawString("Kaffeetasse: Die Kaffeetasse kann ebenfalls von der Spielfigur eingesammelt", 10, 600);
+                g.drawString("werden. Sie erhöt die Bewegungsgeschwindigkeit der Figur aber veringert", 10, 620);
+                g.drawString("im Gegenzug die Lebenspunkte der Spielfigur.", 10, 640);
+                bs.show();
+                g.dispose();
+            }
+        }
+        public void update()
+        {
+            if(keyManager.escapeEinmal())
+                currentState = mainMenuState;
         }
     }
     
