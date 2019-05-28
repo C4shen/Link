@@ -213,6 +213,10 @@ public abstract class Creature extends Movable {
         speed += by;
     }
     
+    public void changeHealthBy(double by) {
+        health += by;
+    }
+    
     public void resetKnockback() {
         knockback = null;
     }
