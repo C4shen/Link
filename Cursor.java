@@ -40,7 +40,7 @@ public class Cursor extends Weapon {
      * @param y die y-Position des Cursors
      */
     public Cursor(int x, int y, boolean isFriendly) {
-        super("Cursor", DEFAULT_SPRITE_SHEET, x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, 0);
+        super("Cursor", DEFAULT_SPRITE_SHEET, x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT);
         this.isFriendly = isFriendly;
     }
     

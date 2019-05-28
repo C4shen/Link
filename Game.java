@@ -88,14 +88,13 @@ public class Game implements Runnable {
         WindowListener screenListener = new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                stop();
+                endGame();
             }
         };
         playerName = "Player101";
         screen = new Screen("LINK - Legend of INformatik Kurs", SCREEN_WIDTH, SCREEN_HEIGHT, screenListener);
         keyManager = new KeyManager();
         screen.getFrame().addKeyListener(keyManager);
-        gameState = new GameState();
         mainMenuState = new MainMenuState();
         highscoresState = new HighscoresState();
         scoreManager = new HighScoreManager();
@@ -127,7 +126,7 @@ public class Game implements Runnable {
             }
             else {
                 //Falls die Berechnung zu lange dauert, wird die neu berechneten Werte zunächst nicht "gerendert", sondern die Schleife beginnt von vorne.
-                System.out.println("Wir sind zu spät!");
+                // System.out.println("Wir sind zu spät!");
             }
         }
     }
@@ -176,16 +175,21 @@ public class Game implements Runnable {
         currentState.render(g);
     }
     
+    private void newGame() {
+        gameState = new GameState();
+        currentState = gameState;
+    }
+    
     /** 
      * Beendet das Spiel
      * @author Cashen Adkins, Jakob Kleine
      * @since 0.01 (26.05.2019)
      */
-    private void stop() {
+    private void endGame() {
         scoreManager.saveScores();
         System.exit(0);
     }
-
+    
     private void fontFestlegen(Graphics g, Font f) {
         Graphics2D g2d = (Graphics2D) g; //Damit RenderingHints gesetzt werden können, muss das Graphics-Objekt in ein Graphics2D-Objekt gecastet werden
         g2d.setRenderingHint(
@@ -523,14 +527,17 @@ public class Game implements Runnable {
      */
     public class MainMenuState implements State 
     {
-        int menuItem; //Variable, die speichert, bei welchem Menüpunkt sich der Spieler gerade befindet.
-        BufferedImage menuItemFrame; //Der Rahmen, der sich um den ausgewählten Menüpunkt befindet.
-        Font font; //Das Font, welches für den Text in den Buttons benutzt wird.
+        private static final int ANZAHL_MENU_ITEMS = 6;
+        private int menuItem; //Variable, die speichert, bei welchem Menüpunkt sich der Spieler gerade befindet.
+        private BufferedImage menuItemFrame; //Der Rahmen, der sich um den ausgewählten Menüpunkt befindet.
+        private Font font; //Das Font, welches für den Text in den Buttons benutzt wird.
+        private BufferedImage menuBackground;
         public MainMenuState() 
         {
             menuItem = 0; //Zu Beginn des Menüs ist der ausgewählte Knopf der erste.
             try {
                  menuItemFrame = ImageIO.read(Utils.absoluteFileOf("/res/tilesets/menuitemframe.png")); //Der Rahmen wird gelesen und als BufferedImage gespeichert.
+                 menuBackground = ImageIO.read(Utils.absoluteFileOf("/res/tilesets/menuBackground.png")); //Der Rahmen wird gelesen und als BufferedImage gespeichert.
             } 
             catch (IOException e) {
                 e.printStackTrace();
@@ -549,13 +556,15 @@ public class Game implements Runnable {
                 g = bs.getDrawGraphics();
                 //Clear Screen
                 g.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+                // g.drawImage(menuBackground, 0, 0, null);
                 fontFestlegen(g,font);
                 g.setColor(new Color(127, 101, 73));
-                g.drawString("Spielen", SCREEN_WIDTH/2-120, 200);
-                g.drawString("Anleitung", SCREEN_WIDTH/2-120, 280);
-                g.drawString("Optionen", SCREEN_WIDTH/2-120, 360);
-                g.drawString("Bestenliste", SCREEN_WIDTH/2-120, 440);
-                g.drawString("Beenden", SCREEN_WIDTH/2-120, 520);
+                g.drawString("Neues Spiel", SCREEN_WIDTH/2-120, 200);
+                g.drawString("Weiterspielen", SCREEN_WIDTH/2-120, 280);
+                g.drawString("Anleitung", SCREEN_WIDTH/2-120, 360);
+                g.drawString("Optionen", SCREEN_WIDTH/2-120, 440);
+                g.drawString("Bestenliste", SCREEN_WIDTH/2-120, 520);
+                g.drawString("Beenden", SCREEN_WIDTH/2-120, 600);
                 g.drawImage(menuItemFrame, SCREEN_WIDTH/2-190, 140 + menuItem * 80, 384, 96, null);
                 bs.show();
                 g.dispose();
@@ -566,7 +575,7 @@ public class Game implements Runnable {
         public void update() 
         {
             if(keyManager.downEinmal()) {
-                if(menuItem < 4) 
+                if(menuItem < ANZAHL_MENU_ITEMS-1) 
                     menuItem++;
                 else
                     menuItem = 0;
@@ -575,24 +584,28 @@ public class Game implements Runnable {
                 if(menuItem > 0) 
                     menuItem--;
                 else
-                    menuItem = 4;
+                    menuItem = ANZAHL_MENU_ITEMS-1;
             }
             else if(keyManager.attackEinmal()) {
                 switch(menuItem) {
                     case 0:
-                        currentState = gameState;
+                        newGame();
                     break;
                     case 1: 
-                        
+                        if(gameState != null) 
+                            currentState = gameState;
                     break; 
                     case 2:
                     
                     break;
                     case 3: 
+                        
+                    break;
+                    case 4: 
                         currentState = highscoresState;
                     break;
-                    case 4: //Später eher default (wenn Anleitung und Optionen implementiert)
-                        stop();
+                    default:
+                        endGame();
                 }
             }
             

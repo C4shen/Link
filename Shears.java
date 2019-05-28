@@ -14,23 +14,22 @@ public class Shears extends Weapon
     private static final int KB_AMOUNT = 50; //Die Standard-Weite des Knockbacks
     private static final double KB_STRENGTH = 7; //Die Standard-Stärke des Knockbacks
     private static final int DEFAULT_DAMAGE = 5; //Der Standard-Schaden
+    private static final int DEFAULT_ATTACK_DELAY = 30;
 
     /**
      * Die Waffen werden immer relativ zu ihren Besitzern positioniert. 
      * Der Cursor ist eine Waffe des Players. Das sind also die zusätzlichen Werte für die 
      * x-/y-Koordinaten des Cursors in der bestimmten Pose [2.Dimension] einer Bewegungsrichtung [1.Dimension]
      */
-    private static final Point[][] handelPositions = new Point[][]{
-        new Point[] { new Point(06, 14), new Point(06, 14), new Point(06, 14) },
-        new Point[] { new Point(10, 13), new Point(10, 13), new Point(10, 13) },
-        new Point[] { new Point(0, 0), new Point(0,0), new Point(0,0) },
-        new Point[] { new Point(0, 0), new Point(0,0), new Point(0,0) }
+    private static final Point[] handelPositions = new Point[]{
+        new Point(17, 21),
+        new Point(21, 00) 
     };
     
-    private double startX; //Die Startposition vor dem Angriff. Der Cursor kehrt hierhin zurück
-    private double startY;
-    public Shears(int x, int y, double ownerSpeed, boolean isFriendly) {
-        super("Scheren eines Side-Effects", DEFAULT_SPRITE_SHEET, x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, ownerSpeed);
+    private int attackDelay;
+    public Shears(int x, int y, boolean isLeft) {
+        super("Schere eines Side-Effects", DEFAULT_SPRITE_SHEET, x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        prevDirection = isLeft ? 0 : 1;
     }
     
     /**
@@ -40,9 +39,10 @@ public class Shears extends Weapon
     @Override
     public void update() {
         if(isAttacking) {
-            
+            if(animationDelay-- <= 0) {
+                stopAttack();
+            }
         }
-        //Sonst muss die Waffe von ihrem Besitzer gelenkt werden
     }
     
     /**
@@ -51,17 +51,16 @@ public class Shears extends Weapon
      */
     @Override
     public void setPositionInHand(Point handPosition, int xPosOwner, int yPosOwner) {
-        entityX = handPosition.x ;//- handelPositions[xPosPlayer][directionPlayer].x;
-        entityY = handPosition.y ;//- handelPositions[xPosPlayer][directionPlayer].y;
+        entityX = handPosition.x - handelPositions[prevDirection].x;
+        entityY = handPosition.y - handelPositions[prevDirection].y;
         
-        setEntityImage(spriteSheet.getSpriteElement(xPos, prevDirection));
+        setEntityImage(spriteSheet.getSpriteElement(0, prevDirection));
     }
     
     /**
      * @author Jakob Kleine, Janni Röbbecke
      */
     public void notifySuccess() {
-        image = spriteSheet.getSpriteElement(0, prevDirection+4); //Das könnte eigentlich länger sein, dmit man das besser sieht
     }
     
     /**
@@ -71,11 +70,8 @@ public class Shears extends Weapon
     @Override
     public void startAttack(Point direction) {
         if(!isAttacking) {
-            startX = entityX; //Speichert die Position vor dem Angriff
-            startY = entityY; 
-            speed = 5; //Jetzt bewegt sich der Cursor mit einer eigenen Geschwindigkeit
-            setMove(direction); //Der Cursor wird in die angegebene Richtung geworfen
-            isAttacking = true;
+            image = spriteSheet.getSpriteElement(1, prevDirection);
+            attackDelay = DEFAULT_ATTACK_DELAY;
         }
     }
     
@@ -86,19 +82,7 @@ public class Shears extends Weapon
      */
     private void stopAttack() {
         isAttacking = false;
-        entityX = startX; //Setzt den Cursor sicherheitshalber auf die Startposition zurück
-        entityY = startY;
-    }
-    
-    /**
-     * Überprüft, ob die Waffe wieder an ihrem Startpunkt angekommen ist, bzw. ob sie schon darüber hinaus (beyond) bewegt wurde
-     * @return true, wenn die Position der Waffe ihrer Startposition gleicht, oder sie (in der Bewegungsrichtung der Waffe) größer ist. Sonst false
-     */
-    private boolean beyondStart(){
-        //Wenn keine Bewegung entlang x || Bewegung nach links -> entityX soll >= startX sein || Bewegung nach rechts -> ...
-        return (xMove==0 || (xMove<0 && entityX>=startX) || (xMove>0 && entityX<=startX))
-                && //y.Richtung muss genauso überprüft werden
-               (yMove==0 || (yMove<0 && entityY>=startY) || (yMove>0 && entityY<=startY));
+        image = spriteSheet.getSpriteElement(0, prevDirection); //Das könnte eigentlich länger sein, dmit man das besser sieht
     }
 
     /**

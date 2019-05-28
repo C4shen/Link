@@ -30,6 +30,8 @@ public class SideEffect extends Enemy
     public static final int DEFAULT_SPEED = 5;
     
     public static final int DEFAULT_SCORE_VALUE = 50;
+    
+    
     /**
      * Ertellt einen neuen Nebeneffekt
      * @author Janni Röbbecke, Jakob Kleine, Cashen Adkins
