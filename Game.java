@@ -361,9 +361,18 @@ public class Game implements Runnable {
             attackingWeapons.removeAll(waffenGestorbenerGegner);
             gegnerListe.removeAll(nichtMehrLebendeGegner);
             
-            for(Item i : spawnedItems) 
-                i.update();
-            
+            LinkedList<Item> verfalleneItems = new LinkedList<Item>(); 
+            for(Item i : spawnedItems) {
+                if(i.exists()){
+                    i.update();
+                }
+                else {
+                    verfalleneItems.add(i);
+                }
+            }
+            spawnedItems.removeAll(verfalleneItems);
+                
+                
             collisionDet.update();
             
             if(enemySpawnDelay-- <= 0) {
