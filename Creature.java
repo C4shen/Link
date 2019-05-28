@@ -48,7 +48,7 @@ public abstract class Creature extends Movable {
     
     public void setWeapon(Weapon w) {
         weapon = w; 
-        weapon.setPositionInHand(new Point((int) Math.round(entityX), (int) Math.round(entityY)));
+        weapon.setPositionInHand(new Point((int) Math.round(entityX), (int) Math.round(entityY)), xPos, prevDirection);
     }
     
     /**
@@ -122,7 +122,7 @@ public abstract class Creature extends Movable {
                 if(weapon.isAttacking()) //Wenn die Waffe sich bewegt, soll sie sich eigenständig updaten, sonst wird ihre Bewegung vorgegeben
                     weapon.update();
                 else
-                    weapon.setPositionInHand(getHandPosition(prevDirection,xPos));
+                    weapon.setPositionInHand(getHandPosition(prevDirection,xPos), xPos, prevDirection);
             }
         }
     }

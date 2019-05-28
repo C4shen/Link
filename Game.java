@@ -91,7 +91,7 @@ public class Game implements Runnable {
                 stop();
             }
         };
-        playerName = "John_Doe";
+        playerName = "Player101";
         screen = new Screen("LINK - Legend of INformatik Kurs", SCREEN_WIDTH, SCREEN_HEIGHT, screenListener);
         keyManager = new KeyManager();
         screen.getFrame().addKeyListener(keyManager);

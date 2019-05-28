@@ -27,8 +27,8 @@ public class Cursor extends Weapon {
     protected static final Point[][] handelPositions = new Point[][]{
         new Point[] { new Point(06, 14), new Point(06, 14), new Point(06, 14) },
         new Point[] { new Point(10, 13), new Point(10, 13), new Point(10, 13) },
-        new Point[] { new Point(0, 0), new Point(0,0), new Point(0,0) },
-        new Point[] { new Point(0, 0), new Point(0,0), new Point(0,0) }
+        new Point[] { new Point(06, 14), new Point(06, 14), new Point(06, 14) },
+        new Point[] { new Point(10, 13), new Point(10, 13), new Point(10, 13) }
     };
     
     private double startX; //Die Startposition vor dem Angriff. Der Cursor kehrt hierhin zurück
@@ -39,8 +39,8 @@ public class Cursor extends Weapon {
      * @param x die x-Position des Cursors
      * @param y die y-Position des Cursors
      */
-    public Cursor(int x, int y, double ownerSpeed, boolean isFriendly) {
-        super("Cursor", DEFAULT_SPRITE_SHEET, x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, ownerSpeed);
+    public Cursor(int x, int y, boolean isFriendly) {
+        super("Cursor", DEFAULT_SPRITE_SHEET, x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, 0);
         this.isFriendly = isFriendly;
     }
     
@@ -67,9 +67,9 @@ public class Cursor extends Weapon {
      * @since 22.05.2019
      */
     @Override
-    public void setPositionInHand(Point handPosition) {
-        entityX = handPosition.x ;//- handelPositions[xPosPlayer][directionPlayer].x;
-        entityY = handPosition.y ;//- handelPositions[xPosPlayer][directionPlayer].y;
+    public void setPositionInHand(Point handPosition, int poseOwner, int directionOwner) {
+        entityX = handPosition.x - handelPositions[directionOwner][poseOwner].x;
+        entityY = handPosition.y - handelPositions[directionOwner][poseOwner].y;
         
         setEntityImage(spriteSheet.getSpriteElement(xPos, prevDirection));
     }

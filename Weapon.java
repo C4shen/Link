@@ -60,7 +60,7 @@ public abstract class Weapon extends Movable {
      * @author Janni Röbbecke, Jakob Kleine
      * @since 21.05.2019                   
      */
-    public abstract void setPositionInHand(Point handPosition);
+    public abstract void setPositionInHand(Point handPosition, int poseOwner, int directionOwner);
     
     /**
      * Gibt das Knockback der Waffe zurück

@@ -28,7 +28,7 @@ public class CursorItem extends Item
      * @since 26.05.2019
      */
     public void affect(Player p) {
-        p.setWeapon(new Cursor((int) Math.round(p.entityX), (int) Math.round(p.entityY), Player.DEFAULT_SPEED, true));
+        p.setWeapon(new Cursor((int) Math.round(p.entityX), (int) Math.round(p.entityY), true));
     }
     
     /**

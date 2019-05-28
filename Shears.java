@@ -50,7 +50,7 @@ public class Shears extends Weapon
      * @since 22.05.2019
      */
     @Override
-    public void setPositionInHand(Point handPosition) {
+    public void setPositionInHand(Point handPosition, int xPosOwner, int yPosOwner) {
         entityX = handPosition.x ;//- handelPositions[xPosPlayer][directionPlayer].x;
         entityY = handPosition.y ;//- handelPositions[xPosPlayer][directionPlayer].y;
         

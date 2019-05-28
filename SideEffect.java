@@ -9,14 +9,10 @@ import java.awt.Rectangle;
  */
 public class SideEffect extends Enemy
 {
-    //Noch nicht bestimmt
-    private static final Point[][] handPosition = new Point[][]{
-        new Point[]{ new Point(25, 20), new Point(14, 26), new Point(18, 23) },
-        new Point[]{ new Point(25, 19), new Point(17, 17), new Point(02, 06) },
-        new Point[]{ new Point(27, 19), new Point(32, 22), new Point(43, 11) },
-        new Point[]{ new Point(32, 18), new Point(37, 26), new Point(34, 22) }
-    };
-    
+    /*
+     * Die Koordinaten der Hand sind beim SideEffect immer gleich. [Erklärung der Aufgabe dieses Attributs beim gleichnamigen Attribut in der Player - Klasse]
+     */
+    private static final Point handPosition = new Point(56, 29);
     /*
      * Das Standart-Spritesheet-Objekt, auf das alle Objekte dieser Klasse als ihr SpriteSheet referenzieren. 
      * Dadurch, dass es ein Standard-Bild gibt, müssen die gleichen Bilder nicht mehrmals geladen werden.
@@ -44,7 +40,8 @@ public class SideEffect extends Enemy
      */
     public SideEffect(int x, int y) 
     {
-        super(x, y, "Krebs", DEFAULT_SPRITE_SHEET, DEFAULT_HEALTH, DEFAULT_SPEED, new Cursor(x+10, y+30, DEFAULT_SPEED, false));
+        super(x, y, "Krebs", DEFAULT_SPRITE_SHEET, DEFAULT_HEALTH, DEFAULT_SPEED, new Cursor(x+10, y+30, false));
+        
         setMove(new Point(-1, 0)); //Zu Beginn bewegt sich der Side-Effect immer nach links
         health = SideEffect.DEFAULT_HEALTH;
     }
@@ -64,7 +61,7 @@ public class SideEffect extends Enemy
      * @since 22.05.2019
      */
     public Point getHandPosition(int xPos, int direction){
-        return new Point(handPosition[xPos][direction].x + (int) Math.round(entityX), handPosition[xPos][direction].y + (int) Math.round(entityY));
+        return new Point(handPosition.x + (int) Math.round(entityX), handPosition.y + (int) Math.round(entityY));
     }
     
     /**

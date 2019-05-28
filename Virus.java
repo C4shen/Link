@@ -43,7 +43,7 @@ public class Virus extends Enemy
      */
     public Virus(int x, int y) 
     {
-        super(x, y, "Virus", DEFAULT_SPRITE_SHEET, DEFAULT_HEALTH, DEFAULT_SPEED, new Cursor(x+10, y+30, DEFAULT_SPEED, false));
+        super(x, y, "Virus", DEFAULT_SPRITE_SHEET, DEFAULT_HEALTH, DEFAULT_SPEED, new Cursor(x+10, y+30, false));
         health = SideEffect.DEFAULT_HEALTH;
     }
    

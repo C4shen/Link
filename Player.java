@@ -24,16 +24,20 @@ public class Player extends Creature {
     /**
      * Standard-Geschwindigkeit des Spielcharakters
      */
-    public static final double DEFAULT_SPEED = 1.5;
+    private static final double DEFAULT_SPEED = 1.5;
     
-    /**
-     * Die Koordinaten der Hand in den verschiedenen Bildern/Positionen
+    /*
+     * Die Koordinaten der Hand in den verschiedenen Bildern/Positionen von der oberen linken Ecke des jeweiligen Bilds aus.
+     * Sie werden gespeichert, damit die Waffen immer genau in der Hand positioniert werden kann, und nicht speziell auf eine
+     * Figur maßgeschneidert sein müssen.
+     * Für jede Waffe wird außerdem die Position des Griffs gespeichert, also die Position der Stelle, an der die Waffe in die
+     * Hand des Besitzers gelegt werden soll.
      */
     private static final Point[][] handPosition = new Point[][]{
-        new Point[]{ new Point(25, 20), new Point(14, 26), new Point(18, 23) },
-        new Point[]{ new Point(25, 19), new Point(17, 17), new Point(02, 06) },
-        new Point[]{ new Point(27, 19), new Point(32, 22), new Point(43, 11) },
-        new Point[]{ new Point(32, 18), new Point(37, 26), new Point(34, 22) }
+        new Point[]{ new Point(31, 34), new Point(20, 40), new Point(24, 37) },
+        new Point[]{ new Point(35, 32), new Point(27, 30), new Point(12, 19) },
+        new Point[]{ new Point(33, 33), new Point(38, 36), new Point(49, 25) },
+        new Point[]{ new Point(42, 31), new Point(47, 39), new Point(44, 35) }
     };
     
     /**
