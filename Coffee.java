@@ -11,7 +11,7 @@ import java.awt.Rectangle;
  * @author Jakob Kleine, Janni Röbbecke
  * @since 26.05.2019
  */
-public class Kaffee extends Item
+public class Coffee extends Item
 {
     private static final SpriteSheet DEFAULT_SPRITE_SHEET = new SpriteSheet("/res/sprites/items/kaffee.png", 1 /*moves*/, 1 /*directions*/, 32 /*width*/, 26 /*height*/);
     private static final int DEFAULT_WIDTH = 32, DEFAULT_HEIGHT = 26; //Die Standard-Größe eines Kaffees
@@ -29,7 +29,7 @@ public class Kaffee extends Item
      * @author Janni Röbbecke, Jakob Kleine
      * @since 26.05.2019
      */
-    public Kaffee(int xKoordinate, int yKoordinate) {
+    public Coffee(int xKoordinate, int yKoordinate) {
         super("Kaffee", DEFAULT_SPRITE_SHEET, xKoordinate, yKoordinate, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
     
