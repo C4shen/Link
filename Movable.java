@@ -92,6 +92,13 @@ public abstract class Movable extends Entity {
         yMove = p.y;
     }
     
+    /**
+     * Ändert die Bewegungsrichtung der Spielfigur
+     * @author Janni Röbbecke, Jakob Kleine
+     * @param xM Bewegung der Spielfigur in x-Richtung
+     * @param yM Bewegung der Spielfigur in y-Richtung
+     * @since (20.05.2019)
+     */
     public void setMove(double xM, double yM){
         xMove = xM;
         yMove = yM;
@@ -132,6 +139,12 @@ public abstract class Movable extends Entity {
     
     public abstract double getDefaultSpeed();
 
+    /**
+     * Verändert die Bewegung des Chatakters um die angegebenen Werte
+     * @param byX veränderung der Bewegung in x-Richtung
+     * @param byY veränderung der Bewegung in y-Richtung
+     * @author Jakob Kleine, Janni Röbbecke
+     */
     public void moveBy(int byX, int byY) {
         entityX += byX;
         entityY += byY;
