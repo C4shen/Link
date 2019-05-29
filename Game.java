@@ -482,7 +482,7 @@ public class Game implements Runnable {
             catch(InvocationTargetException e) { e.printStackTrace(); }
         }
         
-        /*
+        /**
          * Zuständig, um die Entitäten auf dem Spielfeld auf Kollisionen zu überprüfen, und diese zu verwalten.
          * Es wäre auch möglich, die Methoden direkt in die Klasse GameState zu schreiben, mit dieser inneren Klasse
          * wird allerdings der Kollision-Teil separiert, um die Kohäsion und Übersichtlichkeit zu verbessern.
@@ -498,7 +498,7 @@ public class Game implements Runnable {
          * @since 24.05.2019
          */
         private class CollisionDetector {
-            /*
+            /**
              * Aktualisiert den CollisionDetector, der daraufhin alle Entitäten auf dem Spielfeld auf Kollision überprüft und 
              * diese Kollision auswertet.
              * @author Jakob Kleine, Cepehr Bromand, Ares Zühlke, Janni Röbbecke
@@ -544,7 +544,7 @@ public class Game implements Runnable {
                     keepInside(e);
             }
         
-            /*
+            /**
              * Hält eine bewegbare Entittät, die eventuell aus dem Spielfeld gelaufen ist, innerhalb des Spielfelds
              * @author Jakob Kleine, Cepehr Bromand, Ares Zühlke
              * @since 24.05.2019

@@ -8,8 +8,8 @@ import java.awt.Rectangle;
  */
 public class Pizza extends Item
 {
-    private static final SpriteSheet DEFAULT_SPRITE_SHEET = new SpriteSheet("/res/sprites/items/pizza.png", 4 /*moves*/, 1 /*directions*/, 32 /*width*/, 26 /*height*/);
-    private static final int DEFAULT_WIDTH = 32, DEFAULT_HEIGHT = 26; //Die Standard-Größe eines Pizzastücks
+    private static final SpriteSheet DEFAULT_SPRITE_SHEET = new SpriteSheet("/res/sprites/items/pizza.png", 4 /*moves*/, 1 /*directions*/, 32 /*width*/, 32 /*height*/);
+    private static final int DEFAULT_WIDTH = 32, DEFAULT_HEIGHT = 32; //Die Standard-Größe eines Pizzastücks
     
     private static final int DEFAULT_HP = 10; //Die Standardanzahl von Lebenspunkten, die das Pizzastück wiederherrstellt
     
