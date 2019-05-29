@@ -803,8 +803,8 @@ public class Game implements Runnable {
                             g.setFont(unterüberschrift);
                             Utils.centerText(g, "Ziel des Spiels", SCREEN_WIDTH, zeilenHoehe+=40); 
                             g.setFont(standardSchrift); //Font-Festlegen muss nur einmal aufgerufen werden; dann sind die RenderingHints für Text bereits gesetzt
-                            g.drawString("In diesem Informatik-orientiertem Spiel geht es darum einen möglichst", 40, zeilenHoehe+=35);
-                            g.drawString("großen Score zu erzielen, indem man Gegner besiegt, die auf dem ", 40, zeilenHoehe+=20);
+                            g.drawString("In diesem Informatik-orientierten Spiel geht es darum einen möglichst", 40, zeilenHoehe+=35);
+                            g.drawString("hohen Score zu erzielen, indem man Gegner besiegt, die auf dem ", 40, zeilenHoehe+=20);
                             g.drawString("Spielfeld erscheinen und Items einsammelt, die einem dabei.", 40, zeilenHoehe+=20);
                             g.drawString("helfen.", 40, zeilenHoehe+=20);
                             g.setFont(unterüberschrift);
@@ -823,8 +823,8 @@ public class Game implements Runnable {
                             g.drawString("zufälligen Feldern gespawnt. Sie fügen der Spielfigur Schaden zu und", 40, zeilenHoehe+=20);
                             g.drawString("werfen sie ein Stück zurück (geben Knockback).", 40, zeilenHoehe+=20);
                             g.drawString("Bisher gibt es folgende Gegener:", 40, zeilenHoehe+=20);
-                            g.drawString("Seiten-Effekt: Der Seiten-Effekt (dargestellt durch einen Krebs) läuft", 40, zeilenHoehe+=30);
-                            g.drawString("ausschließlich seitlich und greift bei Berührung mit der Spielfigur mit", 40, zeilenHoehe+=20);
+                            g.drawString("Seiten-Effekt: Der Seiten-Effekt (dargestellt mit einem Krebs) läuft", 40, zeilenHoehe+=30);
+                            g.drawString("ausschließlich seitlich und greift bei Berührung der Spielfigur mit", 40, zeilenHoehe+=20);
                             g.drawString("seinen Scheren an.", 40, zeilenHoehe+=20);
                             g.drawString("Virus: Der Virus ist verfolgt die Spielfigur. Er fügt ihr Schaden zu,", 40, zeilenHoehe+=30);
                             g.drawString("indem er seine Waffe (momentan ein Cursor) auf sie wirft.", 40, zeilenHoehe+=20);
@@ -853,6 +853,7 @@ public class Game implements Runnable {
                             g.setFont(standardSchrift);
                             g.drawString("Das Töten von Gegnern bringt Punkte ein. Jeder Gegner-Typ bringt", 40, zeilenHoehe+=40);
                             g.drawString("dabei eine eigene Anzahl an Score-Punkten. ", 40, zeilenHoehe+=20);
+                            g.drawString("Der Score wird in der oberen rechten Ecke des Spiels angezeigt. ", 40, zeilenHoehe+=20);
                             g.drawString("Die 10 besten Scores werden gespeichert und können im Menü", 40, zeilenHoehe+=20);
                             g.drawString("unter dem Reiter Bestenliste eingesehen werden. Zusätzlich zu", 40, zeilenHoehe+=20);
                             g.drawString("der erreichten Punktzahl wird dabei auch der Name des Spielers", 40, zeilenHoehe+=20);
