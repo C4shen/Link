@@ -13,8 +13,8 @@ import java.awt.Rectangle;
  */
 public class Coffee extends Item
 {
-    private static final SpriteSheet DEFAULT_SPRITE_SHEET = new SpriteSheet("/res/sprites/items/kaffee.png", 1 /*moves*/, 1 /*directions*/, 32 /*width*/, 26 /*height*/);
-    private static final int DEFAULT_WIDTH = 32, DEFAULT_HEIGHT = 26; //Die Standard-Größe eines Kaffees
+    private static final SpriteSheet DEFAULT_SPRITE_SHEET = new SpriteSheet("/res/sprites/items/kaffee.png", 4 /*moves*/, 1 /*directions*/, 39 /*width*/, 54 /*height*/);
+    private static final int DEFAULT_WIDTH = 39, DEFAULT_HEIGHT = 54; //Die Standard-Größe eines Kaffees
     
     private static int bereitsGesammelt; //Speichert die Anzahl der Kaffees, die bereits eingesammelt wurden
     

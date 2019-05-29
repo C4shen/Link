@@ -39,7 +39,7 @@ public abstract class Item extends Entity
     @Override
     public void update() {
         existenceTime--;
-        if(animationDelay++ >= 7) { //Die Animation soll nur alle 7 Durchläufe der Loop erfolgen
+        if(animationDelay++ >= 12) { //Die Animation soll nur alle 7 Durchläufe der Loop erfolgen
             animationDelay = 0; //Setzt das Delay zurück
             if(xPos < spriteSheet.getPoseAmount()-1) //wenn man gerade noch nicht beim letzten Bild ist, soll das nächste gewählt werden
                 xPos++;
