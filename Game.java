@@ -847,6 +847,17 @@ public class Game implements Runnable {
                             g.drawString("desto geringer ist der Geschwindigkeits-Boost, aber desto", 40, zeilenHoehe+=20);
                             g.drawString("höher ist der zugefügte Schaden.", 40, zeilenHoehe+=20);
                             g.drawString("Pizza: Pizza erhöht die Lebenpunkte der Spielfigur", 40, zeilenHoehe+=30);
+                            
+                            g.setFont(unterüberschrift);
+                            Utils.centerText(g, "Score", SCREEN_WIDTH, zeilenHoehe+=40);
+                            g.setFont(standardSchrift);
+                            g.drawString("Das Töten von Gegnern bringt Punkte ein. Jeder Gegner-Typ bringt", 40, zeilenHoehe+=40);
+                            g.drawString("dabei eine eigene Anzahl an Score-Punkten. ", 40, zeilenHoehe+=20);
+                            g.drawString("Die 10 besten Scores werden gespeichert und können im Menü", 40, zeilenHoehe+=20);
+                            g.drawString("unter dem Reiter Bestenliste eingesehen werden. Zusätzlich zu", 40, zeilenHoehe+=20);
+                            g.drawString("der erreichten Punktzahl wird dabei auch der Name des Spielers", 40, zeilenHoehe+=20);
+                            g.drawString("und das Datum des Spiels gespeichert. Das Ändern des gespeicherten", 40, zeilenHoehe+=20);
+                            g.drawString("Namens ist allerdings momentan nicht möglich.", 40, zeilenHoehe+=20);
                     break;
                 }
 
