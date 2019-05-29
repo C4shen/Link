@@ -42,7 +42,7 @@ public class Cursor extends Weapon {
      * @author Ares Zülke, Janni Röbbecke, Jakob Kleine
      */
     public Cursor(int x, int y, boolean isFriendly) {
-        super("Cursor", DEFAULT_SPRITE_SHEET, x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        super(DEFAULT_SPRITE_SHEET, x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT);
         this.isFriendly = isFriendly;
     }
     

@@ -21,7 +21,7 @@ public class Pizza extends Item
      * @since 28.05.2019
      */
     public Pizza(int xKoordinate, int yKoordinate) {
-        super("Pizza", DEFAULT_SPRITE_SHEET, xKoordinate, yKoordinate, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        super(DEFAULT_SPRITE_SHEET, xKoordinate, yKoordinate, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
     
     /**

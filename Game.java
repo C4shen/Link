@@ -194,7 +194,7 @@ public class Game implements Runnable {
      */
     private void newGame() {
         gameState = new GameState();
-        Kaffee.resetSelectedAmount(); //Die Effekte des Kaffes verändern sich, je mehr Kaffee eingesammelt wurde. Das muss jetzt zurückgesetzt werden
+        Coffee.resetSelectedAmount(); //Die Effekte des Kaffes verändern sich, je mehr Kaffee eingesammelt wurde. Das muss jetzt zurückgesetzt werden
         currentState = gameState;
     }
     
@@ -332,7 +332,7 @@ public class Game implements Runnable {
                 enemyConstructors[1] = Class.forName("SideEffect").getConstructor(int.class, int.class);
 
                 itemConstructors[0] = Class.forName("CursorItem").getConstructor(int.class, int.class);
-                itemConstructors[1] = Class.forName("Kaffee").getConstructor(int.class, int.class);
+                itemConstructors[1] = Class.forName("Coffee").getConstructor(int.class, int.class);
                 itemConstructors[2] = Class.forName("Pizza").getConstructor(int.class, int.class);
             } 
             catch(ClassNotFoundException e) { e.printStackTrace(); }

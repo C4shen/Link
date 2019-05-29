@@ -18,10 +18,6 @@ public abstract class Entity {
     public static final int DEFAULT_HEIGHT = 64;
     
     /**
-     * Name der Figur
-     */
-    protected String name;
-    /**
      * Aktuelle x-Position der Figur
      */
     protected double entityX;
@@ -68,8 +64,7 @@ public abstract class Entity {
      * @param height die Höhe der Figur
      * @since 0.01 (10.05.2019)
      */
-    public Entity(String name, BufferedImage image, int x, int y, int width, int height) {
-        this.name = name;
+    public Entity(BufferedImage image, int x, int y, int width, int height) {
         this.image = image;
         this.entityX = x;
         this.entityY = y;

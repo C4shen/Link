@@ -27,8 +27,8 @@ public abstract class Weapon extends Movable {
      * @param height die Höhe der Waffe
      * @since 0.01 (17.05.2019)
      */
-    public Weapon(String name, SpriteSheet spriteSheet, int x, int y, int width, int height) {
-        super(name, spriteSheet, x, y, width, height, 0);
+    public Weapon(SpriteSheet spriteSheet, int x, int y, int width, int height) {
+        super(spriteSheet, x, y, width, height, 0);
     }
     
     /**
