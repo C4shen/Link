@@ -25,10 +25,9 @@ public class Screen
      * @param title der Titel des Spiels
      * @param width die Breite des Screens
      * @param height die Höhe des Screens
-     * @param listener ein WindowListener, der das Schließen des Fensters verwalten soll und damit ein geplantes Beenden des Spiels ermöglicht
      * @since 10.05.2019 (WindowListener seit 27.05)
      */
-    public Screen(String title, int width, int height, WindowListener listener)
+    public Screen(String title, int width, int height)
     {
         this.title = title;
         this.width = width;
@@ -36,8 +35,7 @@ public class Screen
 
         frame = new JFrame(title);
         frame.setSize(width, height);
-        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); //Beim Drücken des x oben Rechts soll nichts passieren. Das schließen verwaltet der WindowListener
-        frame.addWindowListener(listener);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); //Beim Drücken des x oben Rechts soll nichts passieren. Das Schließen verwaltet der WindowListener
         frame.setResizable(false);
         frame.setLocationRelativeTo(null); //Positioniert den Frame in der Mitte des Bildschirms
         frame.setIconImage(new ImageIcon(Utils.absoluteFileOf("/res/icon.png").toString()).getImage());

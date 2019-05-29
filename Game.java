@@ -55,7 +55,6 @@ public class Game implements Runnable {
     private Screen screen; //Der Screen, auf dem das Spiel visualisiert wird
     private boolean running = true; //Gibt an, ob das Spiel momentan läuft (beendet ggf. die Game-Loop)
     private KeyManager keyManager; //Der KeyManager, der die Eingaben über die Tastatur verwaltet.
-    private Graphics g; //Die Graphics, mit denen die Figuren gemalt werden.
     private State currentState; 
     private GameState gameState;
     private MainMenuState mainMenuState;
@@ -90,15 +89,8 @@ public class Game implements Runnable {
         //Es werden zwei Attribute zur Überprüfung der vegrangegen Berechnungszeit erstellt.
         long timestamp;
         long oldTimestamp;
-        //Es wird ein neues Fenster ertsellt mit dem Namen des Spiels als Titel und der Höhe und Breite der vorher angegebenen Attribute.
-        WindowListener screenListener = new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                endGame();
-            }
-        };
         playerName = "Player101";
-        screen = new Screen("LINK - Legend of INformatik Kurs", SCREEN_WIDTH, SCREEN_HEIGHT, screenListener);
+        screen = new Screen("LINK - Legend of INformatik Kurs", SCREEN_WIDTH, SCREEN_HEIGHT);
         try {
              menuBackground = ImageIO.read(Utils.absoluteFileOf("/res/tilesets/menuBackground.jpg")); //Der Rahmen wird gelesen und als BufferedImage gespeichert.
         } 
@@ -107,6 +99,13 @@ public class Game implements Runnable {
         }
         keyManager = new KeyManager();
         screen.getFrame().addKeyListener(keyManager);
+        WindowListener screenListener = new WindowAdapter() { //Verwaltet das Schließen des Screens. 
+            @Override
+            public void windowClosing(WindowEvent e) {
+                endGame();
+            }
+        };
+        screen.getFrame().addWindowListener(screenListener);
         mainMenuState = new MainMenuState();
         tutorialState = new TutorialState();
         highscoresState = new HighscoresState();
@@ -185,7 +184,7 @@ public class Game implements Runnable {
      */
     private void render() 
     {
-        currentState.render(g);
+        //currentState.render(g);
     }
     
     /**

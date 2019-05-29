@@ -21,9 +21,10 @@ public class Knockback
      * @since 23.05.2019
      */
     public Knockback(int amount, double strength, double dirX, double dirY) {
-        /* Bei keiner Richtungsangabe würde das Opfer des Knockbacks auf der Stelle bleiben, sich aber nicht bewegen könen, weil noch Knockback durchgeführt werden muss.
-         * Das KNockback könnte allerdings nicht abgearbeitet werden, weil "knockbackLeft" nicht reduziert werden kann. 
-         * Deswegen muss verhindert werden, dass keine Richtung angegeben wird [Es wäre möglich eine IllegalArgumentException zu throwen, aber das Spiel soll sich nicht aufhängen]
+        /* 
+         * Bei keiner Richtungsangabe würde das Opfer des Knockbacks auf der Stelle bleiben, sich aber nicht bewegen könen, weil noch Knockback durchgeführt werden muss.
+         * Das Knockback könnte allerdings nicht abgearbeitet werden, weil "knockbackLeft" nicht reduziert werden kann. 
+         * Deswegen muss verhindert werden, dass keine Richtung angegeben wird [Es wäre möglich eine IllegalArgumentException zu throwen, aber das Spiel soll sich nicht aufhängen].
          */
         if(dirX == 0 && dirY == 0) { 
             System.err.println("Es wurde ein Knockback ohne Richtung erstellt. Das ist nicht vorgesehen, weshalb eine zufällige Richtung (nach rechts) bestimmt wird.");
