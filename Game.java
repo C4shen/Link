@@ -55,6 +55,7 @@ public class Game implements Runnable {
     private Screen screen; //Der Screen, auf dem das Spiel visualisiert wird
     private boolean running = true; //Gibt an, ob das Spiel momentan läuft (beendet ggf. die Game-Loop)
     private KeyManager keyManager; //Der KeyManager, der die Eingaben über die Tastatur verwaltet.
+    private Graphics g; //Die Graphics, mit denen die Figuren gemalt werden.
     private State currentState; 
     private GameState gameState;
     private MainMenuState mainMenuState;
@@ -184,7 +185,7 @@ public class Game implements Runnable {
      */
     private void render() 
     {
-        //currentState.render(g);
+        currentState.render(g);
     }
     
     /**
@@ -236,21 +237,12 @@ public class Game implements Runnable {
     }
     
     /**
-<<<<<<< HEAD
-<<<<<<< HEAD
      * Ein State ist ein Zustand in dem sich das Programm befinden kann. 
      * @author Jakob Kleine, Janni Röbbecke, Cashen Adkins
      * @since 25.05.2019
-=======
      * 
      * [Hinweis: weil private innere Klassen/Interfaces mit allen ihren Methoden nicht in JavaDoc angezeigt werden, 
      *           wird javadoc bei den folgenden Klassen zwar angedeutet, aber nicht verwendet ]
->>>>>>> 53668c1c2380c96f708eda6dd2489921fd7f5623
-=======
-     * 
-     * [Hinweis: weil private innere Klassen/Interfaces mit allen ihren Methoden nicht in JavaDoc angezeigt werden, 
-     *           wird javadoc bei den folgenden Klassen zwar angedeutet, aber nicht verwendet ]
->>>>>>> 53668c1c2380c96f708eda6dd2489921fd7f5623
      */
     private interface State
     {

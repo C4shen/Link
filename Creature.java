@@ -229,12 +229,24 @@ public abstract class Creature extends Movable {
      * @param direction die Richtung der aktuellen Bewegung
      * @return einen Punkt (x|y), dessen Koordinaten denen der Hand der Kreatur entsprechen
      */
-    public abstract Point getHandPosition(int xPos, int direction);
-    
+    protected abstract Point getHandPosition(int xPos, int direction);
+
+    /**
+     * Verändert die Geschwindigkeit um die angegebene Menge
+     * @param by die Menge, um die die Geschwindigkeit geändert werden sollen (positiv oder negativ)
+     * @author Janni Röbbecke, Cashen Adkins, Jakob Kleine
+     * @since 28.05.2019
+     */
     public void changeSpeedBy(double by) {
         speed += by;
     }
     
+    /**
+     * Verändert die Healthpunkte um die angegebene Menge
+     * @param by die Menge, um die die HP geändert werden sollen (positiv oder negativ)
+     * @author Cashen Adkins, Jakob Kleine
+     * @since 28.05.2019
+     */
     public void changeHealthBy(double by) {
         health += by;
     }

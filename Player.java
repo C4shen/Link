@@ -55,14 +55,14 @@ public class Player extends Creature {
     /**
      * Der Spieler empfängt die Information in welche Richtungen er gerade Gesteuert wird
      * @param p Punkt, der die Richtungen angiebt in die die Spielfigur gerade gesteuert wird
-     * @author Janni Röbbecke, Jakob Kleine
+     * @author Janni Röbbecke, Cashen Adkins
      * @since 28.05.2019
      */
     public void reciveKeyInput(Point p){
         if(p.x!=0 && p.y!=0){
             //sollte der Spieler sich in zwei Richtungen geleichzeitig bewegen wird seine Bewegung reduziert, 
-            //damit er insgesmt genausoschnell läuft wie er in eine Richtung laufen würde
-            xMove = 0.7071067811865475 *p.getX();
+            //damit er insgesmt genau so schnell läuft, wie er in eine Richtung laufen würde. Mit dem Satz des Pythagoras ergibt sich folgdende Formel um das zu erreichen
+            xMove = 0.7071067811865475 *p.getX(); //0.70710.. = sqrt(1/2); Math.sqrt hat das nicht ausgerechnet.
             yMove = 0.7071067811865475 *p.getY();
         }
         else {

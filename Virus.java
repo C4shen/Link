@@ -57,7 +57,7 @@ public class Virus extends Enemy
             xMove = knockback.getDirectionX();
     }
     
-    //Noch nicht bestimmt
+    //Der Virus ist noch nicht animiert, also kann hierüber keine Aussage getroffen werden
     public boolean weaponBehind(){ return false; }
     
     /**
@@ -76,10 +76,18 @@ public class Virus extends Enemy
         return new Rectangle((int) Math.round(entityX), (int) Math.round(entityY), 25, 48);
     }
     
+    /**
+     * @author Janni Röbbecke, Jakob Kleine
+     * @since 22.05.2019
+     */
     public int getScoreValue() {
         return DEFAULT_SCORE_VALUE;
     }
     
+    /**
+     * @author Janni Röbbecke, Jakob Kleine
+     * @since 22.05.2019
+     */
     public Weapon target(Player player){
         if(player.getHitbox().intersects(getHitbox())){
             return startAttack();

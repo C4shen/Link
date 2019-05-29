@@ -61,7 +61,7 @@ public abstract class Movable extends Entity {
      * @author Jakob Kleine, Cashen Adkins, www.quizdroid.wordpress.com
      * @since 0.01 (10.05.2019) [Animiert seit 13.05.2019]
      */
-    public void move(){
+    protected void move(){
         entityX += xMove * speed; //Die Figur bewegt sich mit ihrer bestimmten Geschwindigkeit in ihre Richtung (x & y)
         entityY += yMove * speed;
         
