@@ -318,7 +318,7 @@ public class Game implements Runnable {
             
             //Die Konstruktoren der Gegner und Items werden gespeichert
             enemyConstructors = new Constructor[2];
-            itemConstructors = new Constructor[3];
+            itemConstructors = new Constructor[4];
             try{
                 enemyConstructors[0] = Class.forName("Virus").getConstructor(int.class, int.class);
                 enemyConstructors[1] = Class.forName("SideEffect").getConstructor(int.class, int.class);
@@ -326,6 +326,7 @@ public class Game implements Runnable {
                 itemConstructors[0] = Class.forName("CursorItem").getConstructor(int.class, int.class);
                 itemConstructors[1] = Class.forName("Coffee").getConstructor(int.class, int.class);
                 itemConstructors[2] = Class.forName("Pizza").getConstructor(int.class, int.class);
+                itemConstructors[3] = Class.forName("Shoes").getConstructor(int.class, int.class);
             } 
             catch(ClassNotFoundException e) { e.printStackTrace(); }
             catch(NoSuchMethodException e) { e.printStackTrace(); }
@@ -474,7 +475,7 @@ public class Game implements Runnable {
          */
         private void spawnRandomItem() {
             try {
-                spawnedItems.add((Item) itemConstructors[Utils.random(0,2)].newInstance(Utils.random(10, 550), Utils.random(110, 650)));
+                spawnedItems.add((Item) itemConstructors[Utils.random(0,3)].newInstance(Utils.random(10, 550), Utils.random(110, 650)));
             }
             catch(InstantiationException e) { e.printStackTrace(); }
             catch(IllegalAccessException e) { e.printStackTrace(); }
