@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.util.Random;
 import java.util.Date;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 /**
  * Eine Klasse mit nützlichen öfters benutzen Methoden, die nicht unbedingt einer bestimmten Klasse zugeordnet werden können.
@@ -30,6 +31,35 @@ public class Utils
     public static void centerText(Graphics g, String text, int width, int yPosition) {
         //width/2 -> Text würde in Mitte starten; also width/2 - textBreite/2 -> passend verschoben; dann ausgeklammert -> (width-textBreite)/2
         g.drawString(text, (width - textBreite(g, text))/2, yPosition);
+    }
+    
+    /**
+     * Kombiniert die angegebenen Bilder in einem neuen Bild
+     */
+    public static BufferedImage combineImages(BufferedImage... imges) {
+        int wid = 0;
+        int height = 0;
+        for(BufferedImage i : imges) {
+            wid += i.getWidth();
+            height += i.getHeight();
+        }
+        
+        BufferedImage newImage = new BufferedImage(wid,height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = newImage.createGraphics();
+        // Color oldColor = g2.getColor();
+        // fill background
+        // g2.setPaint(Color.WHITE);
+        // g2.fillRect(0, 0, wid, height);
+        // draw image
+        // g2.setColor(oldColor);
+        
+        int aktX = 0;
+        for(BufferedImage i : imges) {
+            g2.drawImage(i, null, aktX, 0);
+            aktX += i.getWidth();
+        }
+        g2.dispose();
+        return newImage;
     }
     
     /**

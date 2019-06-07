@@ -60,6 +60,7 @@ public class Game implements Runnable {
     private GameState gameState;
     private MainMenuState mainMenuState;
     private TutorialState tutorialState;
+    private OptionsState optionsState;
     private HighscoresState highscoresState;
     private HighScoreManager scoreManager;
     private BufferedImage menuBackground;
@@ -109,6 +110,7 @@ public class Game implements Runnable {
         screen.getFrame().addWindowListener(screenListener);
         mainMenuState = new MainMenuState();
         tutorialState = new TutorialState();
+        optionsState = new OptionsState();
         highscoresState = new HighscoresState();
         scoreManager = new HighScoreManager();
         currentState = mainMenuState;
@@ -723,7 +725,7 @@ public class Game implements Runnable {
                         currentState = tutorialState;
                     break;
                     case 3: 
-                        //hier müsste zum Optionen-State gewechselt werden; so weit sind wir allerdings nicht gekommen
+                        currentState = optionsState;
                     break;
                     case 4: 
                         currentState = highscoresState; 
@@ -748,6 +750,31 @@ public class Game implements Runnable {
                 menuItem = item;
         }
     }
+    
+    public class OptionsState implements State 
+    {
+        private TextField nameInput;
+        public OptionsState() {
+            nameInput = new TextField("Hallo", 100, 100, 100);
+        }
+        public void render(Graphics g) {
+            screen.getCanvas().setBackground(Color.white); //Weiß wird als Hintergrundfarbe dargestellt
+            BufferStrategy bs = screen.getCanvas().getBufferStrategy(); 
+            if(bs == null)
+                screen.getCanvas().createBufferStrategy(3);
+            else
+            {
+                g = bs.getDrawGraphics();
+                g.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+                g.drawImage(menuBackground, 0, 0, null);
+                nameInput.render(g);
+            }
+        }
+        public void update() {
+            
+        }
+    }
+    
     /**
      * Der Tutorial-State ist der State, in dem sich das Spiel befindet, wenn die Anleitung aufgerufen wird.
      * @author Ares Zühlke, Cepehr Bromand, Jakob Kleine
