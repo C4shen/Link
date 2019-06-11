@@ -7,7 +7,9 @@ import java.awt.event.KeyListener;
  * @since 0.01 (11.05.2019)
  */
 public class KeyManager implements KeyListener {
+    private boolean capsLocked;
     private boolean[] keys; //Speichert für alle Tasten, ob sie gedrückt werden
+    private boolean[] keysLast;
     private boolean[] relevantKeys; //Speichert, ob die relevanten Tasten für das Spiel gedrückt werden: w, s, a, d, space, escape (in dieser Reihenfolge; w a s d meint auch pfeile in entsprechender Richtung)
     private boolean[] lastStateRelevantKeys; //Speichert den letzten Status der relevanten Tasten, sodass die Taste nicht mehrmals pro Loop "gedrückt" wird, obwohl man sie nur einmal drücken will.
     /**
@@ -17,6 +19,7 @@ public class KeyManager implements KeyListener {
      */
     public KeyManager(){
         keys = new boolean[256];
+        keysLast = new boolean[256];
         relevantKeys = new boolean[6];
         lastStateRelevantKeys = new boolean[6];
     }
@@ -55,6 +58,8 @@ public class KeyManager implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         keys[e.getKeyCode()] = false; //Der losgelassene Knopf wird nicht mehr gedrückt
+        if(e.getKeyCode() == KeyEvent.VK_CAPS_LOCK)
+            capsLocked = !capsLocked;
     }
     
     /**
@@ -85,6 +90,25 @@ public class KeyManager implements KeyListener {
             lastStateRelevantKeys[keyIndex] = relevantKeys[keyIndex]; //Speichert den nun letzten Status des gewählten Keys
             return false;
         }
+    }
+    
+    public boolean generalKeyPressedOnce(int keyIndex) {
+        if(keys[keyIndex] && !keysLast[keyIndex]) { //Nur wenn grade gedrückt && vorher nicht gedrückt
+            keysLast[keyIndex] = keys[keyIndex]; //Speichert den nun letzten Status des gewählten Keys
+            return true;
+        }
+        else {
+            keysLast[keyIndex] = keys[keyIndex]; //Speichert den nun letzten Status des gewählten Keys
+            return false;
+        }
+    }
+    
+    public boolean crtl() {
+        return keys[KeyEvent.VK_CONTROL];
+    }
+    
+    public boolean upperCase() {
+        return keys[KeyEvent.VK_SHIFT] ^ capsLocked;
     }
     
     /**

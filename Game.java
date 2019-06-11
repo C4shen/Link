@@ -222,23 +222,6 @@ public class Game implements Runnable {
     }
     
     /**
-     * Stelllt die gewünschte Schriftart ein und sorg dafür, das die Schrift schöner gerendert wird
-     * (muss nur einmalvor dem Rendern aufgerufen werden, danach kann setFond benutzt werden)
-     * @author Jakob Kleine, Cashen Adkins
-     * @param f gewünschte Schriftart
-     */
-    private void fontFestlegen(Graphics g, Font f) {
-        Graphics2D g2d = (Graphics2D) g; //Damit RenderingHints gesetzt werden können, muss das Graphics-Objekt in ein Graphics2D-Objekt gecastet werden
-        g2d.setRenderingHint(
-            RenderingHints.KEY_TEXT_ANTIALIASING, //Text-Anti-Aliasing -> weichere Kanten
-            RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        g2d.setRenderingHint(
-            RenderingHints.KEY_FRACTIONALMETRICS, //Fractional-Metrics -> konsistente Buchstabengröße
-            RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-        g2d.setFont(f);
-    }
-    
-    /**
      * Ein State ist ein Zustand in dem sich das Programm befinden kann. 
      * @author Jakob Kleine, Janni Röbbecke, Cashen Adkins
      * @since 25.05.2019
@@ -363,7 +346,7 @@ public class Game implements Runnable {
                     i.render(g);
                 
                 //Am oberen Bildrand werden die Lebenspunkte und der Score des Spielers angezeigt
-                fontFestlegen(g, new Font("American Typewriter", Font.BOLD, 40)); 
+                Utils.fontFestlegen(g, new Font("American Typewriter", Font.BOLD, 40)); 
                 g.setColor(new Color(215, 7, 7));
                 g.drawString("HP: "+player.health, 10, (HP_BAR_HEIGHT+40)/2);
                 g.setColor(new Color(204, 146, 12));
@@ -672,7 +655,7 @@ public class Game implements Runnable {
                 //Clear Screen
                 g.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
                 g.drawImage(menuBackground, 0, 0, null);
-                fontFestlegen(g,font);
+                Utils.fontFestlegen(g,font);
                 g.setColor(color);
                 g.drawString("Neues Spiel", SCREEN_WIDTH/2-120, 200);
                 if(gameState == null) { //Wenn der Game-State null ist, kann gerade nicht weitergespielt werden, also wird das Menüitem dafür heller gemalt
@@ -683,9 +666,7 @@ public class Game implements Runnable {
                 else //Sonst wird es ganz normal angezeigt
                     g.drawString("Weiterspielen", SCREEN_WIDTH/2-120, 280);
                 g.drawString("Anleitung", SCREEN_WIDTH/2-120, 360);
-                g.setColor(color.brighter()); //Die Optionen haben wir noch nicht implementiert, also werden sie heller angezeigt
                 g.drawString("Optionen", SCREEN_WIDTH/2-120, 440);
-                g.setColor(color); //Der Rest 
                 g.drawString("Bestenliste", SCREEN_WIDTH/2-120, 520);
                 g.drawString("Beenden", SCREEN_WIDTH/2-120, 600);
                 g.drawImage(menuItemFrame, SCREEN_WIDTH/2-190, 140 + menuItem * 80, 384, 96, null); //Zeichnet den Rahmen um das ausgewählte Item
@@ -753,13 +734,24 @@ public class Game implements Runnable {
     
     public class OptionsState implements State 
     {
+        private static final int NAME_IN_INDEX = 1;
+        private static final int MENU_ENTRIES = 2;
+        private BufferedImage menuItemFrame; //Der Rahmen, der sich um den ausgewählten Menüpunkt befindet.
         private TextField nameInput;
+        private int menuItem;
         public OptionsState() {
-            nameInput = new TextField("Hallo", 100, 100, 100);
+            nameInput = new TextField("z.B. EinBoss123", 250, 500, 300);
+            try {
+                 menuItemFrame = ImageIO.read(Utils.absoluteFileOf("/res/tilesets/menuitemframe.png")); //Der Rahmen wird gelesen und als BufferedImage gespeichert.
+            } 
+            catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+        
         public void render(Graphics g) {
             screen.getCanvas().setBackground(Color.white); //Weiß wird als Hintergrundfarbe dargestellt
-            BufferStrategy bs = screen.getCanvas().getBufferStrategy(); 
+            BufferStrategy bs = screen.getCanvas().getBufferStrategy();
             if(bs == null)
                 screen.getCanvas().createBufferStrategy(3);
             else
@@ -767,11 +759,53 @@ public class Game implements Runnable {
                 g = bs.getDrawGraphics();
                 g.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
                 g.drawImage(menuBackground, 0, 0, null);
+                Utils.fontFestlegen(g, new Font("Futura", Font.BOLD, 40));
+                Utils.centerText(g, "OPTIONEN", SCREEN_WIDTH, 100);
+                g.drawString("Name:", 110, 550);
                 nameInput.render(g);
+                if(menuItem != NAME_IN_INDEX) 
+                    g.drawImage(menuItemFrame, SCREEN_WIDTH/2-190, 140 + menuItem * 80, 384, 96, null); //Zeichnet den Rahmen um das ausgewählte Item
+                bs.show();
+                g.dispose();
             }
         }
+        
         public void update() {
-            
+            if(nameInput.isFocussed()) {
+                if(keyManager.generalKeyPressedOnce(java.awt.event.KeyEvent.VK_ENTER) || keyManager.generalKeyPressedOnce(java.awt.event.KeyEvent.VK_ESCAPE))  
+                    nameEintragen();
+                else 
+                    nameInput.recieveInput(keyManager);
+            }
+            else {
+                if(keyManager.downEinmal()) {
+                    if(menuItem < MENU_ENTRIES-1) //Wenn nicht beim letzten Item -> zum nächsten
+                        menuItem++;
+                    else //Sonst: zum ersten
+                        menuItem = 0;
+                    if(menuItem == NAME_IN_INDEX) 
+                        nameInput.recieveFocus();
+                }
+                else if(keyManager.upEinmal()) {
+                    if(menuItem > 0) { //Wenn nicht beim ersten Item -> zum vorherigen
+                        menuItem--;
+                    }
+                    else
+                        menuItem = MENU_ENTRIES-1; //Sonst: zum letzten Item
+                    if(menuItem == NAME_IN_INDEX) 
+                        nameInput.recieveFocus();
+                }
+                
+                if(keyManager.escapeEinmal()) 
+                    currentState = mainMenuState;
+            }
+        }
+        
+        private void nameEintragen() { 
+            if(!nameInput.getText().isEmpty()) { 
+                playerName = nameInput.getText();
+            }
+            nameInput.loseFocus();
         }
     }
     
@@ -818,7 +852,7 @@ public class Game implements Runnable {
                 //Clear Screen
                 g.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
                 g.drawImage(menuBackground, 0, 0, null);
-                fontFestlegen(g,überschrift);
+                Utils.fontFestlegen(g,überschrift);
                 g.setColor(schriftFarbe.darker().darker()); //Eine dunklere Schriftfarbe ist hier leichter zu lesen.
                 /* 
                  * Speichert die Zeilenhöhe, sodass beim einfügen von Text die Zeilenhöhe automatisch angepasst wird, indem bei jedem Anzeigen von Text die Zeilenhöhe
@@ -954,7 +988,7 @@ public class Game implements Runnable {
                 //Clear Screen
                 g.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
                 g.drawImage(menuBackground, 0, 0, null);
-                fontFestlegen(g,basisFont.deriveFont(Font.BOLD));
+                Utils.fontFestlegen(g,basisFont.deriveFont(Font.BOLD));
                 g.setColor(new Color(65, 41, 31));
                 
                 Utils.centerText(g, "BESTENLISTE", SCREEN_WIDTH, 100);

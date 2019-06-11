@@ -7,7 +7,13 @@ import java.util.Random;
 import java.util.Date;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-
+import java.awt.RenderingHints;
+import java.awt.Font;
+import java.awt.event.KeyEvent;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.DataFlavor;
 /**
  * Eine Klasse mit nützlichen öfters benutzen Methoden, die nicht unbedingt einer bestimmten Klasse zugeordnet werden können.
  * 
@@ -18,6 +24,44 @@ import java.awt.Graphics2D;
 public class Utils 
 {
     private static Random rGenerator = new Random(); //Ein Generator für zufällige Zahlen
+    
+    public static String pasteClipboard() {
+        Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
+        Transferable t = c.getContents(null);
+        if (t == null)
+            return "";
+        try {
+            return (String) t.getTransferData(DataFlavor.stringFlavor);
+        } catch (Exception e){
+            e.printStackTrace();
+            return "";
+        }
+    }
+    
+    public static boolean isPrintableChar(char c) {
+        Character.UnicodeBlock block = Character.UnicodeBlock.of( c );
+        return (!Character.isISOControl(c)) &&
+            c != KeyEvent.CHAR_UNDEFINED &&
+            block != null &&
+            block != Character.UnicodeBlock.SPECIALS;
+    }
+    
+    /**
+     * Stelllt die gewünschte Schriftart ein und sorg dafür, das die Schrift schöner gerendert wird
+     * (muss nur einmalvor dem Rendern aufgerufen werden, danach kann setFond benutzt werden)
+     * @author Jakob Kleine, Cashen Adkins
+     * @param f gewünschte Schriftart
+     */
+    public static void fontFestlegen(Graphics g, Font f) {
+        Graphics2D g2d = (Graphics2D) g; //Damit RenderingHints gesetzt werden können, muss das Graphics-Objekt in ein Graphics2D-Objekt gecastet werden
+        g2d.setRenderingHint(
+            RenderingHints.KEY_TEXT_ANTIALIASING, //Text-Anti-Aliasing -> weichere Kanten
+            RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g2d.setRenderingHint(
+            RenderingHints.KEY_FRACTIONALMETRICS, //Fractional-Metrics -> konsistente Buchstabengröße
+            RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+        g2d.setFont(f);
+    }
     
     /**
      * Zeichnet einen Text zentriert in der angegebenen Breite
@@ -68,7 +112,7 @@ public class Utils
      * @since 27.05.2019
      * [@param und @return wegen Redundanz weggelassen]
      */
-    private static int textBreite(Graphics g, String text) {
+    public static int textBreite(Graphics g, String text) {
         return g.getFontMetrics().stringWidth(text);
     }
     
