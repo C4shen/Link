@@ -1,5 +1,7 @@
-import java.awt.*;
-import java.awt.image.*;
+import java.awt.Font;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 /**
  * Der HighscoresState ist der State, in dem sich das Spiel befindet, wenn die Highscores angezeigt werden. 

@@ -1,5 +1,7 @@
-import java.awt.*;
-import java.awt.image.*;
+import java.awt.Font;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 /**
  * Der Tutorial-State ist der State, in dem sich das Spiel befindet, wenn die Anleitung aufgerufen wird.
  * @author Ares Zühlke, Cepehr Bromand, Jakob Kleine

@@ -1,26 +1,10 @@
 import java.awt.Canvas;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
-import java.awt.RenderingHints;
-import java.awt.Graphics2D;
-import java.awt.Color;
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Random;
-import java.awt.Font;
-import java.io.IOException;
-import java.io.File;
-import javax.imageio.ImageIO;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.event.WindowAdapter;
-import java.io.PrintWriter;
-import java.io.FileNotFoundException;
+
 /**
  * Die zentrale Klasse des Programms. Hier wird die Anzeige und Funktionalität des Spiels verwaltet.
  * @author Cashen Adkins, Cepehr Bromand, Janni Röbbecke, Jakob Kleine, Ares Zühlke www.quizdroid.wordpress.com
