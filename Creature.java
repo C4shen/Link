@@ -112,7 +112,10 @@ public abstract class Creature extends Movable {
      */
     @Override
     public void update() {
-        if(knockback != null) {
+        if(knockback == null) {
+            defaultUpdate();
+        }
+        else {
             if(knockback.getAmountLeft() <= 0) 
                 resetKnockback();
             else {
@@ -120,14 +123,12 @@ public abstract class Creature extends Movable {
                 knockbackAbarbeiten(zusatzX, zusatzY);
             }
         }
-        else {
-            defaultUpdate();
-        }
     }
     
     protected void defaultUpdate() {
-        move();
-        if(weapon != null) {
+        if(weapon == null || !weapon.isAttacking()) //Wenn die Kreatur keine Waffe hat oder die Waffe nicht angreift, darf sie sich bewegen.
+            move();
+        if(weapon != null) { //Wenn die Figur eine Waffe hat, muss sie aktualisiert/verschoben werden
             if(weapon.isAttacking()) //Wenn die Waffe sich bewegt, soll sie sich eigenständig updaten, sonst wird ihre Bewegung vorgegeben
                 weapon.update();
             else

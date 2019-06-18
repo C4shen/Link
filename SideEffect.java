@@ -199,9 +199,9 @@ public class SideEffect extends Enemy
                     else 
                         setMove(new Point(1,0));
                 }
-                if(entityX <= Game.BORDER_WIDTH) //Der Side-Effect läuft immer vom linken Rand des Spielfelds zum rechten. Er fängt hier also an nach rechts zu laufen
+                if(entityX <= GameState.BORDER_WIDTH) //Der Side-Effect läuft immer vom linken Rand des Spielfelds zum rechten. Er fängt hier also an nach rechts zu laufen
                     setMove(new Point(1, 0));
-                if(entityX >= Game.SCREEN_WIDTH-DEFAULT_WIDTH-Game.BORDER_WIDTH) //Wenn er am rechten Rand angekommen ist, läuft er wieder nach links
+                if(entityX >= Game.SCREEN_WIDTH-DEFAULT_WIDTH-GameState.BORDER_WIDTH) //Wenn er am rechten Rand angekommen ist, läuft er wieder nach links
                     setMove(new Point(-1, 0));
             }
         }

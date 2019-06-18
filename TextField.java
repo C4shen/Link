@@ -54,6 +54,10 @@ public class TextField
         return anzahlTiles;
     }
     
+    public void setPlaceholder(String ph) {
+        placeholder = ph;
+    }
+    
     public static int getActualWidth(int width) {
         int anzahlTiles = getTilesNumber(width);
         return anzahlTiles * DEFAULT_TILE_WIDH;
@@ -156,7 +160,11 @@ public class TextField
     }
     
     public void setText(String t) {
-        text.setLength(0);
+        empty();
         text.append(t);
+    }
+    
+    public void empty() {
+        text.setLength(0);
     }
 }

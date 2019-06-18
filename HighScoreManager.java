@@ -14,6 +14,7 @@ public class HighScoreManager
     private static final int MAX_SCORE_NUMBER = 10; //Die maximale Anzahl an zu speichernden Scores
     private static final String path = "/res/scores.link"; //Der Pfad zur Highscore-Textdatei
     private ArrayList<Score> scores; //Eine Liste mit allen highscores
+    
     /**
      * Erstellt einen neuen HighScoreManager, der die bisher erzielten Highscores aus der Highscore-Text-Datei einliest.
      * @author Janni Röbbecke, Jakob Kleine, Cashen Adkins
