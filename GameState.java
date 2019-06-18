@@ -14,6 +14,10 @@ import java.lang.reflect.InvocationTargetException;
 public class GameState extends State 
 {
     /**
+     * Die Höhe des Bereichs, in dem die HP, der Score usw. angezeigt wird
+     */
+    public static final int HP_BAR_HEIGHT = 100;
+    /**
      * Die Standard-Dicke der Wand (Border) des Spiel-Raums 
      */
     public static final int BORDER_WIDTH = 10;
@@ -52,10 +56,10 @@ public class GameState extends State
                     
         //Grenzen, an denen der Raum Ended werden festgelegt
         roomBorders = new Rectangle[] {
-            new Rectangle(               0,    Game.HP_BAR_HEIGHT, Game.SCREEN_WIDTH, BORDER_WIDTH), //links oben -> rechts oben
+            new Rectangle(               0,         HP_BAR_HEIGHT, Game.SCREEN_WIDTH, BORDER_WIDTH), //links oben -> rechts oben
             new Rectangle(               0, Game.SCREEN_HEIGHT-10, Game.SCREEN_WIDTH, BORDER_WIDTH), //links unten -> rechts unten
-            new Rectangle(               0,    Game.HP_BAR_HEIGHT, BORDER_WIDTH, Game.SCREEN_WIDTH), //links oben -> links unten
-            new Rectangle( Game.SCREEN_WIDTH-10,    Game.HP_BAR_HEIGHT, BORDER_WIDTH, Game.SCREEN_WIDTH)  //rechts oben -> rechts unten
+            new Rectangle(               0,         HP_BAR_HEIGHT, BORDER_WIDTH, Game.SCREEN_WIDTH), //links oben -> links unten
+            new Rectangle( Game.SCREEN_WIDTH-10,    HP_BAR_HEIGHT, BORDER_WIDTH, Game.SCREEN_WIDTH)  //rechts oben -> rechts unten
         };
         try{
             hpBarBackground = ImageIO.read(Utils.absoluteFileOf("/res/tilesets/hpbarBackground.png"));
@@ -99,9 +103,9 @@ public class GameState extends State
         //Am oberen Bildrand werden die Lebenspunkte und der Score des Spielers angezeigt
         Utils.fontFestlegen(g, new Font("American Typewriter", Font.BOLD, 40)); 
         g.setColor(new Color(215, 7, 7));
-        g.drawString("HP: "+player.health, 10, (Game.HP_BAR_HEIGHT+40)/2);
+        g.drawString("HP: "+player.health, 10, (HP_BAR_HEIGHT+40)/2);
         g.setColor(new Color(204, 146, 12));
-        g.drawString(""+score, 500, (Game.HP_BAR_HEIGHT+40)/2);
+        g.drawString(""+score, 500, (HP_BAR_HEIGHT+40)/2);
     }
     
     /**
@@ -307,7 +311,7 @@ public class GameState extends State
             int xNeu = -1;
             int yNeu = -1;
             if(collision(e, roomBorders[0])) //Border Oben
-                yNeu = Game.HP_BAR_HEIGHT + BORDER_WIDTH; //Positioniert y am oberen Rand
+                yNeu = HP_BAR_HEIGHT + BORDER_WIDTH; //Positioniert y am oberen Rand
             else if(collision(e, roomBorders[1])) //Border Unten
                 yNeu = Game.SCREEN_HEIGHT - (int) e.getHitbox().getHeight() - BORDER_WIDTH; //Positioniert y am unteren Rand
             //Kein else hier, weil auch 2 Borders getroffen werden können

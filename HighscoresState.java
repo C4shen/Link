@@ -44,6 +44,7 @@ public class HighscoresState extends State {
             g.drawString((i<9?"0":"")+(i+1)+": "+scores.get(i), 40 /*x-Position*/, 175+55*i);
         }
        
+        g.setColor(Color.white);
         g.setFont(basisFont.deriveFont(Font.ITALIC, 15)); 
         String hinweis = "Um zum Hauptmenü zurückzukehren bitte ESCAPE drücken.";
         Utils.centerText(g, hinweis, Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT-15);

@@ -12,7 +12,7 @@ import java.io.FileNotFoundException;
 public class HighScoreManager 
 {
     private static final int MAX_SCORE_NUMBER = 10; //Die maximale Anzahl an zu speichernden Scores
-    private static final String path = "/res/scores.link"; //Der Pfad zur Highscore-Textdatei
+    private static final String path = "/res/SCORES"; //Der Pfad zur Highscore-Textdatei
     private ArrayList<Score> scores; //Eine Liste mit allen highscores
     
     /**

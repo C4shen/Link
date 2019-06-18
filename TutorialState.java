@@ -14,7 +14,7 @@ public class TutorialState extends State
     private Font standardSchrift; //Ein Font für regulären Text
     private Color schriftFarbe; 
     private int pageNr; //Die Seitennummer, bei der man sich gerade in der Anleitung befindet.
-    /*
+    /**
      * Erstellt einen neuen Tutrial-State
      * @author Jakob Kleine, Cepehr Bromand, Ares Zühlke
      * @since 22.05.2019
@@ -27,7 +27,7 @@ public class TutorialState extends State
         pageNr = 0;
     }
     
-    /*
+    /**
      * @author Jakob Kleine, Cepehr Bromand, Ares Zühlke
      * @since 22.05.2019
      */
@@ -106,11 +106,12 @@ public class TutorialState extends State
             break;
         }
 
+        g.setColor(Color.white);
         g.setFont(standardSchrift.deriveFont(Font.ITALIC, 15)); 
         String hinweis = "Seite "+(pageNr+1)+"; Blättern mit w&s / a&d oder Pfeiltasten. Zum Hauptmenü: bitte ESCAPE drücken.";
         Utils.centerText(g, hinweis, Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT-15);
     }
-    /*
+    /**
      * @author Jakob Kleine, Cepehr Bromand, Ares Zühlke
      * @since 28.05.2019
      */

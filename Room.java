@@ -47,7 +47,7 @@ public class Room {
             for(int tileX = 0; tileX < sizeX; tileX++){
                 //tileX*TileSet.TILE_WIDTH entspricht der x-Koordinate der zu malenden Kachel
                 //Die y-Koordinate wird um so viel erhöht (nach unten verschoben), wie die Lebensanzeige usw. Platz benötigt
-                ts.renderTile(g, tileMap[tileX][tileY], tileX * TileSet.TILE_WIDTH, tileY * TileSet.TILE_HEIGHT + Game.HP_BAR_HEIGHT);
+                ts.renderTile(g, tileMap[tileX][tileY], tileX * TileSet.TILE_WIDTH, tileY * TileSet.TILE_HEIGHT + GameState.HP_BAR_HEIGHT);
             }
         }
     }
