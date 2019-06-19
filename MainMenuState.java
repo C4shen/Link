@@ -46,7 +46,7 @@ public class MainMenuState extends State
         Utils.fontFestlegen(g,font);
         g.setColor(color);
         g.drawString("Neues Spiel", Game.SCREEN_WIDTH/2-120, 200);
-        if(true) {//gameState == null) { //Wenn der Game-State null ist, kann gerade nicht weitergespielt werden, also wird das Menüitem dafür heller gemalt
+        if(getStates().get(StateNames.GAME) == null) { //Wenn der Game-State null ist, kann gerade nicht weitergespielt werden, also wird das Menüitem dafür heller gemalt
             g.setColor(color.brighter());
             g.drawString("Weiterspielen", Game.SCREEN_WIDTH/2-120, 280);
             g.setColor(color);
